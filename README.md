@@ -13,7 +13,15 @@ Kelompok 51
 
 ## Pembagian tugas
 
+| NIM | Tugas |
+|-----|-------|
+| 13519116 | Metode Gauss, Gauss-Jordan, Pembuat program utama |
+| 13519169 | Matriks balikan, Kaidah cramer, regresi linier berganda |
+| 13519164 | Determinan matriks metode ekspansi kofaktor dan reduksi baris, interpolasi polinom |
+
 ## Spesifikasi Tugas
+
+[Tugas Besar 1 IF 2123 Aljabar Linier dan  Geometri](http://informatika.stei.itb.ac.id/~rinaldi.munir/AljabarGeometri/2020-2021/Tubes1-Algeo-2020.pdf)
 
 1. Menghitung solusi SPL dengan metode eliminasi Gauss, Gauss-Jordan, matriks
 balikan, dan kaidah Cramer
