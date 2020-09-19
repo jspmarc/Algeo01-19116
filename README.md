@@ -1,7 +1,7 @@
 # Tubes Pertama IF2123 Aljabar Linier dan Geometri
 ### Algeo01-19116
 
-Kelompok 51
+Kelompok 59
 
 | Nama | NIM |
 |------|-----|
