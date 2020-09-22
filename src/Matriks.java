@@ -15,10 +15,17 @@
  *  - [ ] Determinan
  *      - [x] Ekspansi kofaktor
  *      - [ ] Reduksi baris
+ * Minor stuff:
+ *  - [ ] Helper functions kayak jumlah, kali, tukar buat matriks salinan
+ *        (tidak mengubah nilai matriks awal)
  */
 
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
+
+/*
+ * Tipe data mariks dengan elemen awal di 0,0
+ */
 
 class Matriks {
 
@@ -26,8 +33,8 @@ class Matriks {
 
     // banyak baris dan kolom matriks
     private int barisMat, kolomMat,
-        // Banyak elemen matriks
-        jumElmt;
+    // Banyak elemen matriks
+                jumElmt;
     // Matriks persegi atau bukan
     public boolean bujurSangkar;
     // ArrayList dari ArrayList
@@ -43,7 +50,7 @@ class Matriks {
      * @param kolom banyak kolom di matriks
      * */
     Matriks(int baris, int kolom) {
-        // Mengisi mariks dengan +0.0
+        // Mengisi matriks dengan +0.0
         for (int i = 0; i < baris; i++) {
             ArrayList<Double> kol = new ArrayList<>(kolom);
             for (int j = 0; j < kolom; j++) {
@@ -84,6 +91,24 @@ class Matriks {
         this.mat.get(i).set(j, val);
     }
 
+    /**
+     * Mengambil baris ke-i matriks
+     * @param i
+     * @return baris ke-i matriks
+     */
+    public ArrayList<Double> getBaris(int i) {
+        return this.mat.get(i);
+    }
+
+    /**
+     * Mengubah baris ke-i dengan baris barisBaru
+     * @param i indeks baris yang ingin diubah
+     * @param barisBaru barisBaru yang menggantikan baris ke-i
+     */
+    public void setBaris(int i, ArrayList<Double> barisBaru) {
+        this.mat.set(i, barisBaru);
+    }
+
     /* === INPUTS AND OUTPUTS === */
 
     /**
@@ -101,7 +126,7 @@ class Matriks {
                 Double el = scan.nextDouble();
                 kol.add(el);
             }
-            this.mat.set(i, kol);
+            this.setBaris(i, kol);
         }
 
         // Menutup scanner
@@ -125,27 +150,27 @@ class Matriks {
     /**
      * Fungsi membuat kofaktor dari matriks
      * @param mat matriks yang ingin dibuat kofaktornya
-     * @param acuanBrs baris yang menjadi acuan (bukan indeks)
-     * @param acuanKol kolom yang menjadi acuan (bukan indeks)
+     * @param idxAcuanBrs indeks baris yang menjadi acuan
+     * @param idxAcuanKol indeks kolom yang menjadi acuan
      * @return kofaktor matriks dengan acuan sesuai parameter
      */
-    private static Matriks buatKofaktor(Matriks mat, int acuanBrs, int acuanKol){
+    private static Matriks buatKofaktor(Matriks mat, int idxAcuanBrs,
+                                        int idxAcuanKol){
         Matriks matRes;
         int m, n;
-
         matRes = new Matriks(mat.barisMat-1, mat.kolomMat-1);
 
         // i untuk baris mat; j untuk baris mat
         // m untuk baris matRes; n untuk baris matRes
         m = 0; n = 0;
         for(int i = 0; i < mat.barisMat; ++i) {
-            if (i == acuanBrs) {
+            if (i == idxAcuanBrs) {
                 // Nge-skip elmen yang berada di baris yang sama dengan acuanBrs
                 continue;
             }
             for (int j = 0; j <  mat.kolomMat; ++j) {
                 // Nge-skip elemen yang berada di kolom yang sama dengan acuanKol
-                if (j == acuanKol) {
+                if (j == idxAcuanKol) {
                     continue;
                 }
 
@@ -158,6 +183,85 @@ class Matriks {
         }
 
         return matRes;
+    }
+
+    /**
+     * Metode untuk melakukan operasi:
+     * mat[idxBrsAsal] = mat[idxBrsAsal] + k*mat[idxBrsPenjumlah]
+     * dengan k != 1
+     * @param idxBrsAsal indeks baris yang ingin dijumlahkan
+     * @param idxBrsPenjumlah indeks baris yang menjadi penjumlah
+     * @param k konstanta pengali barisPenjumlah
+     */
+    private void jumlahBaris(int idxBrsAsal, int idxBrsPenjumlah,
+                             double k ){
+        double tempElmt;
+
+        // i untuk kolom
+        for (int i = 0; i < this.kolomMat; ++i) {
+            tempElmt = this.getElmt(idxBrsAsal, i);
+            tempElmt += k * this.getElmt(idxBrsPenjumlah, i);
+            this.setElmt(idxBrsAsal, i, tempElmt);
+        }
+    }
+
+    /**
+     * Metode untuk melakukan operasi:
+     * mat[idxBrsAsal] = mat[idxBrsAsal] + mat[idxBrsPenjumlah]
+     * dengan k == 1
+     * @param idxBrsAsal indeks baris yang ingin dijumlahkan
+     * @param idxBrsPenjumlah indeks baris yang menjadi penjumlah
+     */
+    private void jumlahBaris(int idxBrsAsal, int idxBrsPenjumlah) {
+        double tempElmt;
+
+        // i untuk kolom
+        for (int i = 0; i < this.kolomMat; ++i) {
+            tempElmt = this.getElmt(idxBrsAsal, i);
+            tempElmt += this.getElmt(idxBrsPenjumlah, i);
+            this.setElmt(idxBrsAsal, i, tempElmt);
+        }
+    }
+
+    /**
+     * Mengkalikan baris ke-"idxBaris" dengan konsanta k
+     * @param idxBaris indeks baris yang ingin dikalikan
+     * @param k konstanta yang ingin dikalikan ke baris
+     * @param m matriks yang salah satu barisnya ingin dikalikan dengan k
+     */
+    private void kaliBaris(int idxBaris, double k) {
+        double tempElmt;
+
+        // i untuk kolom
+        for (int i = 0; i < this.barisMat; ++i) {
+            tempElmt = k*this.getElmt(idxBaris, i);
+            this.setElmt(idxBaris, i, tempElmt);
+        }
+    }
+
+    /**
+     * Menukarkan baris ke-barisPertama dengan bariss ke-barisKedua
+     * di matriks
+     * @param barisPertama indeks baris pertama yang ingin ditukar
+     * @param barisKedua indeks baris kedua yang ingin ditukar
+     */
+    private void tukarBaris(int barisPertama, int barisKedua) {
+        ArrayList<Double> tempBaris = this.getBaris(barisPertama);
+        this.setBaris(barisPertama, this.getBaris(barisKedua));
+        this.setBaris(barisKedua, tempBaris);
+    }
+
+    /**
+     * Menyalin mAsal ke mTujuan
+     * @param mAsal
+     * @param mTujuan
+     */
+    public static void salinMatriks(Matriks mAsal, Matriks mTujuan) {
+        for (int i = 0; i < mAsal.barisMat; ++i) {
+            for (int j = 0; j < mAsal.kolomMat; ++j) {
+                mTujuan.setElmt(i, j, mAsal.getElmt(i, j));
+            }
+        }
     }
 
     /* === BAGIAN TUGAS === */
@@ -215,11 +319,34 @@ class Matriks {
         nKol = s.nextInt();
 
         Matriks m1 = new Matriks(nBar, nKol);
-        m1.tulisMatriks();
+        Matriks mOriginal = new Matriks(nBar, nKol);
+
+
+        //m1.tulisMatriks();
         m1.bacaMatriks();
+        salinMatriks(m1, mOriginal);
         m1.tulisMatriks();
 
         System.out.format("%.2f", determinanEksKof(m1));
+        System.out.println();
+
+        m1.kaliBaris(0, 200);
+        m1.tulisMatriks();
+        System.out.println();
+
+        m1.tukarBaris(0, 2);
+        m1.tulisMatriks();
+        System.out.println();
+
+        m1.jumlahBaris(1, 2);
+        m1.tulisMatriks();
+        System.out.println();
+
+        m1.jumlahBaris(1, 2, -1);
+        m1.tulisMatriks();
+        System.out.println();
+
+        mOriginal.tulisMatriks();
 
         s.close();
     }
