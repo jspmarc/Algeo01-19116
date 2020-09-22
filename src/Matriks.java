@@ -9,12 +9,12 @@
 
 /* TODO
  * Implementaasi:
- *  Gauss
- *  Gauss-Jordan
- *  Kramer
- *  Determinan
- *      Ekspansi kofaktor
- *      Reduksi baris
+ *  - [ ] Gauss
+ *  - [ ] Gauss-Jordan
+ *  - [ ] Kramer
+ *  - [ ] Determinan
+ *      - [x] Ekspansi kofaktor
+ *      - [ ] Reduksi baris
  */
 
 import java.util.ArrayList; // Array dinamis untuk matriks
@@ -22,10 +22,18 @@ import java.util.Scanner;
 
 class Matriks {
 
+    /* === ATTRIBUTES === */
+
     // banyak baris dan kolom matriks
-    int barisMat, kolomMat;
+    private int barisMat, kolomMat,
+        // Banyak elemen matriks
+        jumElmt;
+    // Matriks persegi atau bukan
+    public boolean bujurSangkar;
     // ArrayList dari ArrayList
     ArrayList<ArrayList<Double>> mat = new ArrayList<>();
+
+    /* === CONSTRUCTOR === */
 
     /**
      * Metode untuk membuat matriks baru
@@ -44,16 +52,45 @@ class Matriks {
             this.mat.add(kol);
         }
 
-        // Mengubah nilai barisMat dan kolomMat
+        // Mengubah atribut matriks
         this.barisMat = baris;
         this.kolomMat = kolom;
+        this.jumElmt = baris*kolom;
+
+        this.bujurSangkar = baris == kolom;
     }
+
+    /* === GETTERS AND SETTERS === */
+
+    /**
+     * Mengembalikan elemen pada mat[i][j]
+     * Alias getter buat element ke-i,j
+     * @param i baris
+     * @param j kolom
+     * @return elemen ke-i,j
+     */
+    public double getElmt(int i, int j) {
+        return this.mat.get(i).get(j);
+    }
+
+    /**
+     * Metode untuk mengubah nilai elemen matriks ke-i,j
+     * Alias setter buat element ke-i,j
+     * @param i indeks baris
+     * @param j indeks kolom
+     * @param val nilai baru yang ingin disubstitusi ke matriks
+     */
+    public void setElmt(int i, int j, double val) {
+        this.mat.get(i).set(j, val);
+    }
+
+    /* === INPUTS AND OUTPUTS === */
 
     /**
      * Metode untuk membuat matrik dengan
      * membaca masukan elemen dari keyboard
      * */
-    void bacaMatriks() {
+    public void bacaMatriks() {
         // Membuat scanner baru (untuk membacaa masukkan dari user)
         Scanner scan = new Scanner(System.in);
 
@@ -61,8 +98,8 @@ class Matriks {
         for (int i = 0; i <this.barisMat; i++) {
             ArrayList<Double> kol = new ArrayList<>(this.kolomMat);
             for (int j = 0; j < this.kolomMat; j++) {
-                Double _el = scan.nextDouble();
-                kol.add(_el);
+                Double el = scan.nextDouble();
+                kol.add(el);
             }
             this.mat.set(i, kol);
         }
@@ -74,14 +111,96 @@ class Matriks {
     /**
      * Metode untuk menuliskan isi elemen di matriks
      * */
-    void tulisMatriks() {
-        for (int i = 0; i <this.barisMat; i++) {
+    public void tulisMatriks() {
+        for (int i = 0; i < this.barisMat; i++) {
             for (int j = 0; j < this.kolomMat; j++) {
-                System.out.print(this.mat.get(i).get(j) + "\t");
+                System.out.print(this.getElmt(i, j) + "\t");
             }
             System.out.println();
         }
     }
+
+    /* === HELPER FUNCTIONS === */
+
+    /**
+     * Fungsi membuat kofaktor dari matriks
+     * @param mat matriks yang ingin dibuat kofaktornya
+     * @param acuanBrs baris yang menjadi acuan (bukan indeks)
+     * @param acuanKol kolom yang menjadi acuan (bukan indeks)
+     * @return kofaktor matriks dengan acuan sesuai parameter
+     */
+    private static Matriks buatKofaktor(Matriks mat, int acuanBrs, int acuanKol){
+        Matriks matRes;
+        int m, n;
+
+        matRes = new Matriks(mat.barisMat-1, mat.kolomMat-1);
+
+        // i untuk baris mat; j untuk baris mat
+        // m untuk baris matRes; n untuk baris matRes
+        m = 0; n = 0;
+        for(int i = 0; i < mat.barisMat; ++i) {
+            if (i == acuanBrs) {
+                // Nge-skip elmen yang berada di baris yang sama dengan acuanBrs
+                continue;
+            }
+            for (int j = 0; j <  mat.kolomMat; ++j) {
+                // Nge-skip elemen yang berada di kolom yang sama dengan acuanKol
+                if (j == acuanKol) {
+                    continue;
+                }
+
+                matRes.setElmt(m, n++, mat.getElmt(i, j));
+                if (n == matRes.kolomMat) {
+                    n = 0;
+                    m++;
+                }
+            }
+        }
+
+        return matRes;
+    }
+
+    /* === BAGIAN TUGAS === */
+
+    /**
+     * Metode menghitung determinan matriks dengan ekspansi kofaktor
+     * @param m1 matriks yang ingin dihitung kofaktornya
+     * @return nilai determinan dari matriks, 0.0 jika bukan matriks bujur
+     * sangkar
+     */
+    public static double determinanEksKof(Matriks mat) {
+        double res = 0.0;
+        int i;
+        Matriks MTemp = new Matriks(mat.barisMat-1, mat.kolomMat-1);
+
+        if (!mat.bujurSangkar) {
+            System.out.println("Determinan tidak bisa dihitung karena bukan matriks bujur sangkar.");
+            return 0.0;
+        }
+
+        // Basis
+        if (mat.barisMat == 2 && mat.kolomMat == 2) {
+            return ((mat.getElmt(0, 0)*mat.getElmt(1, 1)) -
+                    (mat.getElmt(0, 1)*mat.getElmt(1, 0)));
+        } else if (mat.jumElmt == 1) {
+            return mat.getElmt(0, 0);
+        }
+
+        // Rekurens
+        // Baris yang digunakan adalah baris pertama
+        // i buat nandain kolom untuk acuan
+        for (i = 0; i < mat.kolomMat; ++i) {
+            MTemp = buatKofaktor(mat, 0, i);
+
+            res += ((i % 2 == 0 ? 1 : ~0) *
+                    mat.getElmt(0, i) *
+                    determinanEksKof(MTemp));
+        }
+
+        return res;
+    }
+
+    // === PENGUJIAN / TESTING === //
 
     /**
      * Metode untuk pengujian metode lain matriks ("driver")
@@ -99,6 +218,8 @@ class Matriks {
         m1.tulisMatriks();
         m1.bacaMatriks();
         m1.tulisMatriks();
+
+        System.out.format("%.2f", determinanEksKof(m1));
 
         s.close();
     }
