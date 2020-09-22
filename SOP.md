@@ -6,7 +6,7 @@ Hal-hal yang harus diperhatikan:
 
 1. Simpan *file source code* di folder ini (file `*.java`)
 1. Simpan *Java bytecode* di folder bin (file `*.class` di `Algeo01-19116/bin`)
-1. Simpan *file* - *file* untuk pengujian di folder test (`lgeo01-19116/test`)
+1. Simpan *file* - *file* untuk pengujian di folder test (`Algeo01-19116/test`)
     1. Screenshot hasil pengujian (jika ada) boleh disimpan di folder doc
     (`Algeo01-19116/doc`)
 1. Jangan lupa bikin laporan di folder doc (`Algeo01-19116/doc`)
