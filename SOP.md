@@ -11,7 +11,7 @@ Hal-hal yang harus diperhatikan:
     (`Algeo01-19116/doc`)
 1. Jangan lupa bikin laporan di folder doc (`Algeo01-19116/doc`)
 
-## Programming-related
+## Programming-related {#prog}
 
 1. Gunakan metode penamaan standar Java untuk nama *class*, *variable*, metode,
 dan konstanta

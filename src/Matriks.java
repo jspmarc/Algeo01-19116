@@ -1,7 +1,7 @@
 /*
  * Matriks
  *
- * Jeane Mikha Erwansyh - 13519116
+ * Jeane Mikha Erwansyah - 13519116
  * Josep Marcello - 13519164
  * David Owen Adiwiguna - 13519169
  *
