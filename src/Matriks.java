@@ -24,19 +24,17 @@ import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
 
 /*
- * Tipe data mariks dengan elemen awal di 0,0
+ * Tipe data mariks dengan elemen awal di (0,0)
+ * Indeks selalu diawali 0
  */
 
 class Matriks {
 
     /* === ATTRIBUTES === */
 
-    // banyak baris dan kolom matriks
-    private int barisMat, kolomMat,
-    // Banyak elemen matriks
-                jumElmt;
-    // Matriks persegi atau bukan
-    public boolean bujurSangkar;
+    private int jmlBrsMat, // Banyak baris
+                jmlKolMat; // Banyak kolom
+
     // ArrayList dari ArrayList
     ArrayList<ArrayList<Double>> mat = new ArrayList<>();
 
@@ -60,11 +58,8 @@ class Matriks {
         }
 
         // Mengubah atribut matriks
-        this.barisMat = baris;
-        this.kolomMat = kolom;
-        this.jumElmt = baris*kolom;
-
-        this.bujurSangkar = baris == kolom;
+        this.jmlBrsMat = baris;
+        this.jmlKolMat = kolom;
     }
 
     /* === GETTERS AND SETTERS === */
@@ -120,9 +115,9 @@ class Matriks {
         Scanner scan = new Scanner(System.in);
 
         // Mengganti nilai di matriks sesuai dengan masukkan user
-        for (int i = 0; i <this.barisMat; i++) {
-            ArrayList<Double> kol = new ArrayList<>(this.kolomMat);
-            for (int j = 0; j < this.kolomMat; j++) {
+        for (int i = 0; i <this.jmlBrsMat; i++) {
+            ArrayList<Double> kol = new ArrayList<>(this.jmlKolMat);
+            for (int j = 0; j < this.jmlKolMat; j++) {
                 Double el = scan.nextDouble();
                 kol.add(el);
             }
@@ -137,8 +132,8 @@ class Matriks {
      * Metode untuk menuliskan isi elemen di matriks
      * */
     public void tulisMatriks() {
-        for (int i = 0; i < this.barisMat; i++) {
-            for (int j = 0; j < this.kolomMat; j++) {
+        for (int i = 0; i < this.jmlBrsMat; i++) {
+            for (int j = 0; j < this.jmlKolMat; j++) {
                 System.out.print(this.getElmt(i, j) + "\t");
             }
             System.out.println();
@@ -146,6 +141,22 @@ class Matriks {
     }
 
     /* === HELPER FUNCTIONS === */
+
+    /**
+     * Fungsi untuk mendapatkan ke-persegi-an matriks
+     * @return ke-persegi-an matriks
+     */
+    private boolean adalahPersegi() {
+        return this.jmlBrsMat == this.jmlKolMat;
+    }
+
+    /**
+     * Fungsi untuk mendapatkan banyak elemen matriks
+     * @return banyak elemen matriks
+     */
+    private int jumElmt() {
+        return this.jmlBrsMat*this.jmlKolMat;
+    }
 
     /**
      * Fungsi membuat kofaktor dari matriks
@@ -158,30 +169,29 @@ class Matriks {
                                         int idxAcuanKol){
         Matriks matRes;
         int m, n;
-        matRes = new Matriks(mat.barisMat-1, mat.kolomMat-1);
+        matRes = new Matriks(mat.jmlBrsMat-1, mat.jmlKolMat-1);
 
         // i untuk baris mat; j untuk baris mat
         // m untuk baris matRes; n untuk baris matRes
         m = 0; n = 0;
-        for(int i = 0; i < mat.barisMat; ++i) {
+        for(int i = 0; i < mat.jmlBrsMat; ++i) {
             if (i == idxAcuanBrs) {
                 // Nge-skip elmen yang berada di baris yang sama dengan acuanBrs
                 continue;
             }
-            for (int j = 0; j <  mat.kolomMat; ++j) {
+            for (int j = 0; j <  mat.jmlKolMat; ++j) {
                 // Nge-skip elemen yang berada di kolom yang sama dengan acuanKol
                 if (j == idxAcuanKol) {
                     continue;
                 }
 
                 matRes.setElmt(m, n++, mat.getElmt(i, j));
-                if (n == matRes.kolomMat) {
+                if (n == matRes.jmlKolMat) {
                     n = 0;
                     m++;
                 }
             }
         }
-
         return matRes;
     }
 
@@ -193,12 +203,12 @@ class Matriks {
      * @param idxBrsPenjumlah indeks baris yang menjadi penjumlah
      * @param k konstanta pengali barisPenjumlah
      */
-    private void jumlahBaris(int idxBrsAsal, int idxBrsPenjumlah,
-                             double k ){
+    private void jumlahkanBaris(int idxBrsAsal, int idxBrsPenjumlah,
+                                double k){
         double tempElmt;
 
         // i untuk kolom
-        for (int i = 0; i < this.kolomMat; ++i) {
+        for (int i = 0; i < this.jmlKolMat; ++i) {
             tempElmt = this.getElmt(idxBrsAsal, i);
             tempElmt += k * this.getElmt(idxBrsPenjumlah, i);
             this.setElmt(idxBrsAsal, i, tempElmt);
@@ -212,11 +222,11 @@ class Matriks {
      * @param idxBrsAsal indeks baris yang ingin dijumlahkan
      * @param idxBrsPenjumlah indeks baris yang menjadi penjumlah
      */
-    private void jumlahBaris(int idxBrsAsal, int idxBrsPenjumlah) {
+    private void jumlahkanBaris(int idxBrsAsal, int idxBrsPenjumlah) {
         double tempElmt;
 
         // i untuk kolom
-        for (int i = 0; i < this.kolomMat; ++i) {
+        for (int i = 0; i < this.jmlKolMat; ++i) {
             tempElmt = this.getElmt(idxBrsAsal, i);
             tempElmt += this.getElmt(idxBrsPenjumlah, i);
             this.setElmt(idxBrsAsal, i, tempElmt);
@@ -233,7 +243,7 @@ class Matriks {
         double tempElmt;
 
         // i untuk kolom
-        for (int i = 0; i < this.barisMat; ++i) {
+        for (int i = 0; i < this.jmlBrsMat; ++i) {
             tempElmt = k*this.getElmt(idxBaris, i);
             this.setElmt(idxBaris, i, tempElmt);
         }
@@ -257,43 +267,45 @@ class Matriks {
      * @param mTujuan
      */
     public static void salinMatriks(Matriks mAsal, Matriks mTujuan) {
-        for (int i = 0; i < mAsal.barisMat; ++i) {
-            for (int j = 0; j < mAsal.kolomMat; ++j) {
+        for (int i = 0; i < mAsal.jmlBrsMat; ++i) {
+            for (int j = 0; j < mAsal.jmlKolMat; ++j) {
                 mTujuan.setElmt(i, j, mAsal.getElmt(i, j));
             }
         }
+
+        mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
+        mTujuan.jmlKolMat = mAsal.jmlKolMat;
+    }
     }
 
     /* === BAGIAN TUGAS === */
 
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
-     * @param m1 matriks yang ingin dihitung kofaktornya
-     * @return nilai determinan dari matriks, 0.0 jika bukan matriks bujur
-     * sangkar
+     * @param mat matriks yang ingin dihitung kofaktornya
+     * @return nilai determinan dari matriks, NaN jika bukan matriks persegi
      */
     public static double determinanEksKof(Matriks mat) {
         double res = 0.0;
-        int i;
-        Matriks MTemp = new Matriks(mat.barisMat-1, mat.kolomMat-1);
+        Matriks MTemp = new Matriks(mat.jmlBrsMat-1, mat.jmlKolMat-1);
 
-        if (!mat.bujurSangkar) {
+        if (!mat.adalahPersegi()) {
             System.out.println("Determinan tidak bisa dihitung karena bukan matriks bujur sangkar.");
-            return 0.0;
+            return Double.NaN;
         }
 
         // Basis
-        if (mat.barisMat == 2 && mat.kolomMat == 2) {
+        if (mat.jmlBrsMat == 2 && mat.jmlKolMat == 2) {
             return ((mat.getElmt(0, 0)*mat.getElmt(1, 1)) -
                     (mat.getElmt(0, 1)*mat.getElmt(1, 0)));
-        } else if (mat.jumElmt == 1) {
+        } else if (mat.jumElmt() == 1) {
             return mat.getElmt(0, 0);
         }
 
         // Rekurens
         // Baris yang digunakan adalah baris pertama
         // i buat nandain kolom untuk acuan
-        for (i = 0; i < mat.kolomMat; ++i) {
+        for (int i = 0; i < mat.jmlKolMat; ++i) {
             MTemp = buatKofaktor(mat, 0, i);
 
             res += ((i % 2 == 0 ? 1 : ~0) *

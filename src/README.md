@@ -4,7 +4,7 @@ Folder untuk menyimpan *source code* dalam bahasa Java
 
 Terdiri dari 2 *file*
 
-* Matriks.java
+* `Matriks.java`
   * Berisi dari definisi dan realisasi ADT Matriks (atribut dan metode)
   * serta berisi definisi dan realisasi dari fungsi-fungsi untuk (kemungkinan
   akan dipisah ke *file* lain):
@@ -13,7 +13,7 @@ Terdiri dari 2 *file*
     * Inverse matriks
     * Interpolasi polinom
     * Regresi linier berganda
-* Main.java
+* `Main.java`
   * Berisi implementasi dari Matriks.java dan program utama
 
 [SOP](../SOP.md)
