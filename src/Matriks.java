@@ -308,9 +308,11 @@ class Matriks {
         // TODO: Selesaiin fungsi ini
         if (aug.jmlKolMat != 1) {
             System.out.println("Bukan matriks augment");
+            System.out.println("Matriks gagal diubah jadi matriks augmented");
             return;
         } else if (aug.jmlBrsMat != this.jmlBrsMat) {
             System.out.println("Jumlah baris kedua matriks berbeda");
+            System.out.println("Matriks gagal diubah jadi matriks augmented");
             return;
         }
 
@@ -332,6 +334,7 @@ class Matriks {
 
         if (!mat.adalahPersegi()) {
             System.out.println("Determinan tidak bisa dihitung karena bukan matriks bujur sangkar.");
+            System.out.println("Gagal menghitung determinan matriks");
             return Double.NaN;
         }
 
