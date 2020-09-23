@@ -276,6 +276,47 @@ class Matriks {
         mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
         mTujuan.jmlKolMat = mAsal.jmlKolMat;
     }
+
+    private void jadikanSgtgAtas() {
+        // TODO: SELESAIN!
+        // i nandain baris yang sedang diproses
+        for (int i = 0; i < this.jmlBrsMat; i++) {
+            double pivot = this.getElmt(i, i);
+            ArrayList<Double> tempBaris = this.getBaris(i);
+
+            pivot = this.getElmt(i, i);
+            // Nyari baris sampai pivot tidak 0
+            if (pivot != 0) {
+                // membagi setiap elemen di baris i dengan pivot
+                for (int j = 0; j < this.jmlKolMat; ++j) {
+                    System.out.println("Pivot: " + pivot);
+                    tempBaris.set(j,
+                                  tempBaris.get(j)/pivot);
+                }
+            }
+
+            this.tulisMatriks();
+            System.out.println("===-===-===");
+        }
+    }
+
+    /**
+     * Meng-augment matriks pemanggil dengan matriks aug
+     * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
+     */
+    private void jadikanAugmented(Matriks aug) {
+        // TODO: Selesaiin fungsi ini
+        if (aug.jmlKolMat != 1) {
+            System.out.println("Bukan matriks augment");
+            return;
+        } else if (aug.jmlBrsMat != this.jmlBrsMat) {
+            System.out.println("Jumlah baris kedua matriks berbeda");
+            return;
+        }
+
+        this.jmlKolMat++;
+        for (int i = 0; i < this.jmlBrsMat; ++i) {
+        }
     }
 
     /* === BAGIAN TUGAS === */
@@ -316,6 +357,20 @@ class Matriks {
         return res;
     }
 
+    /**
+     * Metode untuk melakukan perhitungan determinan dengan metode reduksi
+     * baris pada matriks mat
+     * @param mat matriks yang ingin dihitung determinannya
+     * @return determinan matriks mat
+     */
+    public static double determinanRedBrs(Matriks mat) {
+        double res = 0.0;
+
+        mat.jadikanSgtgAtas();
+
+        return res;
+    }
+
     // === PENGUJIAN / TESTING === //
 
     /**
@@ -339,24 +394,29 @@ class Matriks {
         salinMatriks(m1, mOriginal);
         m1.tulisMatriks();
 
-        System.out.format("%.2f", determinanEksKof(m1));
-        System.out.println();
+        //System.out.format("%.2f", determinanEksKof(m1));
+        //System.out.format("%.2f", determinanRedBrs(m1));
+        //System.out.println();
 
-        m1.kaliBaris(0, 200);
-        m1.tulisMatriks();
-        System.out.println();
+        //m1.kaliBaris(0, 200);
+        //m1.tulisMatriks();
+        //System.out.println();
 
-        m1.tukarBaris(0, 2);
-        m1.tulisMatriks();
-        System.out.println();
+        //m1.tukarBaris(0, 2);
+        //m1.tulisMatriks();
+        //System.out.println();
 
-        m1.jumlahBaris(1, 2);
-        m1.tulisMatriks();
-        System.out.println();
+        //m1.jumlahBaris(1, 2);
+        //m1.tulisMatriks();
+        //System.out.println();
 
-        m1.jumlahBaris(1, 2, -1);
-        m1.tulisMatriks();
-        System.out.println();
+        //m1.jumlahBaris(1, 2, -1);
+        //m1.tulisMatriks();
+        //System.out.println();
+
+        //m1.jadikanAugmented(mOriginal);
+
+        m1.jadikanSgtgAtas();
 
         mOriginal.tulisMatriks();
 
