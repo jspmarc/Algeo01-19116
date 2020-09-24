@@ -443,7 +443,7 @@ class Matriks {
      */
 
     private int indikator() {
-        boolean konstantaNol;
+        boolean konstantaNol = true;
         boolean koefisienNol = true;
         int j = 0;
 
