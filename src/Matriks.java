@@ -12,7 +12,7 @@
  *  - [ ] Gauss
  *  - [ ] Gauss-Jordan
  *  - [ ] Kramer
- *  - [ ] Determinan
+ *  - [x] Determinan
  *      - [x] Ekspansi kofaktor
  *      - [x] Reduksi baris
  */
@@ -45,6 +45,7 @@
 
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
+import java.lang.Math;
 
 /*
  * Tipe data mariks dengan elemen awal di (0,0)
@@ -157,7 +158,7 @@ class Matriks {
     public void tulisMatriks() {
         for (int i = 0; i < this.jmlBrsMat; i++) {
             for (int j = 0; j < this.jmlKolMat; j++) {
-                System.out.printf("%.3f\t\t", this.getElmt(i, j));
+                System.out.printf("%.2f\t", this.getElmt(i, j));
             }
             System.out.println();
         }
@@ -321,8 +322,10 @@ class Matriks {
     /**
      * Mengubah matriks pemanggil menjadi matriks segitiga atas
      * */
-    private void jadikanSgtgAtas() {
+    private int jadikanSgtgAtas() {
         // TODO: Further testing, edge cases
+        int swapCount = 0;
+
         // i nandain baris yang sedang diproses
         for (int i = 0; i < this.jmlBrsMat; i++) {
             double pivot = this.getElmt(i, i),
@@ -332,7 +335,7 @@ class Matriks {
 
             // Nyari pivot sampai pivot tidak 0
             int z = i+1; // iterator pencarian pivot tidak 0
-            for (; z < this.jmlBrsMat && pivot == 0; ++z) {
+            for (; z < this.jmlBrsMat && tempPivot == 0; ++z) {
                 tempPivot = this.getElmt(z, i);
             }
 
@@ -344,7 +347,8 @@ class Matriks {
             // diproses
             } else if (pivot == 0 && tempPivot != 0) {
                 pivot = tempPivot;
-                this.tukarBaris(i, z);
+                swapCount++;
+                this.tukarBaris(i, --z);
             }
 
             // Setelah selesai pencarian pivot tidak 0,
@@ -358,16 +362,25 @@ class Matriks {
                 firstElmt = this.getElmt(j, i);
                 konstanta = ((pivot >= 0 && firstElmt >= 0) ||
                              (pivot <= 0 && firstElmt <= 0) ? -1 : 1) *
-                            firstElmt/pivot;
+                            firstElmt;
+                konstanta /= pivot;
 
                 this.tambahBaris(j, i, konstanta);
                 System.out.println("Konstanta: " + konstanta);
             }
+
+            this.tulisMatriks();
+            System.out.println("====");
         }
+
+        return swapCount;
     }
 
     /**
      * Meng-augment matriks pemanggil dengan matriks aug
+     * misalkan ada dua matriks: M1 dan M2, di mana M2 adalah matriks yang
+     * ingin di-augment ke M1, maka:
+     * M1.jadikanAugmented(M2), maka: [M1|M2]
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
     private void jadikanAugmented(Matriks aug) {
@@ -390,7 +403,6 @@ class Matriks {
     /**
      * Metode untuk membuat matriks augmented menjadi matriks eselon baris tereduksi
      */
-    
     private void eselonTereduksi() {
         int lead = 0;
         for (int i = 0; i < this.jmlBrsMat; i++) {
@@ -424,9 +436,10 @@ class Matriks {
     /**
      * Metode untuk mencari apakah baris dari matriks eselon baris (tereduksi)
      * memiliki solusi unik, solusi tak hingga, atau solusi tidak ada.
-     * indikator = 0 -> solusi tidak ada
-     * indikator = 1 -> solusi unik
-     * indikator = 2 -> solusi tak hingga
+     * @return ada 3 kemungkinan output:
+     * - 0: Solusi tidak ada
+     * - 1: Solusi unik
+     * - 2: Solusi tak hingga
      */
 
     private int indikator() {
@@ -437,18 +450,17 @@ class Matriks {
         if (getElmt(this.jmlBrsMat-1, this.jmlKolMat-1) == 0) {
             konstantaNol = false;
         }
-        
+
         while ((j < this.jmlKolMat-1) && koefisienNol) {
             if (getElmt(this.jmlBrsMat-1, j) != 0) {
                 koefisienNol = false;
             }
             j++;
         }
-        
+
         int indikator = (koefisienNol && konstantaNol) ? 2 : (koefisienNol && !konstantaNol) ? 0 : 1;
         return indikator;
     }
-
     /* === BAGIAN TUGAS === */
 
     /**
@@ -497,6 +509,7 @@ class Matriks {
     public static double determinanRedBrs(Matriks mat) {
         // TODO: Further testing, edge cases
         double res = 1.0;
+        int sc;
 
         if (!mat.adalahPersegi()) {
             System.out.println("Determinan tidak bisa dihitung karena bukan matriks bujur sangkar.");
@@ -504,12 +517,41 @@ class Matriks {
             return Double.NaN;
         }
 
-        mat.jadikanSgtgAtas();
+        sc = mat.jadikanSgtgAtas();
         for (int i = 0; i < mat.jmlBrsMat; ++i) {
             res *= mat.getElmt(i, i);
         }
 
+        res *= Math.pow(-1, sc);
+
         return res;
+    }
+
+    /**
+     * Mencari interpolasi polinom dari sekumpulan titik yang diberikan
+     * dari matriks titik, Matriks titik terdiri dari:
+     *          x1    x2
+     * --------------------
+     * baris1 | 0.0   1.0 |
+     * baris2 | 2.0   3.2 |
+     * ---    | ---   --- |
+     * barisN | x1N   x2N |
+     * --------------------
+     * @param titik matriks berisi kumpulan titik
+     * @return jika matriks yang diberikan salah, berupa ArrayList berisi NaN,
+     * selain itu akan berisi solusi a_0, a_1, ..., a_n
+     */
+    public static ArrayList<Double> interpolasi(Matriks titik, double x) {
+        ArrayList<Double> solv = new ArrayList<>();
+
+        if (titik.jmlKolMat != 2) {
+            solv.add(Double.NaN);
+            System.out.println("Matriks yang dimasukkan bukan kumpulan titik");
+            System.out.println("Gagal menginterpolasi polino dari matriks yang diberikan");
+            return solv;
+        }
+
+        return solv;
     }
 
     // === PENGUJIAN / TESTING === //
@@ -528,7 +570,6 @@ class Matriks {
 
         Matriks m1 = new Matriks(nBar, nKol);
         Matriks mOriginal = new Matriks(nBar, nKol);
-
 
         //m1.tulisMatriks();
         m1.bacaMatriks();
@@ -560,7 +601,7 @@ class Matriks {
         //m1.jadikanSgtgAtas();
         //m1.jadikanAugmented(m1);
 
-        mOriginal.tulisMatriks();
+        //mOriginal.tulisMatriks();
         m1.tulisMatriks();
 
         s.close();
