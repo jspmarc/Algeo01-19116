@@ -37,6 +37,7 @@
  * - jadikanSgtgAtas
  * - jadikanAugmented
  * - eselonTereduksi
+ * - indikator
  *   *** TUGAS ***
  * - determinanEksKof
  * - determinanRedBrs
@@ -391,7 +392,7 @@ class Matriks {
     
     private void eselonTereduksi() {
         int lead = 0;
-        for (int i = 0; i <= this.jmlBrsMat; i++) {
+        for (int i = 0; i < this.jmlBrsMat; i++) {
             if (this.jmlKolMat <= lead) {
                 return;
             }
@@ -399,7 +400,7 @@ class Matriks {
             int k = i;
             while (getElmt(k, lead) == 0) {
                 k++;
-                if (this.jmlBrsMat == k) {
+                if (this.jmlBrsMat-1 == k) {
                     k = i; lead++;
                     if (this.jmlKolMat == lead) {
                         return;
@@ -410,7 +411,7 @@ class Matriks {
             if (getElmt(i, lead) != 0) {
                 bagiBaris(i, (getElmt(i, lead)));
             }
-            for (int j = 0; j <= this.jmlBrsMat; j++) {
+            for (int j = 0; j < this.jmlBrsMat; j++) {
                 if (j != i) {
                     tambahBaris(j, i, ((-1) * (getElmt(k, lead))));
                 }
@@ -420,8 +421,32 @@ class Matriks {
     }
 
     /**
-     * 
+     * Metode untuk mencari apakah baris dari matriks eselon baris (tereduksi)
+     * memiliki solusi unik, solusi tak hingga, atau solusi tidak ada.
+     * indikator = 0 -> solusi tidak ada
+     * indikator = 1 -> solusi unik
+     * indikator = 2 -> solusi tak hingga
      */
+
+    private int indikator() {
+        boolean konstantaNol;
+        boolean koefisienNol = true;
+        int j = 0;
+
+        if (getElmt(this.jmlBrsMat-1, this.jmlKolMat-1) == 0) {
+            konstantaNol = false;
+        }
+        
+        while ((j < this.jmlKolMat-1) && koefisienNol) {
+            if (getElmt(this.jmlBrsMat-1, j) != 0) {
+                koefisienNol = false;
+            }
+            j++;
+        }
+        
+        int indikator = (koefisienNol && konstantaNol) ? 2 : (koefisienNol && !konstantaNol) ? 0 : 1;
+        return indikator;
+    }
 
     /* === BAGIAN TUGAS === */
 
