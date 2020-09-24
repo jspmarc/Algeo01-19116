@@ -385,7 +385,7 @@ class Matriks {
         }
     }
 
-        /**
+    /**
      * Metode untuk membuat matriks augmented menjadi matriks eselon baris tereduksi
      */
     
@@ -393,16 +393,16 @@ class Matriks {
         int lead = 0;
         for (int i = 0; i <= this.jmlBrsMat; i++) {
             if (this.jmlKolMat <= lead) {
-                break;
+                return;
             }
 
             int k = i;
-            while (getElmt(k, lead) = 0) {
+            while (getElmt(k, lead) == 0) {
                 k++;
-                if (this.jmlBrsMat = k) {
+                if (this.jmlBrsMat == k) {
                     k = i; lead++;
-                    if (this.jmlKolMat = lead) {
-                        break;
+                    if (this.jmlKolMat == lead) {
+                        return;
                     }
                 }
             }
@@ -418,6 +418,10 @@ class Matriks {
             lead++;
         }
     }
+
+    /**
+     * 
+     */
 
     /* === BAGIAN TUGAS === */
 
