@@ -17,6 +17,30 @@
  *      - [x] Reduksi baris
  */
 
+/**
+ * DAFTAR FUNGSI DAN PROSEDUR:
+ * - Matriks
+ * - getElmt
+ * - setEmk
+ * - getBaris
+ * - setBaris
+ * - bacaMatriks
+ * - tulisMatriks
+ * - adalahPersegi
+ * - jumElmt
+ * - buatKofaktor
+ * - jmlhknBrs
+ * - kaliBaris
+ * - bagiBaris
+ * - tukarBaris
+ * - salinMatriks
+ * - jadikanSgtgAtas
+ * - jadikanAugmented
+ * - determinanEksKof
+ * - determinanRedBrs
+ * - gaussJordan
+ */
+
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
 
@@ -176,7 +200,7 @@ class Matriks {
                 // Nge-skip elmen yang berada di baris yang sama dengan acuanBrs
                 continue;
             }
-            for (int j = 0; j <  mat.jmlKolMat; ++j) {
+            for (int j = 0; j < mat.jmlKolMat; ++j) {
                 // Nge-skip elemen yang berada di kolom yang sama dengan acuanKol
                 if (j == idxAcuanKol) {
                     continue;
@@ -235,7 +259,7 @@ class Matriks {
     /**
      * Mengkalikan elemen di baris ke-"idxBaris" dengan konsanta k
      * @param idxBaris indeks baris yang ingin dikalikan
-     * @param k konstanta yang ingin dikalikan ke baris
+     * @param k konstanta yang ingin mengkali baris
      * @param m matriks yang salah satu barisnya ingin dikalikan dengan k
      */
     private void kaliBaris(int idxBaris, double k) {
@@ -244,6 +268,22 @@ class Matriks {
         // i untuk kolom
         for (int i = 0; i < this.jmlBrsMat; ++i) {
             tempElmt = k*this.getElmt(idxBaris, i);
+            this.setElmt(idxBaris, i, tempElmt);
+        }
+    }
+
+    /**
+     * Membagi  elemen di baris ke-"idxBaris" dengan konsanta k
+     * @param idxBaris indeks baris yang ingin dibagi
+     * @param k konstanta yang ingin membagi baris
+     * @param m matriks yang salah satu barisnya ingin dikalikan dengan k
+     */
+    private void bagiBaris(int idxBaris, double k) {
+        double tempElmt;
+
+        // i untuk kolom
+        for (int i = 0; i < this.jmlBrsMat; ++i) {
+            tempElmt = this.getElmt(idxBaris, i)/k;
             this.setElmt(idxBaris, i, tempElmt);
         }
     }
