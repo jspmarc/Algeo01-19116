@@ -359,7 +359,8 @@ class Matriks {
                              (pivot <= 0 && firstElmt <= 0) ? -1 : 1) *
                             firstElmt/pivot;
 
-                this.tambahBrs(j, i, konstanta);
+                this.tambahBaris(j, i, konstanta);
+                System.out.println("Konstanta: " + konstanta);
             }
         }
     }
