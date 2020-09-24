@@ -322,7 +322,7 @@ class Matriks {
     /**
      * Mengubah matriks pemanggil menjadi matriks segitiga atas
      * */
-    private int jadikanSgtgAtas() {
+    private int makeSgtgAtas() {
         // TODO: Further testing, edge cases
         int swapCount = 0;
 
@@ -360,17 +360,18 @@ class Matriks {
             // bawah pivot
             for (int j = i+1; j < this.jmlBrsMat; ++j) {
                 firstElmt = this.getElmt(j, i);
-                konstanta = ((pivot >= 0 && firstElmt >= 0) ||
-                             (pivot <= 0 && firstElmt <= 0) ? -1 : 1) *
-                            firstElmt;
+                konstanta = -1 * firstElmt;
                 konstanta /= pivot;
 
+                //System.out.println( ((pivot >= 0 && firstElmt >= 0) ||
+                                     //(pivot <= 0 && firstElmt <= 0) ? -1 : 1) +
+                                     //" " + firstElmt + " " + pivot );
                 this.tambahBaris(j, i, konstanta);
-                System.out.println("Konstanta: " + konstanta);
+                //System.out.println("Konstanta: " + konstanta);
             }
 
-            this.tulisMatriks();
-            System.out.println("====");
+            //this.tulisMatriks();
+            //System.out.println("====");
         }
 
         return swapCount;
@@ -383,7 +384,7 @@ class Matriks {
      * M1.jadikanAugmented(M2), maka: [M1|M2]
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
-    private void jadikanAugmented(Matriks aug) {
+    private void makeAugmented(Matriks aug) {
         // TODO: Selesaiin fungsi ini
         if (aug.jmlKolMat != 1) {
             System.out.println("Bukan matriks augment");
@@ -404,6 +405,7 @@ class Matriks {
      * Metode untuk membuat matriks augmented menjadi matriks eselon baris tereduksi
      */
     private void eselonTereduksi() {
+        // TODO: Test
         int lead = 0;
         for (int i = 0; i < this.jmlBrsMat; i++) {
             if (this.jmlKolMat <= lead) {
@@ -441,8 +443,8 @@ class Matriks {
      * - 1: Solusi unik
      * - 2: Solusi tak hingga
      */
-
     private int indikator() {
+        // TODO: Test
         boolean konstantaNol = true;
         boolean koefisienNol = true;
         int j = 0;
@@ -507,7 +509,8 @@ class Matriks {
      * @return determinan matriks mat
      */
     public static double determinanRedBrs(Matriks mat) {
-        // TODO: Further testing, edge cases
+        // TODO: untuk angka sangat besar/sangat kecil, implementasi ini kurang
+        // akurat
         double res = 1.0;
         int sc;
 
@@ -517,7 +520,7 @@ class Matriks {
             return Double.NaN;
         }
 
-        sc = mat.jadikanSgtgAtas();
+        sc = mat.makeSgtgAtas();
         for (int i = 0; i < mat.jmlBrsMat; ++i) {
             res *= mat.getElmt(i, i);
         }
@@ -530,12 +533,12 @@ class Matriks {
     /**
      * Mencari interpolasi polinom dari sekumpulan titik yang diberikan
      * dari matriks titik, Matriks titik terdiri dari:
-     *          x1    x2
+     *           x     y
      * --------------------
      * baris1 | 0.0   1.0 |
      * baris2 | 2.0   3.2 |
      * ---    | ---   --- |
-     * barisN | x1N   x2N |
+     * baris-n| x-n   y-n |
      * --------------------
      * @param titik matriks berisi kumpulan titik
      * @return jika matriks yang diberikan salah, berupa ArrayList berisi NaN,
@@ -576,8 +579,8 @@ class Matriks {
         salinMatriks(m1, mOriginal);
         m1.tulisMatriks();
 
-        System.out.printf("%.2f\n", determinanEksKof(m1));
-        System.out.printf("%.2f\n", determinanRedBrs(m1));
+        System.out.printf("Ekspansi kofaktor: %.2f\n", determinanEksKof(m1));
+        System.out.printf("Reduksi baris: %.2f\n", determinanRedBrs(m1));
         //System.out.println();
 
         //m1.kaliBaris(0, 200);
