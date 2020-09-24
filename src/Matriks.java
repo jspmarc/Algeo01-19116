@@ -29,16 +29,17 @@
  * - adalahPersegi
  * - jumElmt
  * - buatKofaktor
- * - jmlhknBrs
+ * - tambahBaris
  * - kaliBaris
  * - bagiBaris
  * - tukarBaris
  * - salinMatriks
  * - jadikanSgtgAtas
  * - jadikanAugmented
+ * - eselonTereduksi
+ *   *** TUGAS ***
  * - determinanEksKof
  * - determinanRedBrs
- * - gaussJordan
  */
 
 import java.util.ArrayList; // Array dinamis untuk matriks
@@ -225,7 +226,7 @@ class Matriks {
      * @param idxBrsPenjumlah indeks baris yang menjadi penjumlah
      * @param k konstanta pengali barisPenjumlah
      */
-    private void jmlhknBrs(int idxBrsAsal, int idxBrsPenjumlah,
+    private void tambahBaris(int idxBrsAsal, int idxBrsPenjumlah,
                                 double k){
         double tempElmt;
 
@@ -245,7 +246,7 @@ class Matriks {
      * @param idxBrsAsal indeks baris yang ingin dijumlahkan
      * @param idxBrsPenjumlah indeks baris yang menjadi penjumlah
      */
-    private void jmlhknBrs(int idxBrsAsal, int idxBrsPenjumlah) {
+    private void tambahBaris(int idxBrsAsal, int idxBrsPenjumlah) {
         double tempElmt;
 
         // i untuk kolom
@@ -273,7 +274,7 @@ class Matriks {
     }
 
     /**
-     * Membagi  elemen di baris ke-"idxBaris" dengan konsanta k
+     * Membagi elemen di baris ke-"idxBaris" dengan konsanta k
      * @param idxBaris indeks baris yang ingin dibagi
      * @param k konstanta yang ingin membagi baris
      * @param m matriks yang salah satu barisnya ingin dikalikan dengan k
@@ -358,7 +359,7 @@ class Matriks {
                              (pivot <= 0 && firstElmt <= 0) ? -1 : 1) *
                             firstElmt/pivot;
 
-                this.jmlhknBrs(j, i, konstanta);
+                this.tambahBrs(j, i, konstanta);
             }
         }
     }
@@ -381,6 +382,40 @@ class Matriks {
 
         this.jmlKolMat++;
         for (int i = 0; i < this.jmlBrsMat; ++i) {
+        }
+    }
+
+        /**
+     * Metode untuk membuat matriks augmented menjadi matriks eselon baris tereduksi
+     */
+    
+    private void eselonTereduksi() {
+        int lead = 0;
+        for (int i = 0; i <= this.jmlBrsMat; i++) {
+            if (this.jmlKolMat <= lead) {
+                break;
+            }
+
+            int k = i;
+            while (getElmt(k, lead) = 0) {
+                k++;
+                if (this.jmlBrsMat = k) {
+                    k = i; lead++;
+                    if (this.jmlKolMat = lead) {
+                        break;
+                    }
+                }
+            }
+            tukarBaris(k, i);
+            if (getElmt(i, lead) != 0) {
+                bagiBaris(i, (getElmt(i, lead)));
+            }
+            for (int j = 0; j <= this.jmlBrsMat; j++) {
+                if (j != i) {
+                    tambahBaris(j, i, ((-1) * (getElmt(k, lead))));
+                }
+            }
+            lead++;
         }
     }
 
