@@ -7,7 +7,7 @@ Kelompok 59
 |------|-----|
 | Jeane Mikha Erwansyah | 13519116 |
 | Josep Marcello | 13519164 |
-| David Owen Adiwiguna | 13519119 |
+| David Owen Adiwiguna | 13519169 |
 
 [SOP](./SOP.md)
 
@@ -16,8 +16,8 @@ Kelompok 59
 | NIM | Tugas |
 |-----|-------|
 | 13519116 | Metode Gauss, Gauss-Jordan, Pembuat program utama |
-| 13519169 | Matriks balikan, Kaidah cramer, regresi linier berganda |
 | 13519164 | Determinan matriks metode ekspansi kofaktor dan reduksi baris, interpolasi polinom |
+| 13519169 | Matriks balikan, Kaidah cramer, regresi linier berganda |
 
 ## Spesifikasi Tugas
 
