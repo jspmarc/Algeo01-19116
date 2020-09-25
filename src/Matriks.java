@@ -1,13 +1,5 @@
 /*
- * Matriks
- *
- * Jeane Mikha Erwansyah - 13519116
- * Josep Marcello - 13519164
- * David Owen Adiwiguna - 13519169
- *
- */
-
-/* TODO
+ * TODO
  * Implementaasi:
  *  - [ ] Gauss
  *  - [ ] Gauss-Jordan
@@ -17,42 +9,53 @@
  *      - [x] Reduksi baris
  */
 
-/**
- * DAFTAR FUNGSI DAN PROSEDUR:
- * - Matriks
- * - getElmt
- * - setEmk
- * - getBaris
- * - setBaris
- * - bacaMatriks
- * - tulisMatriks
- * - adalahPersegi
- * - jumElmt
- * - buatKofaktor
- * - tambahBaris
- * - kaliBaris
- * - bagiBaris
- * - tukarBaris
- * - salinMatriks
- * - jadikanSgtgAtas
- * - jadikanAugmented
- * - eselonTereduksi
- * - indikator
- *   *** TUGAS ***
- * - determinanEksKof
- * - determinanRedBrs
- */
-
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
 import java.lang.Math;
 
-/*
- * Tipe data mariks dengan elemen awal di (0,0)
+/**
+ * Class Matriks
+ * Tipe data mariks adalah double dengan elemen awal di (0,0)
  * Indeks selalu diawali 0
+ *
+ * @author Jeane Mikha Erwansyah - 13519116
+ * @author Josep Marcello - 13519164
+ * @author David Owen Adiwiguna - 13519169
+ *
  */
 
 class Matriks {
+
+    /*
+     * DAFTAR FUNGSI DAN PROSEDUR:
+     * *** CONSTRUCTOR ***
+     *   - Matriks
+     * *** GETTERS AND SETTERS ***
+     *   - getElmt
+     *   - setElmt
+     *   - getBaris
+     *   - setBaris
+     * *** INPUTS/OUTPUTS ***
+     *   - bacaMatriks
+     *   - tulisMatriks
+     * *** HELPER FUNCTIONS ***
+     *   - adalahPersegi
+     *   - jumElmt
+     *   - buatKofaktor
+     *   - tambahBaris
+     *   - kaliBaris
+     *   - bagiBaris
+     *   - tukarBaris
+     *   - salinMatriks
+     *   - makeSgtgAtas
+     *   - makeAugmented
+     *   - eselonTereduksi
+     *   - indikator
+     * *** TUGAS ***
+     *   - determinanEksKof
+     *   - determinanRedBrs
+     *   - interpolasi
+     */
 
     /* === ATTRIBUTES === */
 
@@ -557,56 +560,4 @@ class Matriks {
         return solv;
     }
 
-    // === PENGUJIAN / TESTING === //
-
-    /**
-     * Metode untuk pengujian metode lain matriks ("driver")
-     */
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        int nBar, nKol;
-
-        System.out.print("Masukkan banyak baris: ");
-        nBar = s.nextInt();
-        System.out.print("Masukkan banyak kolom: ");
-        nKol = s.nextInt();
-
-        Matriks m1 = new Matriks(nBar, nKol);
-        Matriks mOriginal = new Matriks(nBar, nKol);
-
-        //m1.tulisMatriks();
-        m1.bacaMatriks();
-        salinMatriks(m1, mOriginal);
-        m1.tulisMatriks();
-
-        System.out.printf("Ekspansi kofaktor: %.2f\n", determinanEksKof(m1));
-        System.out.printf("Reduksi baris: %.2f\n", determinanRedBrs(m1));
-        //System.out.println();
-
-        //m1.kaliBaris(0, 200);
-        //m1.tulisMatriks();
-        //System.out.println();
-
-        //m1.tukarBaris(0, 2);
-        //m1.tulisMatriks();
-        //System.out.println();
-
-        //m1.jumlahBaris(1, 2);
-        //m1.tulisMatriks();
-        //System.out.println();
-
-        //m1.jumlahBaris(1, 2, -1);
-        //m1.tulisMatriks();
-        //System.out.println();
-
-        //m1.jadikanAugmented(mOriginal);
-
-        //m1.jadikanSgtgAtas();
-        //m1.jadikanAugmented(m1);
-
-        //mOriginal.tulisMatriks();
-        m1.tulisMatriks();
-
-        s.close();
-    }
 }

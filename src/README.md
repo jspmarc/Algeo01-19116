@@ -15,6 +15,8 @@ Terdiri dari 2 *file*
     * Regresi linier berganda
 * `Main.java`
   * Berisi implementasi dari Matriks.java dan program utama
+* `Test.java`
+  * Tester untuk ADT Matriks
 
 [SOP](../SOP.md)
 
