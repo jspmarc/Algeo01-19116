@@ -11,6 +11,12 @@
 
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
+
+import org.graalvm.compiler.asm.aarch64.AArch64Assembler.SystemRegister;
+
+import sun.awt.AWTAccessor.SystemTrayAccessor;
+import sun.reflect.generics.reflectiveObjects.GenericArrayTypeImpl;
+
 import java.lang.Math;
 
 /**
@@ -51,7 +57,9 @@ class Matriks {
      *   - makeAugmented
      *   - eselonTereduksi
      *   - indikator
+     *   - buatSPL
      * *** TUGAS ***
+     *   - gaussJordan
      *   - determinanEksKof
      *   - determinanRedBrs
      *   - interpolasi
@@ -466,7 +474,71 @@ class Matriks {
         int indikator = (koefisienNol && konstantaNol) ? 2 : (koefisienNol && !konstantaNol) ? 0 : 1;
         return indikator;
     }
+
+    /**
+     * Metode untuk membuat SPL dari matriks eselon tereduksi
+     * menghasilkan solusi SPL yang solusinya parametrik
+     * @param mat adalah matriks eselon tereduksi yang ingin dicari solusinya
+     * @return Arraylist berisi pair variabel x1 - xn dan solusinya
+     */
+
+    private ArrayList<Pair<String, String>> buatSPL(Matriks mat) {
+        // TODO: menyelesaikan fungsi
+        ArrayList<Pair<String, String>> solParametrik = new ArrayList<>();
+        
+        return solParametrik;
+    }      
+
     /* === BAGIAN TUGAS === */
+
+    /**
+     * Metode Gauss Jordan
+     * @param mat matriks yang ingin diselesaikan dengan metode Gauss-Jordan
+     * @return 3 kemungkinan output:
+     * - nilai x1-xn tertulis: matriks augmented memiliki solusi unik, indikator = 2
+     * - "Solusi tidak ada": matriks augmented tidak memiliki solusi, indikator = 0
+     * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
+     */
+
+    public static ArrayList<Pair<String, String>> gaussJordan(Matriks mat) {
+        // TODO: - Need optimizing, mungkin printing dari tuple menggunakan prosedur
+        //       - buatSPL WIP
+        int indikator;
+        ArrayList<Pair<String, String>> sol = new ArrayList<>();
+
+        mat.eselonTereduksi();
+        indikator = mat.indikator();
+        if (indikator == 0) {
+            System.out.println("Solusi tidak ada");
+            sol.add(new Pair<String, String> ("", ""));
+            return sol;
+        } else if (indikator == 1) { 
+            System.out.println("\r");
+            for (int i = 0; i < mat.jmlBrsMat; i++) {
+                sol.add(new Pair<String, String> ("x" + (i+1),  mat.getElmt(i, mat.jmlKolMat-1)));
+                System.out.print(sol.get(i).getvalue0() + " = \r");
+                System.out.print(sol.get(i).getvalue1() + "\r");
+                if (i != mat.jmlKolMat-1) {
+                    System.out.print(", \r");
+                }
+            }
+            System.out.println();
+            return sol;
+        } else { // indikator == 2
+            sol = mat.buatSPL(mat);
+
+            System.out.println("\r");
+            for (int i = 0; i < mat.jmlBrsMat; i++) {
+                System.out.print(sol.get(i).getvalue0() + " = \r");
+                System.out.print(sol.get(i).getvalue1() + "\r");
+                if (i != mat.jmlKolMat-1) {
+                    System.out.print(", \r");
+                }
+            }
+            System.out.println();
+            return sol;
+        }
+    }
 
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
