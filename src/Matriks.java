@@ -59,7 +59,7 @@ class Matriks {
 
     /* === ATTRIBUTES === */
 
-    private int jmlBrsMat, // Banyak baris
+    public int jmlBrsMat, // Banyak baris
                 jmlKolMat; // Banyak kolom
 
     // ArrayList dari ArrayList
@@ -363,8 +363,7 @@ class Matriks {
             // bawah pivot
             for (int j = i+1; j < this.jmlBrsMat; ++j) {
                 firstElmt = this.getElmt(j, i);
-                konstanta = -1 * firstElmt;
-                konstanta /= pivot;
+                konstanta = -1 * firstElmt/pivot;
 
                 //System.out.println( ((pivot >= 0 && firstElmt >= 0) ||
                                      //(pivot <= 0 && firstElmt <= 0) ? -1 : 1) +
@@ -387,21 +386,22 @@ class Matriks {
      * M1.jadikanAugmented(M2), maka: [M1|M2]
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
-    private void makeAugmented(Matriks aug) {
+    public void makeAugmented(Matriks aug) {
         // TODO: Selesaiin fungsi ini
-        if (aug.jmlKolMat != 1) {
-            System.out.println("Bukan matriks augment");
-            System.out.println("Matriks gagal diubah jadi matriks augmented");
-            return;
-        } else if (aug.jmlBrsMat != this.jmlBrsMat) {
+        int idxAugment;
+        if (aug.jmlBrsMat != this.jmlBrsMat) {
             System.out.println("Jumlah baris kedua matriks berbeda");
             System.out.println("Matriks gagal diubah jadi matriks augmented");
             return;
         }
 
-        this.jmlKolMat++;
+        // Meng-augment baris per baris
         for (int i = 0; i < this.jmlBrsMat; ++i) {
+            for (int j = 0;  j < aug.jmlKolMat; ++j) {
+                this.getBaris(i).add(aug.getElmt(i, j));
+            }
         }
+        this.jmlKolMat +=  aug.jmlKolMat;
     }
 
     /**
@@ -549,12 +549,17 @@ class Matriks {
      */
     public static ArrayList<Double> interpolasi(Matriks titik, double x) {
         ArrayList<Double> solv = new ArrayList<>();
+        Matriks interpolate = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat);
 
         if (titik.jmlKolMat != 2) {
             solv.add(Double.NaN);
             System.out.println("Matriks yang dimasukkan bukan kumpulan titik");
             System.out.println("Gagal menginterpolasi polino dari matriks yang diberikan");
+            solv.add(Double.NaN);
             return solv;
+        }
+
+        for (int i = 0; i < titik.jmlBrsMat; ++i) {
         }
 
         return solv;
