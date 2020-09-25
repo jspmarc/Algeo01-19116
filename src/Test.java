@@ -53,6 +53,9 @@ public class Test {
 
         //mOriginal.tulisMatriks();
         m1.tulisMatriks();
+        m1.makeAugmented(mOriginal);
+        System.out.println(m1.jumElmt() + " " + m1.jmlBrsMat + " " + m1.jmlKolMat);
+        m1.tulisMatriks();
 
         s.close();
     }
