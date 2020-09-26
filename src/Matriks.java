@@ -12,6 +12,8 @@
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
 
+import org.graalvm.compiler.phases.common.InsertMembarsPhase;
+
 import jdk.nashorn.internal.ir.ReturnNode;
 
 import java.lang.Math;
@@ -57,10 +59,9 @@ class Matriks {
      *   - makeEselonTereduksi
      *   - indikator
      *   - solusiDouble
-     *   - matriksToSPL
-     *   - buatSPL (WIP)
+     *   - matriksToSPL (WIP)
      * *** TUGAS ***
-     *   - cetakSolusi
+     *   - cetakSolusi (WIP)
      *   - gauss
      *   - gaussJordan
      *   - determinanEksKof
@@ -577,9 +578,9 @@ class Matriks {
      */
 
     /*
-    private HashMap<String, String> matriksToSPL(Matriks mat) {
-        // TODO: menyelesaikan fungsi || UNDER CONSTRUCTION
-        HashMap<String, String> solParametrik = new HashMap<String, String>();
+    private HashMap<String, String> matriksToSPL() {
+        // TODO: UNDER CONSTRUCTION
+        HashMap<String, String> solParametrik = new HashMap<>();
 
         return solParametrik;
     }
@@ -597,7 +598,7 @@ class Matriks {
      */
 
     public static HashMap<String, String> gauss(Matriks mat) {
-        HashMap<String, String> sol = new HashMap<String, String>();
+        HashMap<String, String> sol = new HashMap<>();
 
         mat.makeEselon();
         sol = mat.gaussJordan(mat);
@@ -617,7 +618,7 @@ class Matriks {
         // TODO: - matriksToSPL WIP
         //       - UNDER CONSTRUCTION
         int indikator;
-        HashMap<String, String> sol = new HashMap<String, String>();
+        HashMap<String, String> sol = new HashMap<>();
 
         mat.makeEselonTereduksi();
         indikator = mat.indikator();
@@ -639,13 +640,24 @@ class Matriks {
 
     /**
      * Metode untuk mencetak jawaban ke layar
-     * Metode mencetak solusi jawaban yang berupa HashMap
+     * @param solHashMap
      */
-    /*
-    public static void cetakSolusi() {
-
+    
+    public static void cetakSolusi(HashMap<String, String> solHashMap) {
+        if (solHashMap.isEmpty()) {
+            System.out.println("Solusi tidak ada");
+        }
+        else {
+            for (int i = 0; i <= solHashMap.size(); i++) {
+                System.out.print("x" + (i+1) + " = " + solHashMap.get("x"+(i+1)));
+                if (i != solHashMap.size()) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
+        }
     }
-    */
+    
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
      * @param mat matriks yang ingin dihitung kofaktornya
