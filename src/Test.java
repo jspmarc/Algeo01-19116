@@ -28,6 +28,7 @@ public class Test {
 
         System.out.printf("Ekspansi kofaktor: %.2f\n", Matriks.determinanEksKof(m1));
         System.out.printf("Reduksi baris: %.2f\n", Matriks.determinanRedBrs(m1));
+        Matriks.salinMatriks(mOriginal, m1);
         //System.out.println();
 
         //m1.kaliBaris(0, 200);

@@ -481,7 +481,8 @@ class Matriks {
             j++;
         }
 
-        int indikator = (koefisienNol && konstantaNol) ? 2 : (koefisienNol && !konstantaNol) ? 0 : 1;
+        int indikator = (koefisienNol && konstantaNol) ? 2 :
+                        (koefisienNol && !konstantaNol) ? 0 : 1;
         return indikator;
     }
 
@@ -495,6 +496,7 @@ class Matriks {
     /*
     private ArrayList<Pair<String, String>> buatSPL(Matriks mat) {
         // TODO: menyelesaikan fungsi || UNDER CONSTRUCTION
+        // TODO: Change Pair to HashMap
         // Ganti ArrayList of Pair jadi HashMap?
         ArrayList<Pair<String, String>> solParametrik = new ArrayList<>();
 
@@ -638,13 +640,14 @@ class Matriks {
      */
     public static ArrayList<Double> interpolasi(Matriks titik, double x) {
         ArrayList<Double> solv = new ArrayList<>();
-        Matriks matInter = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat);
         int indikator;
+        Matriks matInter = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat+1);
 
         if (titik.jmlKolMat != 2) {
-            solv.add(Double.NaN);
+            // Jika yang didapatkan bukan matriks yang terdiri dari titik-titik
             System.out.println("Matriks yang dimasukkan bukan kumpulan titik");
-            System.out.println("Gagal menginterpolasi polino dari matriks yang diberikan");
+            System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
+            solv.add(Double.NaN);
             return solv;
         }
 
@@ -691,5 +694,4 @@ class Matriks {
 
         return solv;
     }
-
 }
