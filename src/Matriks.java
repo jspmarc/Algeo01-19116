@@ -61,9 +61,9 @@ class Matriks {
      *   - solusiDouble
      *   - matriksToSPL (WIP)
      * *** TUGAS ***
-     *   - cetakSolusi (WIP)
      *   - gauss
      *   - gaussJordan
+     *   - tulisSolusi (WIP)
      *   - determinanEksKof
      *   - determinanRedBrs
      *   - interpolasi
@@ -577,14 +577,61 @@ class Matriks {
      * @return Arraylist berisi pair variabel x1 - xn dan solusinya
      */
 
-    /*
     private HashMap<String, String> matriksToSPL() {
         // TODO: UNDER CONSTRUCTION
+        //       Test
         HashMap<String, String> solParametrik = new HashMap<>();
+        char varBebas = 's'; // variabel bebas
+        
+        // Mencari banyak variabel bebas yang dibutuhkan
+        int jmlBarisNol = 0;
+        int i = 0;
+        int j = 0;
+        boolean nol = true;
 
+        while (nol && i < mat.jmlBrsMat) {
+            while (nol && j < mat.jmlKolMat) {
+                if (mat.getElmt(i, j) != 0) {
+                    nol = false;
+                }
+                jmlBarisNol++;
+            }
+        }
+
+        // jumlah variabel - jumlah baris matriks yang tidak nol
+        int jmlBarisTidakNol = this.jmlBrsMat - jmlBarisNol;
+        int jmlVarBebas = this.jmlKolMat-1 - jmlBarisTidakNol;
+
+        // Assigning xn(s) that is a free variable(s) with a parametric solution/alphabet
+        for (j = 0; j < this.jmlKolMat-1; j++) {
+            for (i = 0; i < this.jmlBrsMat; i++) {
+                if (this.getElmt(i, j) != 0 || this.getElmt(i, j) != 1) {
+                    solParametrik.put("x" + (j+1), varBebas + "");
+                    if (varBebas == 'z') {
+                        varBebas -= 25;
+                    }
+                    else {
+                        varBebas++;
+                    }
+                }
+                
+            }
+        }
+
+        // Assigning the rest of xns with a value for their solution
+        /*
+        for (i = 0; i < jmlBarisTidakNol; i++) {
+            for (j = 0; j < this.jmlKolMat; j++) {
+                solParametrik.put("x" + (i+1), "-" + this.getElmt(i, j) + solParametrik.get("x" + (j+1));
+                solParametrik.replace("x" + (i+1), newvalue);
+                // koefisien min, konstanta plus
+                }
+                
+            }
+        }
+        */
         return solParametrik;
     }
-    */
     
     /* === BAGIAN TUGAS === */
 
@@ -643,12 +690,12 @@ class Matriks {
      * @param solHashMap
      */
     
-    public static void cetakSolusi(HashMap<String, String> solHashMap) {
+    public static void tulisSolusi(HashMap<String, String> solHashMap) {
         if (solHashMap.isEmpty()) {
             System.out.println("Solusi tidak ada");
         }
         else {
-            for (int i = 0; i <= solHashMap.size(); i++) {
+            for (int i = solHashMap.size(); i >= 0; i--) {
                 System.out.print("x" + (i+1) + " = " + solHashMap.get("x"+(i+1)));
                 if (i != solHashMap.size()) {
                     System.out.print(", ");
