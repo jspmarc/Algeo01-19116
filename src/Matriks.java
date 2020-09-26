@@ -59,7 +59,7 @@ class Matriks {
 
     /* === ATTRIBUTES === */
 
-    public int jmlBrsMat, // Banyak baris
+    private int jmlBrsMat, // Banyak baris
                 jmlKolMat; // Banyak kolom
 
     // ArrayList dari ArrayList
@@ -129,6 +129,20 @@ class Matriks {
      */
     public void setBaris(int i, ArrayList<Double> barisBaru) {
         this.mat.set(i, barisBaru);
+    }
+
+    /**
+     * @return Banyak kolom matriks
+     */
+    public int getJmlKol() {
+        return this.jmlKolMat;
+    }
+
+    /**
+     * @return Banyak baris matriks
+     */
+    public int getJmlBrs() {
+        return this.jmlBrsMat;
     }
 
     /* === INPUTS AND OUTPUTS === */

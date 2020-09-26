@@ -54,7 +54,7 @@ public class Test {
         //mOriginal.tulisMatriks();
         m1.tulisMatriks();
         m1.makeAugmented(mOriginal);
-        System.out.println(m1.jumElmt() + " " + m1.jmlBrsMat + " " + m1.jmlKolMat);
+        System.out.println(m1.jumElmt() + " " + m1.getJmlBrs() + " " + m1.getJmlKol());
         m1.tulisMatriks();
 
         s.close();
