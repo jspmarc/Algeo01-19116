@@ -11,6 +11,9 @@
 
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
+
+import jdk.nashorn.internal.ir.ReturnNode;
+
 import java.lang.Math;
 import java.util.HashMap;
 
@@ -53,9 +56,12 @@ class Matriks {
      *   - makeEselon
      *   - makeEselonTereduksi
      *   - indikator
+     *   - solusiDouble
+     *   - matriksToSPL
      *   - buatSPL (WIP)
      * *** TUGAS ***
-     *   - gauss (WIP)
+     *   - cetakSolusi
+     *   - gauss
      *   - gaussJordan
      *   - determinanEksKof
      *   - determinanRedBrs
@@ -485,7 +491,7 @@ class Matriks {
      */
 
     public void makeEselonTereduksi() {
-        // TODO: Ganti jadi private :(
+        // TODO: Ganti jadi private
         //       Test
         double temp;
         for (int i = this.jmlKolMat-1; i >= 0; i--) {
@@ -547,26 +553,44 @@ class Matriks {
     }
 
     /**
+     * Metode untuk mencari (assign) solusi dari matriks eselon baris tereduksi
+     * Prekondisi: indikator = 1 dan matriks sudah berupa matriks eselon tereduksi
+     * @return HashMap<String, Double>
+     */
+
+    private HashMap<String, Double> solusiDouble() {
+        // TODO: Test
+        HashMap<String, Double> sol = new HashMap<String, Double>();
+
+        for (int i = 0; i < this.jmlBrsMat; i++) {
+            double val = this.getElmt(i, this.jmlKolMat-1);
+            sol.put("x" + (i+1), val);
+        }
+        return sol;
+    }
+
+    /**
      * Metode untuk membuat SPL dari matriks eselon tereduksi
-     * menghasilkan solusi SPL yang solusinya parametrik
-     * @param mat adalah matriks eselon tereduksi yang ingin dicari solusinya
+     * menghasilkan solusi SPL yang solusinya parametrik.
+     * Prekondisi: matriks sudah berupa matriks eselon tereduksi dengan indikator = 2
      * @return Arraylist berisi pair variabel x1 - xn dan solusinya
      */
 
     /*
-    private HashMap<String, String> buatSPL(Matriks mat) {
+    private HashMap<String, String> matriksToSPL(Matriks mat) {
         // TODO: menyelesaikan fungsi || UNDER CONSTRUCTION
         HashMap<String, String> solParametrik = new HashMap<String, String>();
 
         return solParametrik;
     }
     */
+    
     /* === BAGIAN TUGAS === */
 
     /**
      * Metode Gauss
      * @param mat
-     * @return 3 kemungkinan output:
+     * @return 3 kemungkinan output (dalam tipe string):
      * - nilai x1-xn tertulis: matriks augmented memiliki solusi unik, indikator = 2
      * - "Solusi tidak ada": matriks augmented tidak memiliki solusi, indikator = 0
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
@@ -576,7 +600,6 @@ class Matriks {
         HashMap<String, String> sol = new HashMap<String, String>();
 
         mat.makeEselon();
-        mat.makeEselonTereduksi();
         sol = mat.gaussJordan(mat);
         return sol;
     }
@@ -584,16 +607,14 @@ class Matriks {
     /**
      * Metode Gauss Jordan
      * @param mat matriks yang ingin diselesaikan dengan metode Gauss-Jordan
-     * @return 3 kemungkinan output:
+     * @return 3 kemungkinan output (dalam tipe string):
      * - nilai x1-xn tertulis: matriks augmented memiliki solusi unik, indikator = 2
      * - "Solusi tidak ada": matriks augmented tidak memiliki solusi, indikator = 0
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
 
     public static HashMap<String, String> gaussJordan(Matriks mat) {
-        // TODO: - Mmungkin printing dari tuple menggunakan prosedur
-        //       - buatSPL WIP
-        //       - return type string or double?
+        // TODO: - matriksToSPL WIP
         //       - UNDER CONSTRUCTION
         int indikator;
         HashMap<String, String> sol = new HashMap<String, String>();
@@ -601,7 +622,6 @@ class Matriks {
         mat.makeEselonTereduksi();
         indikator = mat.indikator();
         if (indikator == 0) {
-            //System.out.println("Solusi tidak ada");
             sol.put("", "");
             return sol;
         } else if (indikator == 1) {
@@ -609,15 +629,23 @@ class Matriks {
                 double val = mat.getElmt(i, mat.jmlKolMat-1);
                 String valString = Double.toString(val);
                 sol.put("x" + (i+1), valString);
-                // mungkin prosedur printing
             }
             return sol;
         } else { // indikator == 2
-            //sol = mat.buatSPL(mat);
+            sol = mat.matriksToSPL(mat);
             return sol;
         }
     }
 
+    /**
+     * Metode untuk mencetak jawaban ke layar
+     * Metode mencetak solusi jawaban yang berupa HashMap
+     */
+    /*
+    public static void cetakSolusi() {
+
+    }
+    */
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
      * @param mat matriks yang ingin dihitung kofaktornya
