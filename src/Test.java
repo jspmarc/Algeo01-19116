@@ -28,6 +28,7 @@ public class Test {
 
         System.out.printf("Ekspansi kofaktor: %.2f\n", Matriks.determinanEksKof(m1));
         System.out.printf("Reduksi baris: %.2f\n", Matriks.determinanRedBrs(m1));
+        Matriks.salinMatriks(mOriginal, m1);
         //System.out.println();
 
         //m1.kaliBaris(0, 200);
@@ -52,6 +53,13 @@ public class Test {
         //m1.jadikanAugmented(m1);
 
         //mOriginal.tulisMatriks();
+        //m1.tulisMatriks();
+        //Matriks.interpolasi(m1, 1);
+        m1.makeAugmented(mOriginal);
+        System.out.println("Before: ");
+        m1.tulisMatriks();
+        m1.eselonTereduksi();
+        System.out.println("After: ");
         m1.tulisMatriks();
 
         s.close();
