@@ -49,10 +49,12 @@ class Matriks {
      *   - salinMatriks
      *   - makeSgtgAtas
      *   - makeAugmented
-     *   - eselonTereduksi
+     *   - makeEselon
+     *   - makeEselonTereduksi
      *   - indikator
-     *   - buatSPL
+     *   - buatSPL (WIP)
      * *** TUGAS ***
+     *   - gauss (WIP)
      *   - gaussJordan
      *   - determinanEksKof
      *   - determinanRedBrs
@@ -413,7 +415,7 @@ class Matriks {
     }
 
     /**
-     * Metode untuk membuat matriks augmented menjadi matriks eselon baris tereduksi
+     * Metode untuk membuat matriks augmented menjadi matriks eselon baris
      */
     public void makeEselon() {
         // TODO: FIX ME & Jadiin private lagi
@@ -473,6 +475,40 @@ class Matriks {
             }
 
             leadIdx++;
+        }
+    }
+
+    /**
+     * Metode untuk mengubah matriks eselon baris menjadi
+     * matriks eselon baris tereduksi
+     */
+
+    public void makeEselonTereduksi() {
+        double temp;
+        for (int i = this.jmlKolMat-1; i >= 0; i--) {
+            for (int j = i; j >= 0; j--) {
+                temp = this.getElmt(j, i) / this.getElmt(i, i);
+                for (int k = this.jmlKolMat-1; k >= i; k--) {
+                    double val = this.getElmt(j, k) - temp * this.getElmt(i, k);
+                    this.setElmt(j, k, val);
+                }
+            }
+        }
+
+        ArrayList<Double> tempBaris = new ArrayList<>(); // ?
+        for (i = 0; i < this.jmlKolMat-1; i++) {
+            tempBaris.set(i, 0); // membuat koefisien leading menjadi 0
+        }
+        for (i = 0; i < this.jmlKolMat-1; i++) {
+            for (j = 0; j <= this.jmlKolMat-1; j++) {
+                if (tempBaris.get(i) == 0 && j != this.jmlKolMat-1) {
+                    tempBaris.set(i, this.getElmt(i, j));
+                }
+                if (tempBaris.get(i) != 0) {
+                    val = this.getElmt(i, j) / 
+                    this.setElmt(i, j, val);
+                }
+            }
         }
     }
 
@@ -551,13 +587,12 @@ class Matriks {
             sol.add(new Pair<String, String> ("", ""));
             return sol;
         } else if (indikator == 1) {
-            System.out.println("\r");
             for (int i = 0; i < mat.jmlBrsMat; i++) {
                 sol.add(new Pair<String, String> ("x" + (i+1),  mat.getElmt(i, mat.jmlKolMat-1)));
-                System.out.print(sol.get(i).getvalue0() + " = \r");
-                System.out.print(sol.get(i).getvalue1() + "\r");
+                System.out.print(sol.get(i).getvalue0() + " = ");
+                System.out.print(sol.get(i).getvalue1());
                 if (i != mat.jmlKolMat-1) {
-                    System.out.print(", \r");
+                    System.out.print(", ");
                 }
             }
             System.out.println();
@@ -567,10 +602,10 @@ class Matriks {
 
             System.out.println("\r");
             for (int i = 0; i < mat.jmlBrsMat; i++) {
-                System.out.print(sol.get(i).getvalue0() + " = \r");
-                System.out.print(sol.get(i).getvalue1() + "\r");
+                System.out.print(sol.get(i).getvalue0() + " = ");
+                System.out.print(sol.get(i).getvalue1());
                 if (i != mat.jmlKolMat-1) {
-                    System.out.print(", \r");
+                    System.out.print(", ");
                 }
             }
             System.out.println();
