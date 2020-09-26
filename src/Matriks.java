@@ -564,6 +564,24 @@ class Matriks {
     /* === BAGIAN TUGAS === */
 
     /**
+     * Metode Gauss
+     * @param mat
+     * @return 3 kemungkinan output:
+     * - nilai x1-xn tertulis: matriks augmented memiliki solusi unik, indikator = 2
+     * - "Solusi tidak ada": matriks augmented tidak memiliki solusi, indikator = 0
+     * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
+     */
+
+    public static HashMap<String, String> gauss(Matriks mat) {
+        HashMap<String, String> sol = new HashMap<String, String>();
+
+        mat.makeEselon();
+        mat.makeEselonTereduksi();
+        sol = mat.gaussJordan(mat);
+        return sol;
+    }
+
+    /**
      * Metode Gauss Jordan
      * @param mat matriks yang ingin diselesaikan dengan metode Gauss-Jordan
      * @return 3 kemungkinan output:
@@ -573,8 +591,9 @@ class Matriks {
      */
 
     public static HashMap<String, String> gaussJordan(Matriks mat) {
-        // TODO: - Need optimizing, mungkin printing dari tuple menggunakan prosedur
+        // TODO: - Mmungkin printing dari tuple menggunakan prosedur
         //       - buatSPL WIP
+        //       - return type string or double?
         //       - UNDER CONSTRUCTION
         int indikator;
         HashMap<String, String> sol = new HashMap<String, String>();
