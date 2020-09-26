@@ -12,6 +12,7 @@
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
 import java.lang.Math;
+import java.util.HashMap;
 
 /**
  * Class Matriks
@@ -484,6 +485,8 @@ class Matriks {
      */
 
     public void makeEselonTereduksi() {
+        // TODO: Ganti jadi private :(
+        //       Test
         double temp;
         for (int i = this.jmlKolMat-1; i >= 0; i--) {
             for (int j = i; j >= 0; j--) {
@@ -496,16 +499,16 @@ class Matriks {
         }
 
         ArrayList<Double> tempBaris = new ArrayList<>(); // ?
-        for (i = 0; i < this.jmlKolMat-1; i++) {
+        for (int i = 0; i < this.jmlKolMat-1; i++) {
             tempBaris.set(i, 0); // membuat koefisien leading menjadi 0
         }
-        for (i = 0; i < this.jmlKolMat-1; i++) {
-            for (j = 0; j <= this.jmlKolMat-1; j++) {
+        for (int i = 0; i < this.jmlKolMat-1; i++) {
+            for (int j = 0; j <= this.jmlKolMat-1; j++) {
                 if (tempBaris.get(i) == 0 && j != this.jmlKolMat-1) {
                     tempBaris.set(i, this.getElmt(i, j));
                 }
                 if (tempBaris.get(i) != 0) {
-                    val = this.getElmt(i, j) / 
+                    double val = this.getElmt(i, j); 
                     this.setElmt(i, j, val);
                 }
             }
@@ -550,16 +553,13 @@ class Matriks {
      */
 
     /*
-    private ArrayList<Pair<String, String>> buatSPL(Matriks mat) {
+    private HashMap<String, String> buatSPL(Matriks mat) {
         // TODO: menyelesaikan fungsi || UNDER CONSTRUCTION
-        // TODO: Change Pair to HashMap
-        // Ganti ArrayList of Pair jadi HashMap?
-        ArrayList<Pair<String, String>> solParametrik = new ArrayList<>();
+        HashMap<String, String> solParametrik = new HashMap<String, String>();
 
         return solParametrik;
     }
     */
-
     /* === BAGIAN TUGAS === */
 
     /**
@@ -571,48 +571,32 @@ class Matriks {
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
 
-    /*
-    public static ArrayList<Pair<String, String>> gaussJordan(Matriks mat) {
+    public static HashMap<String, String> gaussJordan(Matriks mat) {
         // TODO: - Need optimizing, mungkin printing dari tuple menggunakan prosedur
         //       - buatSPL WIP
-        //       - Ganti ArrayList of Pair jadi HashMap
         //       - UNDER CONSTRUCTION
         int indikator;
-        ArrayList<Pair<String, String>> sol = new ArrayList<>();
+        HashMap<String, String> sol = new HashMap<String, String>();
 
-        mat.eselonTereduksi();
+        mat.makeEselonTereduksi();
         indikator = mat.indikator();
         if (indikator == 0) {
-            System.out.println("Solusi tidak ada");
-            sol.add(new Pair<String, String> ("", ""));
+            //System.out.println("Solusi tidak ada");
+            sol.put("", "");
             return sol;
         } else if (indikator == 1) {
             for (int i = 0; i < mat.jmlBrsMat; i++) {
-                sol.add(new Pair<String, String> ("x" + (i+1),  mat.getElmt(i, mat.jmlKolMat-1)));
-                System.out.print(sol.get(i).getvalue0() + " = ");
-                System.out.print(sol.get(i).getvalue1());
-                if (i != mat.jmlKolMat-1) {
-                    System.out.print(", ");
-                }
+                double val = mat.getElmt(i, mat.jmlKolMat-1;
+                String valString = Double.toString(val);
+                sol.put("x" + (i+1), valString);
+                // mungkin prosedur printing
             }
-            System.out.println();
             return sol;
         } else { // indikator == 2
-            sol = mat.buatSPL(mat);
-
-            System.out.println("\r");
-            for (int i = 0; i < mat.jmlBrsMat; i++) {
-                System.out.print(sol.get(i).getvalue0() + " = ");
-                System.out.print(sol.get(i).getvalue1());
-                if (i != mat.jmlKolMat-1) {
-                    System.out.print(", ");
-                }
-            }
-            System.out.println();
+            //sol = mat.buatSPL(mat);
             return sol;
         }
     }
-    */
 
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
