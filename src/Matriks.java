@@ -353,7 +353,7 @@ class Matriks {
                    konstanta; // Konstanta pengali matriks
 
             // Nyari pivot sampai pivot tidak 0
-            int z = i+1; // iterator pencarian pivot tidak 0
+            int z = i; // iterator pencarian pivot tidak 0
             for (; z < this.jmlBrsMat && tempPivot == 0; ++z) {
                 tempPivot = this.getElmt(z, i);
             }
@@ -381,15 +381,8 @@ class Matriks {
                 firstElmt = this.getElmt(j, i);
                 konstanta = -1 * firstElmt/pivot;
 
-                //System.out.println( ((pivot >= 0 && firstElmt >= 0) ||
-                                     //(pivot <= 0 && firstElmt <= 0) ? -1 : 1) +
-                                     //" " + firstElmt + " " + pivot );
                 this.tambahBaris(j, i, konstanta);
-                //System.out.println("Konstanta: " + konstanta);
             }
-
-            //this.tulisMatriks();
-            //System.out.println("====");
         }
 
         return swapCount;
@@ -403,8 +396,7 @@ class Matriks {
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
     public void makeAugmented(Matriks aug) {
-        // TODO: Selesaiin fungsi ini
-        int idxAugment;
+        // TODO: Selesaiin fungsi ini  & Jadiin private lagi
         if (aug.jmlBrsMat != this.jmlBrsMat) {
             System.out.println("Jumlah baris kedua matriks berbeda");
             System.out.println("Matriks gagal diubah jadi matriks augmented");
@@ -423,33 +415,43 @@ class Matriks {
     /**
      * Metode untuk membuat matriks augmented menjadi matriks eselon baris tereduksi
      */
-    private void eselonTereduksi() {
-        // TODO: Test
+    public void makeEselon() {
+        // TODO: FIX ME & Jadiin private lagi
         int lead = 0;
         for (int i = 0; i < this.jmlBrsMat; i++) {
-            if (this.jmlKolMat <= lead) {
-                return;
-            }
-
             int k = i;
+            // Kalau bagian diagonalnya nol
+            // Akan dicari sampai tidak nol
             while (getElmt(k, lead) == 0) {
                 k++;
+                // kalau pencarian sudah sampai baris akhir dan masih tidak
+                // ditemukan, tukar dengan baris terakhir
                 if (this.jmlBrsMat-1 == k) {
                     k = i; lead++;
-                    if (this.jmlKolMat == lead) {
+                    // Kalau ternyata di baris akhir sebaris 0 semua, proses
+                    // diberhentikan karena solusi pasti banyak atau tidak ada
+                    if (this.jmlKolMat-1 == lead) {
                         return;
                     }
                 }
             }
+
+            this.tulisMatriks();
             tukarBaris(k, i);
+
+            // Membagi elemen baris agar memiliki one lead
             if (getElmt(i, lead) != 0) {
-                bagiBaris(i, (getElmt(i, lead)));
+                bagiBaris(i, (this.getElmt(i, lead)));
             }
-            for (int j = 0; j < this.jmlBrsMat; j++) {
-                if (j != i) {
-                    tambahBaris(j, i, ((-1) * (getElmt(k, lead))));
-                }
+
+            // Meng-0-kan elemen yang sebaris dengan one-lead
+            for (int j = i+1; j < this.jmlBrsMat; j++) {
+                // Diambil elemen yang di bawah 1 lead
+                double elmtPertama = this.getElmt(j, i),
+                       konstanta = -1 * elmtPertama/this.getElmt(i, lead);
+                tambahBaris(j, i, konstanta);
             }
+
             lead++;
         }
     }
@@ -490,13 +492,15 @@ class Matriks {
      * @return Arraylist berisi pair variabel x1 - xn dan solusinya
      */
 
+    /*
     private ArrayList<Pair<String, String>> buatSPL(Matriks mat) {
-        // TODO: menyelesaikan fungsi
+        // TODO: menyelesaikan fungsi || UNDER CONSTRUCTION
         // Ganti ArrayList of Pair jadi HashMap?
         ArrayList<Pair<String, String>> solParametrik = new ArrayList<>();
 
         return solParametrik;
     }
+    */
 
     /* === BAGIAN TUGAS === */
 
@@ -509,10 +513,12 @@ class Matriks {
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
 
+    /*
     public static ArrayList<Pair<String, String>> gaussJordan(Matriks mat) {
         // TODO: - Need optimizing, mungkin printing dari tuple menggunakan prosedur
         //       - buatSPL WIP
         //       - Ganti ArrayList of Pair jadi HashMap
+        //       - UNDER CONSTRUCTION
         int indikator;
         ArrayList<Pair<String, String>> sol = new ArrayList<>();
 
@@ -549,6 +555,7 @@ class Matriks {
             return sol;
         }
     }
+    */
 
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
@@ -631,12 +638,50 @@ class Matriks {
      */
     public static ArrayList<Double> interpolasi(Matriks titik, double x) {
         ArrayList<Double> solv = new ArrayList<>();
-        Matriks interpolate = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat);
+        Matriks matInter = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat);
+        int indikator;
 
         if (titik.jmlKolMat != 2) {
             solv.add(Double.NaN);
             System.out.println("Matriks yang dimasukkan bukan kumpulan titik");
             System.out.println("Gagal menginterpolasi polino dari matriks yang diberikan");
+            return solv;
+        }
+
+        /*
+        * Proses:
+        * 1.a. Buat matriks dengan banyak baris sebanyak matriks titik
+        *   b. lalu banyak kolom sebanyak baris di matriks titik ditambah 1
+        *   c. dengan kolom pertama tiap baris bernilai 1
+        *   d. dan kolom terakhir adalah elemen y tiap titik
+        * 2. Solve as if it's an SPL
+        * 3. Akan didapat nilai a_0, a_1, ..., a_n
+        *   a. Simpan nilai a_0 sampai a_n di dalam suatu ArrayList
+        * 4. Print jadi p(x) = a_0 + a_1 * x + a_2 * x^2 + ... + a_n * x^n
+        * 5. Plug in x to p(x) and then print the result
+        */
+
+        // 1. "Membuat" dan mengisi matriks baru
+        for (int i = 0; i < titik.jmlBrsMat; ++i) {
+            double currX = titik.getElmt(i, 0),
+                   currY = titik.getElmt(i, 1);
+            for (int j = 0; j < titik.jmlBrsMat; ++j) {
+                matInter.setElmt(i, j, Math.pow(currX, j));
+            }
+            matInter.setElmt(i, matInter.jmlKolMat-1, currY);
+        }
+
+        // 2. Membuat matriks bru menjadi eselon tereduksi
+        System.out.println("Before: ");
+        matInter.tulisMatriks();
+        matInter.makeEselon();
+        System.out.println("After: ");
+        matInter.tulisMatriks();
+        indikator = matInter.indikator();
+        if (indikator == 1) {
+        } else { // indikator 0 atau 2
+            System.out.println("Tidak dapat dicari interpolasi polinom dari titik-titik yang diberikan");
+            System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
             solv.add(Double.NaN);
             return solv;
         }

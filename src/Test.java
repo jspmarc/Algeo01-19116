@@ -52,10 +52,22 @@ public class Test {
         //m1.jadikanAugmented(m1);
 
         //mOriginal.tulisMatriks();
+        //m1.tulisMatriks();
+        //Matriks.interpolasi(m1, 1);
+
+        m1.makeEselon();
+        System.out.println("This is the end");
         m1.tulisMatriks();
-        m1.makeAugmented(mOriginal);
-        System.out.println(m1.jumElmt() + " " + m1.getJmlBrs() + " " + m1.getJmlKol());
-        m1.tulisMatriks();
+
+        //m1.makeAugmented(mOriginal);
+        //System.out.println("Before: ");
+        //m1.tulisMatriks();
+        //m1.eselonTereduksi();
+        //System.out.println("After: ");
+        //m1.tulisMatriks();
+        //m1.makeAugmented(mOriginal);
+        //System.out.println(m1.jumElmt() + " " + m1.getJmlBrs() + " " + m1.getJmlKol());
+        //m1.tulisMatriks();
 
         s.close();
     }
