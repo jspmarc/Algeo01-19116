@@ -500,7 +500,8 @@ class Matriks {
 
         ArrayList<Double> tempBaris = new ArrayList<>(); // ?
         for (int i = 0; i < this.jmlKolMat-1; i++) {
-            tempBaris.set(i, 0); // membuat koefisien leading menjadi 0
+            double val = 0;
+            tempBaris.set(i, val); // membuat koefisien leading menjadi 0
         }
         for (int i = 0; i < this.jmlKolMat-1; i++) {
             for (int j = 0; j <= this.jmlKolMat-1; j++) {
@@ -586,7 +587,7 @@ class Matriks {
             return sol;
         } else if (indikator == 1) {
             for (int i = 0; i < mat.jmlBrsMat; i++) {
-                double val = mat.getElmt(i, mat.jmlKolMat-1;
+                double val = mat.getElmt(i, mat.jmlKolMat-1);
                 String valString = Double.toString(val);
                 sol.put("x" + (i+1), valString);
                 // mungkin prosedur printing
