@@ -479,7 +479,8 @@ class Matriks {
             j++;
         }
 
-        int indikator = (koefisienNol && konstantaNol) ? 2 : (koefisienNol && !konstantaNol) ? 0 : 1;
+        int indikator = (koefisienNol && konstantaNol) ? 2 :
+                        (koefisienNol && !konstantaNol) ? 0 : 1;
         return indikator;
     }
 
@@ -490,14 +491,16 @@ class Matriks {
      * @return Arraylist berisi pair variabel x1 - xn dan solusinya
      */
 
+    /*
     private ArrayList<Pair<String, String>> buatSPL(Matriks mat) {
-        // TODO: menyelesaikan fungsi
+        // TODO: menyelesaikan fungsi || UNDER CONSTRUCTION
+        // TODO: Change Pair to HashMap
         // Ganti ArrayList of Pair jadi HashMap?
         ArrayList<Pair<String, String>> solParametrik = new ArrayList<>();
 
         return solParametrik;
     }
-
+    */
     /* === BAGIAN TUGAS === */
 
     /**
@@ -509,10 +512,12 @@ class Matriks {
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
 
+    /*
     public static ArrayList<Pair<String, String>> gaussJordan(Matriks mat) {
         // TODO: - Need optimizing, mungkin printing dari tuple menggunakan prosedur
         //       - buatSPL WIP
         //       - Ganti ArrayList of Pair jadi HashMap
+        //       - UNDER CONSTRUCTION
         int indikator;
         ArrayList<Pair<String, String>> sol = new ArrayList<>();
 
@@ -549,6 +554,7 @@ class Matriks {
             return sol;
         }
     }
+    */
 
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
@@ -631,12 +637,51 @@ class Matriks {
      */
     public static ArrayList<Double> interpolasi(Matriks titik, double x) {
         ArrayList<Double> solv = new ArrayList<>();
-        Matriks interpolate = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat);
+        int indikator;
+        Matriks matInter = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat+1);
 
         if (titik.jmlKolMat != 2) {
-            solv.add(Double.NaN);
+            // Jika yang didapatkan bukan matriks yang terdiri dari titik-titik
             System.out.println("Matriks yang dimasukkan bukan kumpulan titik");
-            System.out.println("Gagal menginterpolasi polino dari matriks yang diberikan");
+            System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
+            solv.add(Double.NaN);
+            return solv;
+        }
+
+        /*
+        * Proses:
+        * 1.a. Buat matriks dengan banyak baris sebanyak matriks titik
+        *   b. lalu banyak kolom sebanyak baris di matriks titik ditambah 1
+        *   c. dengan kolom pertama tiap baris bernilai 1
+        *   d. dan kolom terakhir adalah elemen y tiap titik
+        * 2. Solve as if it's an SPL
+        * 3. Akan didapat nilai a_0, a_1, ..., a_n
+        *   a. Simpan nilai a_0 sampai a_n di dalam suatu ArrayList
+        * 4. Print jadi p(x) = a_0 + a_1 * x + a_2 * x^2 + ... + a_n * x^n
+        * 5. Plug in x to p(x) and then print the result
+        */
+
+        // 1. "Membuat" dan mengisi matriks baru
+        for (int i = 0; i < titik.jmlBrsMat; ++i) {
+            double currX = titik.getElmt(i, 0),
+                   currY = titik.getElmt(i, 1);
+            for (int j = 0; j < titik.jmlBrsMat; ++j) {
+                matInter.setElmt(i, j, Math.pow(currX, j));
+            }
+            matInter.setElmt(i, matInter.jmlKolMat-1, currY);
+        }
+
+        // 2. Membuat matriks bru menjadi eselon tereduksi
+        System.out.println("Before: ");
+        matInter.tulisMatriks();
+        matInter.eselonTereduksi();
+        System.out.println("After: ");
+        matInter.tulisMatriks();
+        indikator = matInter.indikator();
+        if (indikator == 1) {
+        } else {
+            System.out.println("Tidak dapat dicari interpolasi polinom dari titik-titik yang diberikan");
+            System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
             solv.add(Double.NaN);
             return solv;
         }
@@ -646,5 +691,4 @@ class Matriks {
 
         return solv;
     }
-
 }
