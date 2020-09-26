@@ -51,7 +51,9 @@ class Matriks {
      *   - makeAugmented
      *   - eselonTereduksi
      *   - indikator
+     *   - buatSPL
      * *** TUGAS ***
+     *   - gaussJordan
      *   - determinanEksKof
      *   - determinanRedBrs
      *   - interpolasi
@@ -129,6 +131,20 @@ class Matriks {
      */
     public void setBaris(int i, ArrayList<Double> barisBaru) {
         this.mat.set(i, barisBaru);
+    }
+
+    /**
+     * @return Banyak kolom matriks
+     */
+    public int getJmlKol() {
+        return this.jmlKolMat;
+    }
+
+    /**
+     * @return Banyak baris matriks
+     */
+    public int getJmlBrs() {
+        return this.jmlBrsMat;
     }
 
     /* === INPUTS AND OUTPUTS === */
@@ -363,8 +379,7 @@ class Matriks {
             // bawah pivot
             for (int j = i+1; j < this.jmlBrsMat; ++j) {
                 firstElmt = this.getElmt(j, i);
-                konstanta = -1 * firstElmt;
-                konstanta /= pivot;
+                konstanta = -1 * firstElmt/pivot;
 
                 //System.out.println( ((pivot >= 0 && firstElmt >= 0) ||
                                      //(pivot <= 0 && firstElmt <= 0) ? -1 : 1) +
@@ -387,21 +402,22 @@ class Matriks {
      * M1.jadikanAugmented(M2), maka: [M1|M2]
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
-    private void makeAugmented(Matriks aug) {
+    public void makeAugmented(Matriks aug) {
         // TODO: Selesaiin fungsi ini
-        if (aug.jmlKolMat != 1) {
-            System.out.println("Bukan matriks augment");
-            System.out.println("Matriks gagal diubah jadi matriks augmented");
-            return;
-        } else if (aug.jmlBrsMat != this.jmlBrsMat) {
+        int idxAugment;
+        if (aug.jmlBrsMat != this.jmlBrsMat) {
             System.out.println("Jumlah baris kedua matriks berbeda");
             System.out.println("Matriks gagal diubah jadi matriks augmented");
             return;
         }
 
-        this.jmlKolMat++;
+        // Meng-augment baris per baris
         for (int i = 0; i < this.jmlBrsMat; ++i) {
+            for (int j = 0;  j < aug.jmlKolMat; ++j) {
+                this.getBaris(i).add(aug.getElmt(i, j));
+            }
         }
+        this.jmlKolMat +=  aug.jmlKolMat;
     }
 
     /**
@@ -468,7 +484,77 @@ class Matriks {
         return indikator;
     }
 
+    /**
+     * Metode untuk membuat SPL dari matriks eselon tereduksi
+     * menghasilkan solusi SPL yang solusinya parametrik
+     * @param mat adalah matriks eselon tereduksi yang ingin dicari solusinya
+     * @return Arraylist berisi pair variabel x1 - xn dan solusinya
+     */
+
+    /*
+    private ArrayList<Pair<String, String>> buatSPL(Matriks mat) {
+        // TODO: menyelesaikan fungsi || UNDER CONSTRUCTION
+        // TODO: Change Pair to HashMap
+        // Ganti ArrayList of Pair jadi HashMap?
+        ArrayList<Pair<String, String>> solParametrik = new ArrayList<>();
+
+        return solParametrik;
+    }
+    */
     /* === BAGIAN TUGAS === */
+
+    /**
+     * Metode Gauss Jordan
+     * @param mat matriks yang ingin diselesaikan dengan metode Gauss-Jordan
+     * @return 3 kemungkinan output:
+     * - nilai x1-xn tertulis: matriks augmented memiliki solusi unik, indikator = 2
+     * - "Solusi tidak ada": matriks augmented tidak memiliki solusi, indikator = 0
+     * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
+     */
+
+    /*
+    public static ArrayList<Pair<String, String>> gaussJordan(Matriks mat) {
+        // TODO: - Need optimizing, mungkin printing dari tuple menggunakan prosedur
+        //       - buatSPL WIP
+        //       - Ganti ArrayList of Pair jadi HashMap
+        //       - UNDER CONSTRUCTION
+        int indikator;
+        ArrayList<Pair<String, String>> sol = new ArrayList<>();
+
+        mat.eselonTereduksi();
+        indikator = mat.indikator();
+        if (indikator == 0) {
+            System.out.println("Solusi tidak ada");
+            sol.add(new Pair<String, String> ("", ""));
+            return sol;
+        } else if (indikator == 1) {
+            System.out.println("\r");
+            for (int i = 0; i < mat.jmlBrsMat; i++) {
+                sol.add(new Pair<String, String> ("x" + (i+1),  mat.getElmt(i, mat.jmlKolMat-1)));
+                System.out.print(sol.get(i).getvalue0() + " = \r");
+                System.out.print(sol.get(i).getvalue1() + "\r");
+                if (i != mat.jmlKolMat-1) {
+                    System.out.print(", \r");
+                }
+            }
+            System.out.println();
+            return sol;
+        } else { // indikator == 2
+            sol = mat.buatSPL(mat);
+
+            System.out.println("\r");
+            for (int i = 0; i < mat.jmlBrsMat; i++) {
+                System.out.print(sol.get(i).getvalue0() + " = \r");
+                System.out.print(sol.get(i).getvalue1() + "\r");
+                if (i != mat.jmlKolMat-1) {
+                    System.out.print(", \r");
+                }
+            }
+            System.out.println();
+            return sol;
+        }
+    }
+    */
 
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
@@ -598,6 +684,9 @@ class Matriks {
             System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
             solv.add(Double.NaN);
             return solv;
+        }
+
+        for (int i = 0; i < titik.jmlBrsMat; ++i) {
         }
 
         return solv;
