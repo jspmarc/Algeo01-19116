@@ -11,12 +11,6 @@
 
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
-
-import org.graalvm.compiler.asm.aarch64.AArch64Assembler.SystemRegister;
-
-import sun.awt.AWTAccessor.SystemTrayAccessor;
-import sun.reflect.generics.reflectiveObjects.GenericArrayTypeImpl;
-
 import java.lang.Math;
 
 /**
@@ -498,10 +492,11 @@ class Matriks {
 
     private ArrayList<Pair<String, String>> buatSPL(Matriks mat) {
         // TODO: menyelesaikan fungsi
+        // Ganti ArrayList of Pair jadi HashMap?
         ArrayList<Pair<String, String>> solParametrik = new ArrayList<>();
-        
+
         return solParametrik;
-    }      
+    }
 
     /* === BAGIAN TUGAS === */
 
@@ -517,6 +512,7 @@ class Matriks {
     public static ArrayList<Pair<String, String>> gaussJordan(Matriks mat) {
         // TODO: - Need optimizing, mungkin printing dari tuple menggunakan prosedur
         //       - buatSPL WIP
+        //       - Ganti ArrayList of Pair jadi HashMap
         int indikator;
         ArrayList<Pair<String, String>> sol = new ArrayList<>();
 
@@ -526,7 +522,7 @@ class Matriks {
             System.out.println("Solusi tidak ada");
             sol.add(new Pair<String, String> ("", ""));
             return sol;
-        } else if (indikator == 1) { 
+        } else if (indikator == 1) {
             System.out.println("\r");
             for (int i = 0; i < mat.jmlBrsMat; i++) {
                 sol.add(new Pair<String, String> ("x" + (i+1),  mat.getElmt(i, mat.jmlKolMat-1)));
