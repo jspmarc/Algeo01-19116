@@ -288,7 +288,7 @@ class Matriks {
         double tempElmt;
 
         // i untuk kolom
-        for (int i = 0; i < this.jmlBrsMat; ++i) {
+        for (int i = 0; i < this.jmlKolMat; ++i) {
             tempElmt = k*this.getElmt(idxBaris, i);
             this.setElmt(idxBaris, i, tempElmt);
         }
@@ -304,7 +304,7 @@ class Matriks {
         double tempElmt;
 
         // i untuk kolom
-        for (int i = 0; i < this.jmlBrsMat; ++i) {
+        for (int i = 0; i < this.jmlKolMat; ++i) {
             tempElmt = this.getElmt(idxBaris, i)/k;
             this.setElmt(idxBaris, i, tempElmt);
         }
@@ -417,42 +417,62 @@ class Matriks {
      */
     public void makeEselon() {
         // TODO: FIX ME & Jadiin private lagi
-        int lead = 0;
+        int leadIdx = 0,
+            k;
+        double leadElmt;
         for (int i = 0; i < this.jmlBrsMat; i++) {
-            int k = i;
-            // Kalau bagian diagonalnya nol
+            // k ini iterator buat baris
+            // leadIdx buat nandain posisi leading one
+            // leadElmt adalah elemen yang berada di posisi leading one
+
+            k = i;
+            leadElmt = this.getElmt(k, leadIdx);
+
+            // Kalau leadElmt nol
             // Akan dicari sampai tidak nol
-            while (getElmt(k, lead) == 0) {
-                k++;
-                // kalau pencarian sudah sampai baris akhir dan masih tidak
-                // ditemukan, tukar dengan baris terakhir
-                if (this.jmlBrsMat-1 == k) {
-                    k = i; lead++;
-                    // Kalau ternyata di baris akhir sebaris 0 semua, proses
-                    // diberhentikan karena solusi pasti banyak atau tidak ada
-                    if (this.jmlKolMat-1 == lead) {
+            while (leadElmt == 0) {
+                k++; // Dilihat baris selanjutnya
+                // Kalau k menjadi out of bound
+                // Artinya sekolom dari baris ke-i sampai baris ke-(bnykBrs-1)
+                // 0 semua
+                if (k == this.jmlBrsMat) {
+                    k = i; // k dikembalikan ke i
+                    leadIdx++; // posisi leading one dimajuin satu
+
+                    // Kalau posisi diagonal sudah out of bounds, artinya
+                    // sebaris terakhir memiliki elemen 0 semua
+                    // (kecuali bagian augmented)
+
+                    // this.jmlKolMat-1 biar yang bagian augmented diperiksa
+                    // ga usah diperiksa
+                    if (leadIdx == this.jmlKolMat) {
                         return;
                     }
                 }
+                // Ambil elemen di baris selanjutnya
+                leadElmt = this.getElmt(k, leadIdx);
+            }
+            // Menukar baris kalau ditemukan baris yang elemen leading-nya
+            // tidak 0
+            if (k != i) {
+                tukarBaris(k, i);
             }
 
-            this.tulisMatriks();
-            tukarBaris(k, i);
-
             // Membagi elemen baris agar memiliki one lead
-            if (getElmt(i, lead) != 0) {
-                bagiBaris(i, (this.getElmt(i, lead)));
+            System.out.println(this.getElmt(i, leadIdx));
+            if (this.getElmt(i, leadIdx) != 0) {
+                this.bagiBaris(i, (this.getElmt(i, leadIdx)));
             }
 
             // Meng-0-kan elemen yang sebaris dengan one-lead
             for (int j = i+1; j < this.jmlBrsMat; j++) {
                 // Diambil elemen yang di bawah 1 lead
                 double elmtPertama = this.getElmt(j, i),
-                       konstanta = -1 * elmtPertama/this.getElmt(i, lead);
-                tambahBaris(j, i, konstanta);
+                       konstanta = -1 * elmtPertama/this.getElmt(i, leadIdx);
+                this.tambahBaris(j, i, konstanta);
             }
 
-            lead++;
+            leadIdx++;
         }
     }
 
