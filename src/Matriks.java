@@ -401,7 +401,7 @@ class Matriks {
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
     public void makeAugmented(Matriks aug) {
-        // TODO: Selesaiin fungsi ini  & Jadiin private lagi
+        // TODO: Selesaiin fungsi ini & Jadiin private lagi
         if (aug.jmlBrsMat != this.jmlBrsMat) {
             System.out.println("Jumlah baris kedua matriks berbeda");
             System.out.println("Matriks gagal diubah jadi matriks augmented");
@@ -410,11 +410,11 @@ class Matriks {
 
         // Meng-augment baris per baris
         for (int i = 0; i < this.jmlBrsMat; ++i) {
-            for (int j = 0;  j < aug.jmlKolMat; ++j) {
+            for (int j = 0; j < aug.jmlKolMat; ++j) {
                 this.getBaris(i).add(aug.getElmt(i, j));
             }
         }
-        this.jmlKolMat +=  aug.jmlKolMat;
+        this.jmlKolMat += aug.jmlKolMat;
     }
 
     /**
@@ -569,20 +569,21 @@ class Matriks {
      * Metode untuk membuat SPL dari matriks eselon tereduksi
      * menghasilkan solusi SPL yang solusinya parametrik.
      * Prekondisi: matriks sudah berupa matriks eselon tereduksi dengan indikator = 2
-     * @return Arraylist berisi pair variabel x1 - xn dan solusinya
+     * @return HashMap dengan variabel x1 - xn sebagai key
+     * dan solusinya sebagai value
      */
 
     private HashMap<String, String> matriksToSPL() {
         // TODO: Test
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas
-        int i, j;
 
-        // Assigning xn(s) which is a free variable(s) with a parametric solution/alphabet
+        // Assigning xn(s) which is a free variable(s) with a 
+        // parametric solution/alphabet
         // Asumsi hanya terdapat maksimal 26 variabel bebas
-        for (j = this.jmlKolMat-2; j >= 0; j--) {
+        for (int j = this.jmlKolMat-2; j >= 0; j--) {
             boolean semuaNol = true;
-            for (i = this.jmlBrsMat-1; i >= 0; i--) {
+            for (int i = this.jmlBrsMat-1; i >= 0; i--) {
                 if (this.getElmt(i, j) != 0) {
                     semuaNol = false;
                     break;
@@ -604,9 +605,9 @@ class Matriks {
         j = 0;
         boolean nol = true;
 
-        while (nol && i < this.jmlBrsMat) {
-            while (nol && j < this.jmlKolMat) {
-                if (this.getElmt(i, j) != 0) {
+        while (nol && i < mat.jmlBrsMat) {
+            while (nol && j < mat.jmlKolMat) {
+                if (mat.getElmt(i, j) != 0) {
                     nol = false;
                 }
                 jmlBarisNol++;
@@ -615,36 +616,42 @@ class Matriks {
 
         // jumlah variabel - jumlah baris matriks yang tidak nol
         int jmlBarisTidakNol = this.jmlBrsMat - jmlBarisNol;
-        // int jmlVarBebas = this.jmlKolMat-1 - jmlBarisTidakNol;
 
         // Assigning the rest of xns with a value for their solution
-        /*
-        // TODO: This line unntil 12 lines (or so) after it is missing a
-        // closing curly bracket
         for (i = 0; i < jmlBarisTidakNol; i++) {
-            for (j = 0; j < this.jmlKolMat; j++) {
-                solParametrik.put("x" + (i+1), "-" + this.getElmt(i, j) + solParametrik.get("x" + (j+1));
-                solParametrik.replace("x" + (i+1), newvalue);
-                // koefisien min, konstanta plus
             j = 0;
-            while (this.getElmt(i, j) != 1) {
+
+            // Mencari elemen matriks = 1
+            while (mat.getElmt(i, j) != 1) {
                 j++;
             }
-            for (int k = j; k < this.jmlKolMat-1; k++) {
-            }
-        }
 
-        for (i = 0; i < jmlBarisTidakNol; i++) {
-            for (j = 0; j < this.jmlKolMat; j++) {
-                if (this.getElmt(i, j) == 1) {
-                    solParametrik.put("x" + (i+1), "-" + this.getElmt(i, j) + solParametrik.get("x" + (j+1));
-                    solParametrik.replace("x" + (i+1), newvalue);
-                    // koefisien min, konstanta plus
+            // Inisiasi key HashMap solParametrik
+            solParametrik.put("x" + (j+1), "");
+
+            // j bukan koefien xn
+            if (j != this.jmlKolMat-2) {
+                // Traversing baris yang sama untuk mencari solusi
+                for (int k = j+1; k < this.jmlKolMat; k++) {
+                    // elemen (i, k) merupakan koefisien
+                    if (k != this.jmlKolMat - 2) {
+                        if (this.getElmt(i, k) > 0) { // nilai koefisien positif
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" + this.getElmt(i, k) + solParametrik("x" + (k+1)));
+                        } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" +(-1)*this.getElmt(i, k) + solParametrik("x" + (k+1)));
+                        }
+                    } else { // elemen (i, k) merupakan konstanta
+                        if (this.getElmt(i, k) > 0) { // nilai konstanta positif
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" + this.getElmt(i, k));
+                        } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " +this.getElmt(i, k));
+                        }
                     }
                 }
+            } else { // j adalah koefisien xn
+                solParametrik.replace("x" + (j+1), "" + this.getElmt(i, this.jmlKolMat-1));
             }
         }
-        */
         return solParametrik;
     }
 
@@ -692,7 +699,6 @@ class Matriks {
             }
             return sol;
         } else { // indikator == 2
-            //TODO: ERROR di `sol = mat.matriksToSPL(mat);`
             sol = mat.matriksToSPL(mat);
             return sol;
         }
@@ -853,52 +859,44 @@ class Matriks {
         return solv;
     }
 
-    /**
-     * Membuat inverse/balikan dari matriks yang memanggil
-     */
-    public void balikan(){
+    public void Balikan(Matriks m){
         Scanner sc = new Scanner(System.in);
         int i, j, nBar, nKol;
         double det,temp;
-        nBar = this.jmlBrsMat;
-        nKol = this.jmlKolMat;
-
+        nBar = this.jmlBrsMat();
+        nKol = this.jmlKolMat();
+    
         Matriks mi = new Matriks(nBar, nKol);
         Matriks.salinMatriks(this, mi);
-
+    
         if (mi.adalahPersegi()){
             det = determinanRedBrs(mi);
             for(i = 0; i<(nBar-1) ; i++){
                 for(j = 0; j<(i+1) ; j++){
-                    temp = mi.getElmt(i,j);
+                    temp = mi.elmt(i,j);
                     mi.setElmt(i, j, mi.getElmt(j,i));
                     mi.setElmt(j, i, temp);
                 }
             }
             for(i = 0; i<nKol; i++){
-                mi.bagiBaris(i,det);
+                mi.bagibaris(i,det);
             }
-        } else {
+        }   
+        else {
             System.out.println("Tidak bisa dibuat invers karena buka matriks persegi");
         }
     }
-
-    /**
-     * TODO: DO FILL/FIX THIS COMMENT!
-     * Menyelesaikan SPL dengan metode Cramer untuk matriks yang memanggil
-     * @return nilai SPL dari matriks yang memanggil
-     */
-    public double cramer(){
+    
+    public double Cramer(Matriks m){
         Scanner sc = new Scanner(System.in);
         int i, j, nBar, nKol;
         double det,temp;
-        nBar = this.jmlBrsMat;
-        nKol = this.jmlKolMat;
-
+        nBar = this.jmlBrsMat();
+        nKol = this.jmlKolMat();
+    
         Matriks mi = new Matriks(nBar, nKol);
-        Matriks.salinMatriks(this, mi);
-
-        // TODO: TEMP RETURN, CHANGE!
-        return 0.0;
+        Matriks.salinMatriks(this, mi); 
+    
+    
     }
 }
