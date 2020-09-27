@@ -843,4 +843,45 @@ class Matriks {
 
         return solv;
     }
+
+    public void Balikan(Matriks m){
+        Scanner sc = new Scanner(System.in);
+        int i, j, nBar, nKol;
+        double det,temp;
+        nBar = this.jmlBrsMat();
+        nKol = this.jmlKolMat();
+    
+        Matriks mi = new Matriks(nBar, nKol);
+        Matriks.salinMatriks(this, mi);
+    
+        if (mi.adalahPersegi()){
+            det = determinanRedBrs(mi);
+            for(i = 0; i<(nBar-1) ; i++){
+                for(j = 0; j<(i+1) ; j++){
+                    temp = mi.elmt(i,j);
+                    mi.setElmt(i, j, mi.getElmt(j,i));
+                    mi.setElmt(j, i, temp);
+                }
+            }
+            for(i = 0; i<nKol; i++){
+                mi.bagibaris(i,det);
+            }
+        }   
+        else {
+            System.out.println("Tidak bisa dibuat invers karena buka matriks persegi");
+        }
+    }
+    
+    public double Cramer(Matriks m){
+        Scanner sc = new Scanner(System.in);
+        int i, j, nBar, nKol;
+        double det,temp;
+        nBar = this.jmlBrsMat();
+        nKol = this.jmlKolMat();
+    
+        Matriks mi = new Matriks(nBar, nKol);
+        Matriks.salinMatriks(this, mi); 
+    
+    
+    }
 }
