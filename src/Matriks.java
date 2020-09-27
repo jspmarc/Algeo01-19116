@@ -11,12 +11,6 @@
 
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.Scanner;
-
-import org.graalvm.compiler.phases.common.InsertMembarsPhase;
-
-import jdk.nashorn.internal.ir.ReturnNode;
-
-import java.lang.Math;
 import java.util.HashMap;
 
 /**
@@ -63,7 +57,7 @@ class Matriks {
      * *** TUGAS ***
      *   - gauss
      *   - gaussJordan
-     *   - tulisSolusi (WIP)
+     *   - tulisSolusi
      *   - determinanEksKof
      *   - determinanRedBrs
      *   - interpolasi
@@ -583,6 +577,29 @@ class Matriks {
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas
         
+        
+        // Assigning xn(s) which is a free variable(s) with a parametric solution/alphabet
+        // Asumsi hanya terdapat maksimal 26 variabel bebas
+        for (j = this.jmlKolMat-2; j >= 0; j--) {
+            boolean semuaNol = true;
+            for (i = this.jmlBrsMat-1; i >= 0; i--) {
+                if (this.getElmt(i, j) != 0) {
+                    semuaNol = false;
+                    break;
+                }
+                
+            }
+            if (semuaNol || this.getElmt(i, j) != 1) {
+                solParametrik.put("x" + (j+1), varBebas + "");
+                if (varBebas == 'z') {
+                    varBebas -= 25;
+                }
+                else {
+                    varBebas++;
+                }
+            }
+        }
+
         // Mencari banyak variabel bebas yang dibutuhkan
         int jmlBarisNol = 0;
         int i = 0;
@@ -600,31 +617,28 @@ class Matriks {
 
         // jumlah variabel - jumlah baris matriks yang tidak nol
         int jmlBarisTidakNol = this.jmlBrsMat - jmlBarisNol;
-        int jmlVarBebas = this.jmlKolMat-1 - jmlBarisTidakNol;
-
-        // Assigning xn(s) that is a free variable(s) with a parametric solution/alphabet
-        for (j = 0; j < this.jmlKolMat-1; j++) {
-            for (i = 0; i < this.jmlBrsMat; i++) {
-                if (this.getElmt(i, j) != 0 || this.getElmt(i, j) != 1) {
-                    solParametrik.put("x" + (j+1), varBebas + "");
-                    if (varBebas == 'z') {
-                        varBebas -= 25;
-                    }
-                    else {
-                        varBebas++;
-                    }
-                }
-                
-            }
-        }
-
+        // int jmlVarBebas = this.jmlKolMat-1 - jmlBarisTidakNol;
+        
         // Assigning the rest of xns with a value for their solution
         /*
         for (i = 0; i < jmlBarisTidakNol; i++) {
-            for (j = 0; j < this.jmlKolMat; j++) {
-                solParametrik.put("x" + (i+1), "-" + this.getElmt(i, j) + solParametrik.get("x" + (j+1));
-                solParametrik.replace("x" + (i+1), newvalue);
-                // koefisien min, konstanta plus
+            j = 0;
+            while (mat.getElmt(i, j) != 1) {
+                j++;
+            }
+            for (int k = j; k < mat.jmlKolMat-1; k++) {
+
+            }
+        }
+        
+        
+        for (i = 0; i < jmlBarisTidakNol; i++) {
+            for (j = 0; j < mat.jmlKolMat; j++) {
+                if (mat.getElmt(i, j) == 1) {
+                    solParametrik.put("x" + (i+1), "-" + this.getElmt(i, j) + solParametrik.get("x" + (j+1));
+                    solParametrik.replace("x" + (i+1), newvalue);
+                    // koefisien min, konstanta plus
+                    }
                 }
                 
             }
