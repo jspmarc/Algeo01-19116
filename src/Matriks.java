@@ -10,8 +10,9 @@
  */
 
 import java.util.ArrayList; // Array dinamis untuk matriks
-import java.util.Scanner;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.lang.Math;
 
 /**
  * Class Matriks
@@ -510,7 +511,7 @@ class Matriks {
                     tempBaris.set(i, this.getElmt(i, j));
                 }
                 if (tempBaris.get(i) != 0) {
-                    double val = this.getElmt(i, j); 
+                    double val = this.getElmt(i, j);
                     this.setElmt(i, j, val);
                 }
             }
@@ -572,12 +573,10 @@ class Matriks {
      */
 
     private HashMap<String, String> matriksToSPL() {
-        // TODO: UNDER CONSTRUCTION
-        //       Test
+        // TODO: Test
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas
-        
-        
+
         // Assigning xn(s) which is a free variable(s) with a parametric solution/alphabet
         // Asumsi hanya terdapat maksimal 26 variabel bebas
         for (j = this.jmlKolMat-2; j >= 0; j--) {
@@ -587,7 +586,6 @@ class Matriks {
                     semuaNol = false;
                     break;
                 }
-                
             }
             if (semuaNol || this.getElmt(i, j) != 1) {
                 solParametrik.put("x" + (j+1), varBebas + "");
@@ -618,9 +616,8 @@ class Matriks {
         // jumlah variabel - jumlah baris matriks yang tidak nol
         int jmlBarisTidakNol = this.jmlBrsMat - jmlBarisNol;
         // int jmlVarBebas = this.jmlKolMat-1 - jmlBarisTidakNol;
-        
+
         // Assigning the rest of xns with a value for their solution
-        /*
         for (i = 0; i < jmlBarisTidakNol; i++) {
             j = 0;
             while (mat.getElmt(i, j) != 1) {
@@ -630,8 +627,6 @@ class Matriks {
 
             }
         }
-        
-        
         for (i = 0; i < jmlBarisTidakNol; i++) {
             for (j = 0; j < mat.jmlKolMat; j++) {
                 if (mat.getElmt(i, j) == 1) {
@@ -640,13 +635,11 @@ class Matriks {
                     // koefisien min, konstanta plus
                     }
                 }
-                
             }
         }
-        */
         return solParametrik;
     }
-    
+
     /* === BAGIAN TUGAS === */
 
     /**
@@ -657,7 +650,6 @@ class Matriks {
      * - "Solusi tidak ada": matriks augmented tidak memiliki solusi, indikator = 0
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
-
     public static HashMap<String, String> gauss(Matriks mat) {
         HashMap<String, String> sol = new HashMap<>();
 
@@ -674,10 +666,8 @@ class Matriks {
      * - "Solusi tidak ada": matriks augmented tidak memiliki solusi, indikator = 0
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
-
     public static HashMap<String, String> gaussJordan(Matriks mat) {
         // TODO: - matriksToSPL WIP
-        //       - UNDER CONSTRUCTION
         int indikator;
         HashMap<String, String> sol = new HashMap<>();
 
@@ -703,7 +693,6 @@ class Matriks {
      * Metode untuk mencetak jawaban ke layar
      * @param solHashMap
      */
-    
     public static void tulisSolusi(HashMap<String, String> solHashMap) {
         if (solHashMap.isEmpty()) {
             System.out.println("Solusi tidak ada");
@@ -718,7 +707,7 @@ class Matriks {
             System.out.println();
         }
     }
-    
+
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
      * @param mat matriks yang ingin dihitung kofaktornya
