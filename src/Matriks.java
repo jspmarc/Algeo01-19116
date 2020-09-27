@@ -852,44 +852,44 @@ class Matriks {
         return solv;
     }
 
-    public void Balikan(Matriks m){
+    public void balikan(Matriks m){
         Scanner sc = new Scanner(System.in);
         int i, j, nBar, nKol;
         double det,temp;
-        nBar = this.jmlBrsMat();
-        nKol = this.jmlKolMat();
-    
+        nBar = this.jmlBrsMat;
+        nKol = this.jmlKolMat;
+
         Matriks mi = new Matriks(nBar, nKol);
         Matriks.salinMatriks(this, mi);
-    
+
         if (mi.adalahPersegi()){
             det = determinanRedBrs(mi);
             for(i = 0; i<(nBar-1) ; i++){
                 for(j = 0; j<(i+1) ; j++){
-                    temp = mi.elmt(i,j);
+                    temp = mi.getElmt(i,j);
                     mi.setElmt(i, j, mi.getElmt(j,i));
                     mi.setElmt(j, i, temp);
                 }
             }
             for(i = 0; i<nKol; i++){
-                mi.bagibaris(i,det);
+                mi.bagiBaris(i,det);
             }
-        }   
-        else {
+        } else {
             System.out.println("Tidak bisa dibuat invers karena buka matriks persegi");
         }
     }
-    
-    public double Cramer(Matriks m){
+
+    public double cramer(Matriks m){
         Scanner sc = new Scanner(System.in);
         int i, j, nBar, nKol;
         double det,temp;
-        nBar = this.jmlBrsMat();
-        nKol = this.jmlKolMat();
-    
+        nBar = this.jmlBrsMat;
+        nKol = this.jmlKolMat;
+
         Matriks mi = new Matriks(nBar, nKol);
-        Matriks.salinMatriks(this, mi); 
-    
-    
+        Matriks.salinMatriks(this, mi);
+
+        // TODO: TEMP RETURN, CHANGE!
+        return 0.0;
     }
 }
