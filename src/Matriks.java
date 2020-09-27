@@ -576,6 +576,7 @@ class Matriks {
         // TODO: Test
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas
+        int i, j;
 
         // Assigning xn(s) which is a free variable(s) with a parametric solution/alphabet
         // Asumsi hanya terdapat maksimal 26 variabel bebas
@@ -591,8 +592,7 @@ class Matriks {
                 solParametrik.put("x" + (j+1), varBebas + "");
                 if (varBebas == 'z') {
                     varBebas -= 25;
-                }
-                else {
+                } else {
                     varBebas++;
                 }
             }
@@ -600,13 +600,13 @@ class Matriks {
 
         // Mencari banyak variabel bebas yang dibutuhkan
         int jmlBarisNol = 0;
-        int i = 0;
-        int j = 0;
+        i = 0;
+        j = 0;
         boolean nol = true;
 
-        while (nol && i < mat.jmlBrsMat) {
-            while (nol && j < mat.jmlKolMat) {
-                if (mat.getElmt(i, j) != 0) {
+        while (nol && i < this.jmlBrsMat) {
+            while (nol && j < this.jmlKolMat) {
+                if (this.getElmt(i, j) != 0) {
                     nol = false;
                 }
                 jmlBarisNol++;
@@ -618,18 +618,25 @@ class Matriks {
         // int jmlVarBebas = this.jmlKolMat-1 - jmlBarisTidakNol;
 
         // Assigning the rest of xns with a value for their solution
+        /*
+        // TODO: This line unntil 12 lines (or so) after it is missing a
+        // closing curly bracket
         for (i = 0; i < jmlBarisTidakNol; i++) {
+            for (j = 0; j < this.jmlKolMat; j++) {
+                solParametrik.put("x" + (i+1), "-" + this.getElmt(i, j) + solParametrik.get("x" + (j+1));
+                solParametrik.replace("x" + (i+1), newvalue);
+                // koefisien min, konstanta plus
             j = 0;
-            while (mat.getElmt(i, j) != 1) {
+            while (this.getElmt(i, j) != 1) {
                 j++;
             }
-            for (int k = j; k < mat.jmlKolMat-1; k++) {
-
+            for (int k = j; k < this.jmlKolMat-1; k++) {
             }
         }
+
         for (i = 0; i < jmlBarisTidakNol; i++) {
-            for (j = 0; j < mat.jmlKolMat; j++) {
-                if (mat.getElmt(i, j) == 1) {
+            for (j = 0; j < this.jmlKolMat; j++) {
+                if (this.getElmt(i, j) == 1) {
                     solParametrik.put("x" + (i+1), "-" + this.getElmt(i, j) + solParametrik.get("x" + (j+1));
                     solParametrik.replace("x" + (i+1), newvalue);
                     // koefisien min, konstanta plus
@@ -637,6 +644,7 @@ class Matriks {
                 }
             }
         }
+        */
         return solParametrik;
     }
 
