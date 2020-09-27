@@ -692,6 +692,7 @@ class Matriks {
             }
             return sol;
         } else { // indikator == 2
+            //TODO: ERROR di `sol = mat.matriksToSPL(mat);`
             sol = mat.matriksToSPL(mat);
             return sol;
         }
@@ -852,7 +853,10 @@ class Matriks {
         return solv;
     }
 
-    public void balikan(Matriks m){
+    /**
+     * Membuat inverse/balikan dari matriks yang memanggil
+     */
+    public void balikan(){
         Scanner sc = new Scanner(System.in);
         int i, j, nBar, nKol;
         double det,temp;
@@ -879,7 +883,12 @@ class Matriks {
         }
     }
 
-    public double cramer(Matriks m){
+    /**
+     * TODO: DO FILL/FIX THIS COMMENT!
+     * Menyelesaikan SPL dengan metode Cramer untuk matriks yang memanggil
+     * @return nilai SPL dari matriks yang memanggil
+     */
+    public double cramer(){
         Scanner sc = new Scanner(System.in);
         int i, j, nBar, nKol;
         double det,temp;
