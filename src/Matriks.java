@@ -485,7 +485,6 @@ class Matriks {
      * Metode untuk mengubah matriks eselon baris menjadi
      * matriks eselon baris tereduksi
      */
-
     public void makeEselonTereduksi() {
         // TODO: Ganti jadi private
         //       Test
@@ -576,13 +575,14 @@ class Matriks {
         // TODO: Test
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas
+        int i, j;
 
-        // Assigning xn(s) which is a free variable(s) with a 
+        // Assigning xn(s) which is a free variable(s) with a
         // parametric solution/alphabet
         // Asumsi hanya terdapat maksimal 26 variabel bebas
-        for (int j = this.jmlKolMat-2; j >= 0; j--) {
+        for (j = this.jmlKolMat-2; j >= 0; j--) {
             boolean semuaNol = true;
-            for (int i = this.jmlBrsMat-1; i >= 0; i--) {
+            for (i = this.jmlBrsMat-1; i >= 0; i--) {
                 if (this.getElmt(i, j) != 0) {
                     semuaNol = false;
                     break;
@@ -604,9 +604,9 @@ class Matriks {
         j = 0;
         boolean nol = true;
 
-        while (nol && i < mat.jmlBrsMat) {
-            while (nol && j < mat.jmlKolMat) {
-                if (mat.getElmt(i, j) != 0) {
+        while (nol && i < this.jmlBrsMat) {
+            while (nol && j < this.jmlKolMat) {
+                if (this.getElmt(i, j) != 0) {
                     nol = false;
                 }
                 jmlBarisNol++;
@@ -621,7 +621,7 @@ class Matriks {
             j = 0;
 
             // Mencari elemen matriks = 1
-            while (mat.getElmt(i, j) != 1) {
+            while (this.getElmt(i, j) != 1) {
                 j++;
             }
 
@@ -635,9 +635,11 @@ class Matriks {
                     // elemen (i, k) merupakan koefisien
                     if (k != this.jmlKolMat - 2) {
                         if (this.getElmt(i, k) > 0) { // nilai koefisien positif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" + this.getElmt(i, k) + solParametrik("x" + (k+1)));
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
+                                                    this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
                         } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" +(-1)*this.getElmt(i, k) + solParametrik("x" + (k+1)));
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" +
+                                                    (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
                         }
                     } else { // elemen (i, k) merupakan konstanta
                         if (this.getElmt(i, k) > 0) { // nilai konstanta positif
@@ -668,7 +670,7 @@ class Matriks {
         HashMap<String, String> sol = new HashMap<>();
 
         mat.makeEselon();
-        sol = mat.gaussJordan(mat);
+        sol = gaussJordan(mat);
         return sol;
     }
 
@@ -699,7 +701,7 @@ class Matriks {
             return sol;
         } else { // indikator == 2
             //TODO: ERROR di `sol = mat.matriksToSPL(mat);`
-            sol = mat.matriksToSPL(mat);
+            sol = mat.matriksToSPL();
             return sol;
         }
     }
@@ -890,7 +892,7 @@ class Matriks {
     }
 
     /**
-     * TODO: DO FILL/FIX THIS COMMENT!
+     * TODO: D.O. FILL/FIX THIS COMMENT!
      * Menyelesaikan SPL dengan metode Cramer untuk matriks yang memanggil
      * @return nilai SPL dari matriks yang memanggil
      */
