@@ -464,7 +464,6 @@ class Matriks {
             }
 
             // Membagi elemen baris agar memiliki one lead
-            System.out.println(this.getElmt(i, leadIdx));
             if (this.getElmt(i, leadIdx) != 0) {
                 this.bagiBaris(i, (this.getElmt(i, leadIdx)));
             }
@@ -488,36 +487,66 @@ class Matriks {
     public void makeEselonTereduksi() {
         // TODO: Ganti jadi private
         //       Test
-        double temp;
-        for (int i = this.jmlKolMat-2; i >= 0; i--) {
-            for (int j = i-1; j >= 0; j--) {
-                // Avoiding NaN
-                if (this.getElmt(i, i) == 0) {
-                    temp = 0.0;
-                } else {
-                    temp = this.getElmt(j, i) / this.getElmt(i, i);
-                }
-                for (int k = this.jmlKolMat-1; k >= i; k--) {
-                    double val = this.getElmt(j, k) - temp * this.getElmt(i, k);
-                    this.setElmt(j, k, val);
-                }
-            }
-        }
+        //       Fix: buat bisa untuk matriks bukan n x n+1
 
-        ArrayList<Double> tempBaris = new ArrayList<>();
-        for (int i = 0; i < this.jmlKolMat-1; i++) {
-            tempBaris.add(0.0); // membuat koefisien leading menjadi 0
-        }
-        for (int i = 0; i < this.jmlKolMat-1; i++) {
-            for (int j = 0; j < this.jmlKolMat; j++) {
-                if ((tempBaris.get(i) == 0.0) && (j != this.jmlKolMat-1)) {
-                    tempBaris.set(i, this.getElmt(i, j));
-                }
-                if (tempBaris.get(i) != 0.0) {
-                    double val = this.getElmt(i, j) / tempBaris.get(i);
-                    this.setElmt(i, j, val);
+        int leadIdx = 0,
+            k;
+
+        for (int i = 0; i < this.jmlBrsMat; i++) {
+            // k ini iterator buat baris
+            // leadIdx buat nandain posisi leading one
+            // leadElmt adalah elemen yang berada di posisi leading one
+            
+            if (this.jmlKolMat <= leadIdx) {
+                return;
+            }
+
+            k = i;
+
+            // Kalau leadElmt nol
+            // Akan dicari sampai tidak nol
+            while (this.getElmt(k, leadIdx) == 0) {
+                k++; // Dilihat baris selanjutnya
+                // Kalau k menjadi out of bound
+                // Artinya sekolom dari baris ke-i sampai baris ke-(bnykBrs-1)
+                // 0 semua
+                if (k == this.jmlBrsMat) {
+                    k = i; // k dikembalikan ke i
+                    leadIdx++; // posisi leading one dimajuin satu
+
+                    // Kalau posisi diagonal sudah out of bounds, artinya
+                    // sebaris terakhir memiliki elemen 0 semua
+                    // (kecuali bagian augmented)
+
+                    // this.jmlKolMat-1 biar yang bagian augmented diperiksa
+                    // ga usah diperiksa
+                    if (leadIdx == this.jmlKolMat) {
+                        return;
+                    }
                 }
             }
+            // Menukar baris kalau ditemukan baris yang elemen leading-nya
+            // tidak 0
+            if (k != i) {
+                tukarBaris(k, i);
+            }
+
+            // Membagi elemen baris agar memiliki one lead
+            if (this.getElmt(i, leadIdx) != 0) {
+                this.bagiBaris(i, (this.getElmt(i, leadIdx)));
+            }
+
+            // Meng-0-kan elemen yang sebaris dengan one-lead
+            for (int j = 0; j < this.jmlBrsMat; j++) {
+                if (j != i) {
+                    // Diambil elemen yang di bawah 1 lead
+                    double elmtPertama = this.getElmt(j, leadIdx),
+                        konstanta = -1 * elmtPertama/this.getElmt(i, leadIdx);
+                    this.tambahBaris(j, i, konstanta);
+                }
+            }
+
+            leadIdx++;
         }
     }
 
@@ -721,7 +750,7 @@ class Matriks {
         else {
             for (int i = solHashMap.size(); i >= 0; i--) {
                 System.out.print("x" + (i+1) + " = " + solHashMap.get("x"+(i+1)));
-                if (i != solHashMap.size()) {
+                if (i != 0) {
                     System.out.print(", ");
                 }
             }
