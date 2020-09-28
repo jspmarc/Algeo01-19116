@@ -501,8 +501,7 @@ class Matriks {
 
         ArrayList<Double> tempBaris = new ArrayList<>(); // ?
         for (int i = 0; i < this.jmlKolMat-1; i++) {
-            double val = 0;
-            tempBaris.set(i, val); // membuat koefisien leading menjadi 0
+            tempBaris.add(0.0); // membuat koefisien leading menjadi 0
         }
         for (int i = 0; i < this.jmlKolMat-1; i++) {
             for (int j = 0; j <= this.jmlKolMat-1; j++) {
