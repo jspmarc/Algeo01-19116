@@ -489,9 +489,14 @@ class Matriks {
         // TODO: Ganti jadi private
         //       Test
         double temp;
-        for (int i = this.jmlKolMat-1; i >= 0; i--) {
-            for (int j = i; j >= 0; j--) {
-                temp = this.getElmt(j, i) / this.getElmt(i, i);
+        for (int i = this.jmlKolMat-2; i >= 0; i--) {
+            for (int j = i-1; j >= 0; j--) {
+                // Avoiding NaN
+                if (this.getElmt(i, i) == 0) {
+                    temp = 0.0;
+                } else {
+                    temp = this.getElmt(j, i) / this.getElmt(i, i);
+                }
                 for (int k = this.jmlKolMat-1; k >= i; k--) {
                     double val = this.getElmt(j, k) - temp * this.getElmt(i, k);
                     this.setElmt(j, k, val);
@@ -499,17 +504,17 @@ class Matriks {
             }
         }
 
-        ArrayList<Double> tempBaris = new ArrayList<>(); // ?
+        ArrayList<Double> tempBaris = new ArrayList<>();
         for (int i = 0; i < this.jmlKolMat-1; i++) {
             tempBaris.add(0.0); // membuat koefisien leading menjadi 0
         }
         for (int i = 0; i < this.jmlKolMat-1; i++) {
-            for (int j = 0; j <= this.jmlKolMat-1; j++) {
-                if (tempBaris.get(i) == 0 && j != this.jmlKolMat-1) {
+            for (int j = 0; j < this.jmlKolMat; j++) {
+                if ((tempBaris.get(i) == 0.0) && (j != this.jmlKolMat-1)) {
                     tempBaris.set(i, this.getElmt(i, j));
                 }
-                if (tempBaris.get(i) != 0) {
-                    double val = this.getElmt(i, j);
+                if (tempBaris.get(i) != 0.0) {
+                    double val = this.getElmt(i, j) / tempBaris.get(i);
                     this.setElmt(i, j, val);
                 }
             }
