@@ -62,6 +62,8 @@ class Matriks {
      *   - determinanEksKof
      *   - determinanRedBrs
      *   - interpolasi
+     *   - balikan
+     *   - cramer
      */
 
     /* === ATTRIBUTES === */
@@ -559,17 +561,16 @@ class Matriks {
      * - 2: Solusi tak hingga
      */
     private int indikator() {
-        // TODO: Test
         boolean konstantaNol = true;
         boolean koefisienNol = true;
         int j = 0;
 
-        if (getElmt(this.jmlBrsMat-1, this.jmlKolMat-1) == 0) {
+        if (getElmt(this.jmlBrsMat-1, this.jmlKolMat-1) != 0.0d) {
             konstantaNol = false;
         }
 
         while ((j < this.jmlKolMat-1) && koefisienNol) {
-            if (getElmt(this.jmlBrsMat-1, j) != 0) {
+            if (getElmt(this.jmlBrsMat-1, j) != 0.0d) {
                 koefisienNol = false;
             }
             j++;
@@ -607,7 +608,7 @@ class Matriks {
     private HashMap<String, String> matriksToSPL() {
         // TODO: Test
         HashMap<String, String> solParametrik = new HashMap<>();
-        char varBebas = 's'; // variabel bebas
+        char varBebas = 's'; // variabel bebas pertama
         int i, j;
 
         // Assigning xn(s) which is a free variable(s) with a
@@ -631,8 +632,8 @@ class Matriks {
             }
         }
 
-        // Mencari banyak variabel bebas yang dibutuhkan
-        int jmlBarisNol = 0;
+        // Mencari banyak baris yang tidak nol
+        int jmlBarisTidakNol = 0;
         i = 0;
         j = 0;
         boolean nol = true;
@@ -641,27 +642,27 @@ class Matriks {
             while (nol && j < this.jmlKolMat) {
                 if (this.getElmt(i, j) != 0) {
                     nol = false;
+                    jmlBarisTidakNol++;
                 }
-                jmlBarisNol++;
+                j++;
             }
+            i++;
         }
-
-        // jumlah variabel - jumlah baris matriks yang tidak nol
-        int jmlBarisTidakNol = this.jmlBrsMat - jmlBarisNol;
 
         // Assigning the rest of xns with a value for their solution
         for (i = 0; i < jmlBarisTidakNol; i++) {
             j = 0;
 
-            // Mencari elemen matriks = 1
+            // Mencari elemen matriks = 1 (1 yang pertama merupakan leading one)
             while (this.getElmt(i, j) != 1) {
                 j++;
-            }
+            }    
 
             // Inisiasi key HashMap solParametrik
+            // Untuk elemen matriks yang sama dengan 1
             solParametrik.put("x" + (j+1), "");
-
-            // j bukan koefien xn
+            
+            // j bukan koefisien xn
             if (j != this.jmlKolMat-2) {
                 // Traversing baris yang sama untuk mencari solusi
                 for (int k = j+1; k < this.jmlKolMat; k++) {
@@ -671,14 +672,14 @@ class Matriks {
                             solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
                                                     this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
                         } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" +
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
                                                     (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
                         }
                     } else { // elemen (i, k) merupakan konstanta
                         if (this.getElmt(i, k) > 0) { // nilai konstanta positif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" + this.getElmt(i, k));
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + this.getElmt(i, k));
                         } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " +this.getElmt(i, k));
+                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + this.getElmt(i, k));
                         }
                     }
                 }
@@ -716,14 +717,12 @@ class Matriks {
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
     public static HashMap<String, String> gaussJordan(Matriks mat) {
-        // TODO: - matriksToSPL WIP
         int indikator;
         HashMap<String, String> sol = new HashMap<>();
 
         mat.makeEselonTereduksi();
         indikator = mat.indikator();
         if (indikator == 0) {
-            sol.put("", "");
             return sol;
         } else if (indikator == 1) {
             for (int i = 0; i < mat.jmlBrsMat; i++) {
@@ -733,7 +732,6 @@ class Matriks {
             }
             return sol;
         } else { // indikator == 2
-            //TODO: ERROR di `sol = mat.matriksToSPL(mat);`
             sol = mat.matriksToSPL();
             return sol;
         }
@@ -748,7 +746,7 @@ class Matriks {
             System.out.println("Solusi tidak ada");
         }
         else {
-            for (int i = solHashMap.size(); i >= 0; i--) {
+            for (int i = solHashMap.size()-1; i >= 0; i--) {
                 System.out.print("x" + (i+1) + " = " + solHashMap.get("x"+(i+1)));
                 if (i != 0) {
                     System.out.print(", ");
