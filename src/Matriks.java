@@ -606,7 +606,8 @@ class Matriks {
      */
 
     private HashMap<String, String> matriksToSPL() {
-        // TODO: Test
+        // TODO: More test
+        //       Figure out whitespace in traversing baris yang sama (the minus part)
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas pertama
         int i, j;
@@ -667,7 +668,7 @@ class Matriks {
                 // Traversing baris yang sama untuk mencari solusi
                 for (int k = j+1; k < this.jmlKolMat; k++) {
                     // elemen (i, k) merupakan koefisien
-                    if (k != this.jmlKolMat - 2) {
+                    if (k != this.jmlKolMat - 1) {
                         if (this.getElmt(i, k) > 0) { // nilai koefisien positif
                             solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
                                                     this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
