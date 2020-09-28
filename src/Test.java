@@ -58,8 +58,9 @@ public class Test {
 
         //m1.makeEselon();
         m1.makeEselonTereduksi();
-        System.out.println("This is the end");
         m1.tulisMatriks();
+        m1.tulisSolusi(m1.gaussJordan(m1));
+        System.out.println("This is the end");
         //m1.tulisSolusi(m1.gauss(m1));
 
         //m1.makeAugmented(mOriginal);
