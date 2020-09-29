@@ -310,7 +310,7 @@ class Matriks {
 
             for (int i = 0; i < mat.jmlBrsMat; ++i) {
                 currBaris = "";
-                for (int j = 0; j < mat.jmlBrsMat; ++j) {
+                for (int j = 0; j < mat.jmlKolMat; ++j) {
                     String currEl = String.format("%.2f", mat.getElmt(i, j));
                     currBaris += currEl + es;
                 }
