@@ -1054,15 +1054,19 @@ class Matriks {
             matInter.setElmt(i, matInter.jmlKolMat-1, currY);
         }
 
+        // TODO: Remove this debygging messages
         // 2. Membuat matriks bru menjadi eselon tereduksi
         System.out.println("Before: ");
         matInter.tulisMatriks();
         matInter.makeEselon();
+        //matInter.makeEselonTereduksi();
         System.out.println("After: ");
         matInter.tulisMatriks();
+
+
         indikator = matInter.indikator();
         if (indikator == 1) {
-        } else { // indikator 0 atau 2
+        } else { // indikator 0 atau 2; tidak bisa dibuat interpolasinya
             System.out.println("Tidak dapat dicari interpolasi polinom dari titik-titik yang diberikan");
             System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
             solv.add(Double.NaN);
