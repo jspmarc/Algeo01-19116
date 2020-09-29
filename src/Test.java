@@ -82,7 +82,8 @@ public class Test {
         //System.out.println(m1.jumElmt() + " " + m1.getJmlBrs() + " " + m1.getJmlKol());
         //m1.tulisMatriks();
 
-        Matriks.interpolasi(m1, 1);
+        m1 = Matriks.bacaDariFile();
+        Matriks.interpolasi(m1, 9.2);
         s.close();
         System.out.println("This is the end");
     }

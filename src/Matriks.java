@@ -266,8 +266,6 @@ class Matriks {
                 mat = new Matriks(brs, kol);
                 mat.mat = firstSplit;
 
-                mat.tulisMatriks();
-
                 // Probably close these on the main program instead
                 // Probably wanna use a finally block
                 fr.close();
@@ -1019,9 +1017,12 @@ class Matriks {
      * selain itu akan berisi solusi a_0, a_1, ..., a_n
      */
     public static ArrayList<Double> interpolasi(Matriks titik, double x) {
+        Scanner scan = new Scanner(System.in);
         ArrayList<Double> solv = new ArrayList<>();
         int indikator;
         Matriks matInter = new Matriks(titik.jmlBrsMat, titik.jmlBrsMat+1);
+        String px, ps;
+        double interpolatedX = 0;
 
         if (titik.jmlKolMat != 2) {
             // Jika yang didapatkan bukan matriks yang terdiri dari titik-titik
@@ -1054,20 +1055,48 @@ class Matriks {
             matInter.setElmt(i, matInter.jmlKolMat-1, currY);
         }
 
-        // TODO: Remove this debygging messages
-        // 2. Membuat matriks bru menjadi eselon tereduksi
-        System.out.println("Before: ");
-        matInter.tulisMatriks();
-
         matInter.makeEselon();
         matInter.makeEselonTereduksi();
 
-        System.out.println("After: ");
-        matInter.tulisMatriks();
-
-
         indikator = matInter.indikator();
         if (indikator == 1) {
+            // Ambil kolom terakhir
+            for (int i = 0; i < matInter.jmlBrsMat; ++i) {
+                solv.add(matInter.getElmt(i, matInter.jmlKolMat-1));
+            }
+
+            px = "P(x) = ";
+            ps = "P(" + x + ") = ";
+            for (int i = 0; i < matInter.jmlBrsMat; ++i) {
+                px += String.format("%.4f", solv.get(i) >= 0
+                                            ? solv.get(i)
+                                            : -1*solv.get(i));
+                ps += String.format("%.4f", solv.get(i) >= 0
+                                            ? solv.get(i)
+                                            : -1*solv.get(i));
+                if (i != 0) {
+                    px += "(x" + (i == 1 ? "" : "**" + i) + ")";
+                    ps += "(" + x +  (i == 1 ? "" : "**" + i) + ")";
+                }
+                if (i < matInter.jmlBrsMat-1) {
+                    px += (solv.get(i+1) >= 0) ? " + " : " - ";
+                    ps += (solv.get(i+1) >= 0) ? " + " : " - ";
+                }
+
+                interpolatedX += solv.get(i) * Math.pow(x, i);
+            }
+
+            ps += String.format(" = %.4f", interpolatedX);
+
+            System.out.println(px);
+            System.out.println(ps);
+
+            System.out.print("Ingin menulis output ke file? (y/n): ");
+            String yn = scan.next();
+
+            if (yn.toLowerCase().equals("y")) {
+                tulisKeFile(px + "\n" + ps);
+            }
         } else { // indikator 0 atau 2; tidak bisa dibuat interpolasinya
             System.out.println("Tidak dapat dicari interpolasi polinom dari titik-titik yang diberikan");
             System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
