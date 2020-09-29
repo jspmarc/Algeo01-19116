@@ -9,9 +9,15 @@
  *      - [x] Reduksi baris
  */
 
+// Struktur data
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.HashMap;
 import java.util.Scanner;
+
+// Input/Output-related
+import java.io.*;
+
+// Mathematics
 import java.lang.Math;
 
 /**
@@ -39,6 +45,9 @@ class Matriks {
      * *** INPUTS/OUTPUTS ***
      *   - bacaMatriks
      *   - tulisMatriks
+     *   - bacaDariFile
+     *   - tulisKeFile (Matriks)
+     *   - tulisKeFile (String)
      * *** HELPER FUNCTIONS ***
      *   - adalahPersegi
      *   - jumElmt
@@ -54,7 +63,7 @@ class Matriks {
      *   - makeEselonTereduksi
      *   - indikator
      *   - solusiDouble
-     *   - matriksToSPL (WIP)
+     *   - matriksToSPL
      * *** TUGAS ***
      *   - gauss
      *   - gaussJordan
@@ -62,6 +71,8 @@ class Matriks {
      *   - determinanEksKof
      *   - determinanRedBrs
      *   - interpolasi
+     *   - balikan
+     *   - cramer
      */
 
     /* === ATTRIBUTES === */
@@ -160,6 +171,7 @@ class Matriks {
      * */
     public void bacaMatriks() {
         // Membuat scanner baru (untuk membacaa masukkan dari user)
+        // Tutup scanner di program utama
         Scanner scan = new Scanner(System.in);
 
         // Mengganti nilai di matriks sesuai dengan masukkan user
@@ -171,9 +183,6 @@ class Matriks {
             }
             this.setBaris(i, kol);
         }
-
-        // Menutup scanner
-        scan.close();
     }
 
     /**
@@ -185,6 +194,167 @@ class Matriks {
                 System.out.printf("%.2f\t", this.getElmt(i, j));
             }
             System.out.println();
+        }
+    }
+
+    /**
+     * Membaca matriks dari suatu file plaintext-file lalu mengembalikannya
+     * Setiap elemen di baris dipisahkan spasi dan
+     * Setiap baris dipisahakan \n (newline character)
+     * @return Matriks yang dibaca dari plaintext-file
+     */
+    public static Matriks bacaDariFile() {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileReader fr;
+        BufferedReader br;
+        String path;
+        Matriks mat,
+                tempMat = new Matriks(1, 1);
+        int brs, kol;
+        ArrayList<Double> secondSplit;
+        ArrayList<ArrayList<Double>> firstSplit = new ArrayList<>();
+
+        // Ngebaca dari file
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        // Menghindari error file ga ada
+        try {
+            fr = new FileReader(path);
+            // Menghindari error file ga bisa dibaca
+            try {
+                br = new BufferedReader(fr);
+
+                // Masukin isi file ke suatu string baris per baris
+                StringBuilder fromFile = new StringBuilder();
+                String ls = "\n", // pemisah antarbaris
+                       currLine = br.readLine(); // line sekarang
+                while (currLine != null) {
+                    fromFile.append(currLine + ls);
+                    currLine = br.readLine(); // Next line
+                }
+
+                // Menghapus line separator terakhir
+                fromFile.deleteCharAt(fromFile.length()-1);
+
+                // konversi ke String dari StringBuilder
+                String strFromFile = fromFile.toString();
+
+                brs = 0;
+                kol = 0;
+                boolean firstPast = true;
+
+                // Pecah string per baris
+                for (String str : strFromFile.split("\n")) {
+                    ++brs;
+                    secondSplit = new ArrayList<>();
+
+                    // Pecah elemen per spasi
+                    for (String num : str.split(" ")) {
+                        secondSplit.add(Double.parseDouble(num));
+                        if (firstPast) {
+                            ++kol;
+                        }
+                    }
+
+                    firstSplit.add(secondSplit);
+                    firstPast = false;
+                }
+
+                // Bikin matriks baru
+                mat = new Matriks(brs, kol);
+                mat.mat = firstSplit;
+
+                mat.tulisMatriks();
+
+                // Probably close these on the main program instead
+                // Probably wanna use a finally block
+                fr.close();
+                br.close();
+
+                return mat;
+            } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat membaca file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
+            }
+        } catch(FileNotFoundException e) {
+            System.out.println("File tidak ditemukan\n" + e);
+            System.exit(1);
+        }
+        // Mengisi matriks tempMat denagn NaN
+        tempMat.setElmt(0, 0, Double.NaN);
+        return tempMat;
+    }
+
+    /**
+     * Menuliskan matriks ke file
+     * @param mat matriks yang ingin ditulis ke file
+     */
+    public static void tulisKeFile(Matriks mat) {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileWriter fw;
+        String path,
+               ls = "\n", // line separator
+               es = " "; // element separator
+
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        try {
+            fw = new FileWriter(path);
+            String strMat = "", currBaris;
+
+            for (int i = 0; i < mat.jmlBrsMat; ++i) {
+                currBaris = "";
+                for (int j = 0; j < mat.jmlBrsMat; ++j) {
+                    String currEl = String.format("%.2f", mat.getElmt(i, j));
+                    currBaris += currEl + es;
+                }
+                strMat += currBaris + ls;
+            }
+
+            fw.write(strMat);
+
+            // Probably close these on the main program instead
+            // Probably wanna use a finally block
+            fw.close();
+        } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat menulis ke file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
+        }
+    }
+
+    /**
+     * Menulis string ke file (secara mentah-mentah, tanpa perubahan dari string)
+     * @param str string yang ingin dituliskan ke file
+     */
+    public static void tulisKeFile(String str) {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileWriter fw;
+        String path;
+
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        try {
+            fw = new FileWriter(path);
+            fw.write(str);
+
+            // Probably close these on the main program instead
+            // Probably wanna use a finally block
+            fw.close();
+        } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat menulis ke file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
         }
     }
 
@@ -464,7 +634,6 @@ class Matriks {
             }
 
             // Membagi elemen baris agar memiliki one lead
-            System.out.println(this.getElmt(i, leadIdx));
             if (this.getElmt(i, leadIdx) != 0) {
                 this.bagiBaris(i, (this.getElmt(i, leadIdx)));
             }
@@ -487,33 +656,65 @@ class Matriks {
      */
     public void makeEselonTereduksi() {
         // TODO: Ganti jadi private
-        //       Test
-        double temp;
-        for (int i = this.jmlKolMat-1; i >= 0; i--) {
-            for (int j = i; j >= 0; j--) {
-                temp = this.getElmt(j, i) / this.getElmt(i, i);
-                for (int k = this.jmlKolMat-1; k >= i; k--) {
-                    double val = this.getElmt(j, k) - temp * this.getElmt(i, k);
-                    this.setElmt(j, k, val);
-                }
-            }
-        }
 
-        ArrayList<Double> tempBaris = new ArrayList<>(); // ?
-        for (int i = 0; i < this.jmlKolMat-1; i++) {
-            double val = 0;
-            tempBaris.set(i, val); // membuat koefisien leading menjadi 0
-        }
-        for (int i = 0; i < this.jmlKolMat-1; i++) {
-            for (int j = 0; j <= this.jmlKolMat-1; j++) {
-                if (tempBaris.get(i) == 0 && j != this.jmlKolMat-1) {
-                    tempBaris.set(i, this.getElmt(i, j));
-                }
-                if (tempBaris.get(i) != 0) {
-                    double val = this.getElmt(i, j);
-                    this.setElmt(i, j, val);
+        int leadIdx = 0,
+            k;
+
+        for (int i = 0; i < this.jmlBrsMat; i++) {
+            // k ini iterator buat baris
+            // leadIdx buat nandain posisi leading one
+            // leadElmt adalah elemen yang berada di posisi leading one
+
+            if (this.jmlKolMat <= leadIdx) {
+                return;
+            }
+
+            k = i;
+
+            // Kalau leadElmt nol
+            // Akan dicari sampai tidak nol
+            while (this.getElmt(k, leadIdx) == 0) {
+                k++; // Dilihat baris selanjutnya
+                // Kalau k menjadi out of bound
+                // Artinya sekolom dari baris ke-i sampai baris ke-(bnykBrs-1)
+                // 0 semua
+                if (k == this.jmlBrsMat) {
+                    k = i; // k dikembalikan ke i
+                    leadIdx++; // posisi leading one dimajuin satu
+
+                    // Kalau posisi diagonal sudah out of bounds, artinya
+                    // sebaris terakhir memiliki elemen 0 semua
+                    // (kecuali bagian augmented)
+
+                    // this.jmlKolMat-1 biar yang bagian augmented diperiksa
+                    // ga usah diperiksa
+                    if (leadIdx == this.jmlKolMat) {
+                        return;
+                    }
                 }
             }
+            // Menukar baris kalau ditemukan baris yang elemen leading-nya
+            // tidak 0
+            if (k != i) {
+                tukarBaris(k, i);
+            }
+
+            // Membagi elemen baris agar memiliki one lead
+            if (this.getElmt(i, leadIdx) != 0) {
+                this.bagiBaris(i, (this.getElmt(i, leadIdx)));
+            }
+
+            // Meng-0-kan elemen yang sebaris dengan one-lead
+            for (int j = 0; j < this.jmlBrsMat; j++) {
+                if (j != i) {
+                    // Diambil elemen yang di bawah 1 lead
+                    double elmtPertama = this.getElmt(j, leadIdx),
+                        konstanta = -1 * elmtPertama/this.getElmt(i, leadIdx);
+                    this.tambahBaris(j, i, konstanta);
+                }
+            }
+
+            leadIdx++;
         }
     }
 
@@ -526,17 +727,16 @@ class Matriks {
      * - 2: Solusi tak hingga
      */
     private int indikator() {
-        // TODO: Test
         boolean konstantaNol = true;
         boolean koefisienNol = true;
         int j = 0;
 
-        if (getElmt(this.jmlBrsMat-1, this.jmlKolMat-1) == 0) {
+        if (getElmt(this.jmlBrsMat-1, this.jmlKolMat-1) != 0.0d) {
             konstantaNol = false;
         }
 
         while ((j < this.jmlKolMat-1) && koefisienNol) {
-            if (getElmt(this.jmlBrsMat-1, j) != 0) {
+            if (getElmt(this.jmlBrsMat-1, j) != 0.0d) {
                 koefisienNol = false;
             }
             j++;
@@ -572,9 +772,10 @@ class Matriks {
      */
 
     private HashMap<String, String> matriksToSPL() {
-        // TODO: Test
+        // TODO: More test
+        //       Fix comment
         HashMap<String, String> solParametrik = new HashMap<>();
-        char varBebas = 's'; // variabel bebas
+        char varBebas = 's'; // variabel bebas pertama
         int i, j;
 
         // Assigning xn(s) which is a free variable(s) with a
@@ -598,54 +799,73 @@ class Matriks {
             }
         }
 
-        // Mencari banyak variabel bebas yang dibutuhkan
-        int jmlBarisNol = 0;
+        // Mencari jumlah baris yang tidak nol
+        int jmlBarisTidakNol = 0;
         i = 0;
         j = 0;
         boolean nol = true;
 
-        while (nol && i < this.jmlBrsMat) {
+        while (i < this.jmlBrsMat) {
+            nol = true;
             while (nol && j < this.jmlKolMat) {
                 if (this.getElmt(i, j) != 0) {
+                    jmlBarisTidakNol++;
                     nol = false;
                 }
-                jmlBarisNol++;
+                j++;
             }
+            i++;
         }
-
-        // jumlah variabel - jumlah baris matriks yang tidak nol
-        int jmlBarisTidakNol = this.jmlBrsMat - jmlBarisNol;
 
         // Assigning the rest of xns with a value for their solution
         for (i = 0; i < jmlBarisTidakNol; i++) {
             j = 0;
 
-            // Mencari elemen matriks = 1
+            // Mencari elemen matriks = 1 (1 yang pertama merupakan leading one)
             while (this.getElmt(i, j) != 1) {
                 j++;
             }
 
             // Inisiasi key HashMap solParametrik
+            // Untuk elemen matriks yang sama dengan 1
             solParametrik.put("x" + (j+1), "");
 
-            // j bukan koefien xn
+            // j bukan koefisien xn
             if (j != this.jmlKolMat-2) {
                 // Traversing baris yang sama untuk mencari solusi
                 for (int k = j+1; k < this.jmlKolMat; k++) {
-                    // elemen (i, k) merupakan koefisien
-                    if (k != this.jmlKolMat - 2) {
-                        if (this.getElmt(i, k) > 0) { // nilai koefisien positif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
-                                                    this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
-                        } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" +
-                                                    (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                    // Percabangan untuk mengatasi whitespace bagian awal solusi
+                    if (solParametrik.get("x" + (j+1)) != null && solParametrik.get("x" + (j+1)).equals("")) {
+                        // elemen (i, k) merupakan koefisien
+                        if (k != this.jmlKolMat - 1) {
+                            if (this.getElmt(i, k) > 0) { // nilai koefisien positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + "-" +
+                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) +
+                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            }
+                        } else { // elemen (i, k) merupakan konstanta
+                            if (this.getElmt(i, k) > 0 || this.getElmt(i, k) < 0) { // nilai konstanta positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + this.getElmt(i, k));
+                            }
                         }
-                    } else { // elemen (i, k) merupakan konstanta
-                        if (this.getElmt(i, k) > 0) { // nilai konstanta positif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " +" + this.getElmt(i, k));
-                        } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " +this.getElmt(i, k));
+                    } else {
+                        // elemen (i, k) merupakan koefisien
+                        if (k != this.jmlKolMat - 1) {
+                            if (this.getElmt(i, k) > 0) { // nilai koefisien positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
+                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
+                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            }
+                        } else { // elemen (i, k) merupakan konstanta
+                            if (this.getElmt(i, k) > 0) { // nilai konstanta positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + this.getElmt(i, k));
+                            } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + this.getElmt(i, k));
+                            }
                         }
                     }
                 }
@@ -667,11 +887,8 @@ class Matriks {
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
     public static HashMap<String, String> gauss(Matriks mat) {
-        HashMap<String, String> sol = new HashMap<>();
-
         mat.makeEselon();
-        sol = gaussJordan(mat);
-        return sol;
+        return gaussJordan(mat);
     }
 
     /**
@@ -683,14 +900,12 @@ class Matriks {
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
     public static HashMap<String, String> gaussJordan(Matriks mat) {
-        // TODO: - matriksToSPL WIP
         int indikator;
         HashMap<String, String> sol = new HashMap<>();
 
         mat.makeEselonTereduksi();
         indikator = mat.indikator();
         if (indikator == 0) {
-            sol.put("", "");
             return sol;
         } else if (indikator == 1) {
             for (int i = 0; i < mat.jmlBrsMat; i++) {
@@ -700,7 +915,6 @@ class Matriks {
             }
             return sol;
         } else { // indikator == 2
-            //TODO: ERROR di `sol = mat.matriksToSPL(mat);`
             sol = mat.matriksToSPL();
             return sol;
         }
@@ -715,9 +929,9 @@ class Matriks {
             System.out.println("Solusi tidak ada");
         }
         else {
-            for (int i = solHashMap.size(); i >= 0; i--) {
+            for (int i = solHashMap.size()-1; i >= 0; i--) {
                 System.out.print("x" + (i+1) + " = " + solHashMap.get("x"+(i+1)));
-                if (i != solHashMap.size()) {
+                if (i != 0) {
                     System.out.print(", ");
                 }
             }
@@ -871,10 +1085,13 @@ class Matriks {
         nBar = this.jmlBrsMat;
         nKol = this.jmlKolMat;
 
+        // Membuat matriks baru untuk temp invers
         Matriks mi = new Matriks(nBar, nKol);
         Matriks.salinMatriks(this, mi);
 
+        // Mengecek apakah matriks merupakan matriks persegi
         if (mi.adalahPersegi()){
+            // Men-swap elmt matriks(i,j) dengan elmt (j,i) dengan i sebagai baris dan j sebagai kolom
             det = determinanRedBrs(mi);
             for(i = 0; i<(nBar-1) ; i++){
                 for(j = 0; j<(i+1) ; j++){
@@ -892,21 +1109,53 @@ class Matriks {
     }
 
     /**
-     * TODO: D.O. FILL/FIX THIS COMMENT!
      * Menyelesaikan SPL dengan metode Cramer untuk matriks yang memanggil
      * @return nilai SPL dari matriks yang memanggil
      */
-    public double cramer(){
-        Scanner sc = new Scanner(System.in);
+    public void cramer(){
         int i, j, nBar, nKol;
-        double det,temp;
+        double det1,det2,temp;
         nBar = this.jmlBrsMat;
-        nKol = this.jmlKolMat;
+        nKol = (this.jmlKolMat-1);
 
-        Matriks mi = new Matriks(nBar, nKol);
-        Matriks.salinMatriks(this, mi);
+        // Membuat matrix baru
+        Matriks m = new Matriks(nBar, (nKol+1));
+        Matriks.salinMatriks(this, m);
+        Matriks m1 = new Matriks(nBar, nKol);
+        Matriks m2 = new Matriks(nBar, 1);
+        Matriks m3 = new Matriks(nBar, nKol);
 
-        // TODO: TEMP RETURN, CHANGE!
-        return 0.0;
+        // Mengecek apakah matriks merupakan matriks persegi
+        if(m1.adalahPersegi()){
+            det1 = determinanRedBrs(m1);
+
+            // Memasukan nilai dari elmt m1 dan m2
+            for (i = 0; i<nKol; i++){
+                for(j = 0; j<nKol ; j++){
+                    m1.setElmt(i, j, m.getElmt(i, j));
+                }
+                m2.setElmt(i, 0, m.getElmt(i, nKol));
+            }
+
+            System.out.print("(");
+
+            // Menghitung solusi dari SPL 1 demi 1
+            for (i = 0; i<nKol; i++){
+                if(i != 0){
+                    System.out.print(",");
+                }
+                Matriks.salinMatriks(m3, m1);
+                for(j = 0; j<nBar ; j++){
+                    m3.setElmt(j, i, m2.getElmt(i, 0));
+                }
+                det2 = determinanRedBrs(m3);
+                temp = det2/det1;
+                System.out.print("x"+(i+1)+" = "+(temp));
+            }
+            System.out.println("");
+        }
+        else{
+            System.out.println("Tidak ada solusi");
+        }
     }
 }
