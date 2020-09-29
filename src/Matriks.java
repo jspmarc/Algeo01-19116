@@ -16,14 +16,6 @@ import java.util.Scanner;
 
 // Input/Output-related
 import java.io.*;
-//import java.io.File;
-//import java.io.FileReader;
-//import java.io.FileWriter;
-//import java.io.BufferedReader;
-//import java.io.BufferedWriter;
-// Input/output-related errors
-//import java.io.FileNotFoundException;
-//import java.io.IOException;
 
 // Mathematics
 import java.lang.Math;
@@ -54,7 +46,8 @@ class Matriks {
      *   - bacaMatriks
      *   - tulisMatriks
      *   - bacaDariFile
-     *   - tulisKeFile
+     *   - tulisKeFile (Matriks)
+     *   - tulisKeFile (String)
      * *** HELPER FUNCTIONS ***
      *   - adalahPersegi
      *   - jumElmt
@@ -176,6 +169,7 @@ class Matriks {
      * */
     public void bacaMatriks() {
         // Membuat scanner baru (untuk membacaa masukkan dari user)
+        // Tutup scanner di program utama
         Scanner scan = new Scanner(System.in);
 
         // Mengganti nilai di matriks sesuai dengan masukkan user
@@ -187,9 +181,6 @@ class Matriks {
             }
             this.setBaris(i, kol);
         }
-
-        // Menutup scanner
-        scan.close();
     }
 
     /**
@@ -204,6 +195,12 @@ class Matriks {
         }
     }
 
+    /**
+     * Membaca matriks dari suatu file plaintext-file lalu mengembalikannya
+     * Setiap elemen di baris dipisahkan spasi dan
+     * Setiap baris dipisahakan \n (newline character)
+     * @return Matriks yang dibaca dari plaintext-file
+     */
     public static Matriks bacaDariFile() {
         // Tutup scanner di program utama
         Scanner scan = new Scanner(System.in);
@@ -229,7 +226,7 @@ class Matriks {
 
                 // Masukin isi file ke suatu string baris per baris
                 StringBuilder fromFile = new StringBuilder();
-                String ls = "\n",
+                String ls = "\n", // pemisah antarbaris
                        currLine = br.readLine(); // line sekarang
                 while (currLine != null) {
                     fromFile.append(currLine + ls);
@@ -239,6 +236,7 @@ class Matriks {
                 // Menghapus line separator terakhir
                 fromFile.deleteCharAt(fromFile.length()-1);
 
+                // konversi ke String dari StringBuilder
                 String strFromFile = fromFile.toString();
 
                 brs = 0;
@@ -250,7 +248,7 @@ class Matriks {
                     ++brs;
                     secondSplit = new ArrayList<>();
 
-                    // Pecah string per spasi
+                    // Pecah elemen per spasi
                     for (String num : str.split(" ")) {
                         secondSplit.add(Double.parseDouble(num));
                         if (firstPast) {
@@ -268,6 +266,8 @@ class Matriks {
 
                 mat.tulisMatriks();
 
+                // Probably close these on the main program instead
+                // Probably wanna use a finally block
                 fr.close();
                 br.close();
 
@@ -287,7 +287,73 @@ class Matriks {
         return tempMat;
     }
 
-    public void tulisKeFile() {
+    /**
+     * Menuliskan matriks ke file
+     * @param mat matriks yang ingin ditulis ke file
+     */
+    public static void tulisKeFile(Matriks mat) {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileWriter fw;
+        String path,
+               ls = "\n", // line separator
+               es = " "; // element separator
+
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        try {
+            fw = new FileWriter(path);
+            String strMat = "", currBaris;
+
+            for (int i = 0; i < mat.jmlBrsMat; ++i) {
+                currBaris = "";
+                for (int j = 0; j < mat.jmlBrsMat; ++j) {
+                    String currEl = String.format("%.2f", mat.getElmt(i, j));
+                    currBaris += currEl + es;
+                }
+                strMat += currBaris + ls;
+            }
+
+            fw.write(strMat);
+
+            // Probably close these on the main program instead
+            // Probably wanna use a finally block
+            fw.close();
+        } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat menulis ke file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
+        }
+    }
+
+    /**
+     * Menulis string ke file (secara mentah-mentah, tanpa perubahan dari string)
+     * @param str string yang ingin dituliskan ke file
+     */
+    public static void tulisKeFile(String str) {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileWriter fw;
+        String path;
+
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        try {
+            fw = new FileWriter(path);
+            fw.write(str);
+
+            // Probably close these on the main program instead
+            // Probably wanna use a finally block
+            fw.close();
+        } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat menulis ke file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
+        }
     }
 
     /* === HELPER FUNCTIONS === */
