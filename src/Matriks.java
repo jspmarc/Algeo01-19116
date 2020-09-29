@@ -607,7 +607,7 @@ class Matriks {
 
     private HashMap<String, String> matriksToSPL() {
         // TODO: More test
-        //       Figure out whitespace in traversing baris yang sama (the minus part)
+        //       Fix comment
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas pertama
         int i, j;
@@ -639,11 +639,12 @@ class Matriks {
         j = 0;
         boolean nol = true;
 
-        while (nol && i < this.jmlBrsMat) {
+        while (i < this.jmlBrsMat) {
+            nol = true;
             while (nol && j < this.jmlKolMat) {
                 if (this.getElmt(i, j) != 0) {
-                    nol = false;
                     jmlBarisTidakNol++;
+                    nol = false;
                 }
                 j++;
             }
@@ -667,20 +668,38 @@ class Matriks {
             if (j != this.jmlKolMat-2) {
                 // Traversing baris yang sama untuk mencari solusi
                 for (int k = j+1; k < this.jmlKolMat; k++) {
-                    // elemen (i, k) merupakan koefisien
-                    if (k != this.jmlKolMat - 1) {
-                        if (this.getElmt(i, k) > 0) { // nilai koefisien positif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
-                                                    this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
-                        } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
-                                                    (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                    // Percabangan untuk mengatasi whitespace bagian awal solusi
+                    if (solParametrik.get("x" + (j+1)) == "") {  
+                        // elemen (i, k) merupakan koefisien
+                        if (k != this.jmlKolMat - 1) {
+                            if (this.getElmt(i, k) > 0) { // nilai koefisien positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + "-" +
+                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) +
+                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            }
+                        } else { // elemen (i, k) merupakan konstanta
+                            if (this.getElmt(i, k) > 0 || this.getElmt(i, k) < 0) { // nilai konstanta positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + this.getElmt(i, k));
+                            }
                         }
-                    } else { // elemen (i, k) merupakan konstanta
-                        if (this.getElmt(i, k) > 0) { // nilai konstanta positif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + this.getElmt(i, k));
-                        } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
-                            solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + this.getElmt(i, k));
+                    } else {  
+                        // elemen (i, k) merupakan koefisien
+                        if (k != this.jmlKolMat - 1) {
+                            if (this.getElmt(i, k) > 0) { // nilai koefisien positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
+                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
+                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                            }
+                        } else { // elemen (i, k) merupakan konstanta
+                            if (this.getElmt(i, k) > 0) { // nilai konstanta positif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + this.getElmt(i, k));
+                            } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + this.getElmt(i, k));
+                            }
                         }
                     }
                 }
