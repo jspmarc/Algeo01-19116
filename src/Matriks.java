@@ -9,9 +9,23 @@
  *      - [x] Reduksi baris
  */
 
+// Struktur data
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.HashMap;
 import java.util.Scanner;
+
+// Input/Output-related
+import java.io.*;
+//import java.io.File;
+//import java.io.FileReader;
+//import java.io.FileWriter;
+//import java.io.BufferedReader;
+//import java.io.BufferedWriter;
+// Input/output-related errors
+//import java.io.FileNotFoundException;
+//import java.io.IOException;
+
+// Mathematics
 import java.lang.Math;
 
 /**
@@ -39,6 +53,8 @@ class Matriks {
      * *** INPUTS/OUTPUTS ***
      *   - bacaMatriks
      *   - tulisMatriks
+     *   - bacaDariFile
+     *   - tulisKeFile
      * *** HELPER FUNCTIONS ***
      *   - adalahPersegi
      *   - jumElmt
@@ -186,6 +202,92 @@ class Matriks {
             }
             System.out.println();
         }
+    }
+
+    public static Matriks bacaDariFile() {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileReader fr;
+        BufferedReader br;
+        String path;
+        Matriks mat,
+                tempMat = new Matriks(1, 1);
+        int brs, kol;
+        ArrayList<Double> secondSplit;
+        ArrayList<ArrayList<Double>> firstSplit = new ArrayList<>();
+
+        // Ngebaca dari file
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        // Menghindari error file ga ada
+        try {
+            fr = new FileReader(path);
+            // Menghindari error file ga bisa dibaca
+            try {
+                br = new BufferedReader(fr);
+
+                // Masukin isi file ke suatu string baris per baris
+                StringBuilder fromFile = new StringBuilder();
+                String ls = "\n",
+                       currLine = br.readLine(); // line sekarang
+                while (currLine != null) {
+                    fromFile.append(currLine + ls);
+                    currLine = br.readLine(); // Next line
+                }
+
+                // Menghapus line separator terakhir
+                fromFile.deleteCharAt(fromFile.length()-1);
+
+                String strFromFile = fromFile.toString();
+
+                brs = 0;
+                kol = 0;
+                boolean firstPast = true;
+
+                // Pecah string per baris
+                for (String str : strFromFile.split("\n")) {
+                    ++brs;
+                    secondSplit = new ArrayList<>();
+
+                    // Pecah string per spasi
+                    for (String num : str.split(" ")) {
+                        secondSplit.add(Double.parseDouble(num));
+                        if (firstPast) {
+                            ++kol;
+                        }
+                    }
+
+                    firstSplit.add(secondSplit);
+                    firstPast = false;
+                }
+
+                // Bikin matriks baru
+                mat = new Matriks(brs, kol);
+                mat.mat = firstSplit;
+
+                mat.tulisMatriks();
+
+                fr.close();
+                br.close();
+
+                return mat;
+            } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat membaca file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
+            }
+        } catch(FileNotFoundException e) {
+            System.out.println("File tidak ditemukan\n" + e);
+            System.exit(1);
+        }
+        // Mengisi matriks tempMat denagn NaN
+        tempMat.setElmt(0, 0, Double.NaN);
+        return tempMat;
+    }
+
+    public void tulisKeFile() {
     }
 
     /* === HELPER FUNCTIONS === */
