@@ -54,7 +54,7 @@ class Matriks {
      *   - makeEselonTereduksi
      *   - indikator
      *   - solusiDouble
-     *   - matriksToSPL (WIP)
+     *   - matriksToSPL
      * *** TUGAS ***
      *   - gauss
      *   - gaussJordan
@@ -488,8 +488,6 @@ class Matriks {
      */
     public void makeEselonTereduksi() {
         // TODO: Ganti jadi private
-        //       Test
-        //       Fix: buat bisa untuk matriks bukan n x n+1
 
         int leadIdx = 0,
             k;
@@ -633,7 +631,7 @@ class Matriks {
             }
         }
 
-        // Mencari banyak baris yang tidak nol
+        // Mencari jumlah baris yang tidak nol
         int jmlBarisTidakNol = 0;
         i = 0;
         j = 0;
@@ -669,7 +667,7 @@ class Matriks {
                 // Traversing baris yang sama untuk mencari solusi
                 for (int k = j+1; k < this.jmlKolMat; k++) {
                     // Percabangan untuk mengatasi whitespace bagian awal solusi
-                    if (solParametrik.get("x" + (j+1)) == "") {  
+                    if (solParametrik.get("x" + (j+1)) != null && solParametrik.get("x" + (j+1)).equals("")) {  
                         // elemen (i, k) merupakan koefisien
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
@@ -721,11 +719,8 @@ class Matriks {
      * - nilai x1-xn parametrik: matriks augmented memiliki solusi banyak, indikator = 1
      */
     public static HashMap<String, String> gauss(Matriks mat) {
-        HashMap<String, String> sol = new HashMap<>();
-
         mat.makeEselon();
-        sol = gaussJordan(mat);
-        return sol;
+        return gaussJordan(mat);
     }
 
     /**
