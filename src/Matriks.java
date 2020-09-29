@@ -1058,8 +1058,10 @@ class Matriks {
         // 2. Membuat matriks bru menjadi eselon tereduksi
         System.out.println("Before: ");
         matInter.tulisMatriks();
+
         matInter.makeEselon();
-        //matInter.makeEselonTereduksi();
+        matInter.makeEselonTereduksi();
+
         System.out.println("After: ");
         matInter.tulisMatriks();
 

@@ -65,17 +65,9 @@ public class Test {
 
         //mOriginal.tulisMatriks();
         //m1.tulisMatriks();
-        //Matriks.interpolasi(m1, 1);
 
-<<<<<<< Updated upstream
         //m1.makeEselon();
         m1.makeEselonTereduksi();
-=======
-        m1.makeEselon();
-        //m1.makeEselonTereduksi();
-        Matriks.interpolasi(m1, 1);
-        System.out.println("This is the end");
->>>>>>> Stashed changes
         m1.tulisMatriks();
         Matriks.tulisSolusi(Matriks.gaussJordan(m1));
         //m1.tulisSolusi(m1.gauss(m1));
@@ -90,6 +82,7 @@ public class Test {
         //System.out.println(m1.jumElmt() + " " + m1.getJmlBrs() + " " + m1.getJmlKol());
         //m1.tulisMatriks();
 
+        Matriks.interpolasi(m1, 1);
         s.close();
         System.out.println("This is the end");
     }
