@@ -216,7 +216,7 @@ class Matriks {
         ArrayList<ArrayList<Double>> firstSplit = new ArrayList<>();
 
         // Ngebaca dari file
-        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        System.out.print("Masukkan path ke file input (contoh: /path/to/file), boleh relative path: ");
         path = scan.next();
 
         // Menghindari error file ga ada
@@ -301,7 +301,7 @@ class Matriks {
                ls = "\n", // line separator
                es = " "; // element separator
 
-        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        System.out.print("Masukkan path ke file output (contoh: /path/to/file), boleh relative path: ");
         path = scan.next();
 
         try {
@@ -340,7 +340,7 @@ class Matriks {
         FileWriter fw;
         String path;
 
-        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        System.out.print("Masukkan path ke file output (contoh: /path/to/file), boleh relative path: ");
         path = scan.next();
 
         try {
