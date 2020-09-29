@@ -664,7 +664,7 @@ class Matriks {
             // k ini iterator buat baris
             // leadIdx buat nandain posisi leading one
             // leadElmt adalah elemen yang berada di posisi leading one
-            
+
             if (this.jmlKolMat <= leadIdx) {
                 return;
             }
@@ -824,18 +824,18 @@ class Matriks {
             // Mencari elemen matriks = 1 (1 yang pertama merupakan leading one)
             while (this.getElmt(i, j) != 1) {
                 j++;
-            }    
+            }
 
             // Inisiasi key HashMap solParametrik
             // Untuk elemen matriks yang sama dengan 1
             solParametrik.put("x" + (j+1), "");
-            
+
             // j bukan koefisien xn
             if (j != this.jmlKolMat-2) {
                 // Traversing baris yang sama untuk mencari solusi
                 for (int k = j+1; k < this.jmlKolMat; k++) {
                     // Percabangan untuk mengatasi whitespace bagian awal solusi
-                    if (solParametrik.get("x" + (j+1)) != null && solParametrik.get("x" + (j+1)).equals("")) {  
+                    if (solParametrik.get("x" + (j+1)) != null && solParametrik.get("x" + (j+1)).equals("")) {
                         // elemen (i, k) merupakan koefisien
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
@@ -850,7 +850,7 @@ class Matriks {
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + this.getElmt(i, k));
                             }
                         }
-                    } else {  
+                    } else {
                         // elemen (i, k) merupakan koefisien
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
@@ -1117,18 +1117,18 @@ class Matriks {
         double det1,det2,temp;
         nBar = this.jmlBrsMat;
         nKol = (this.jmlKolMat-1);
-        
+
         // Membuat matrix baru
         Matriks m = new Matriks(nBar, (nKol+1));
         Matriks.salinMatriks(this, m);
         Matriks m1 = new Matriks(nBar, nKol);
         Matriks m2 = new Matriks(nBar, 1);
         Matriks m3 = new Matriks(nBar, nKol);
-    
+
         // Mengecek apakah matriks merupakan matriks persegi
         if(m1.adalahPersegi()){
             det1 = determinanRedBrs(m1);
-    
+
             // Memasukan nilai dari elmt m1 dan m2
             for (i = 0; i<nKol; i++){
                 for(j = 0; j<nKol ; j++){
@@ -1138,7 +1138,7 @@ class Matriks {
             }
 
             System.out.print("(");
-            
+
             // Menghitung solusi dari SPL 1 demi 1
             for (i = 0; i<nKol; i++){
                 if(i != 0){
@@ -1156,6 +1156,6 @@ class Matriks {
         }
         else{
             System.out.println("Tidak ada solusi");
-        } 
+        }
     }
 }
