@@ -33,4 +33,8 @@ kofaktor
 
 ## Petunjuk Instalasi
 
+jalankan perintah `make jar`
+
 ## Petunjuk Penggunaan
+
+jalankan perintah `make`
