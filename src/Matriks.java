@@ -917,10 +917,13 @@ class Matriks {
         nBar = this.jmlBrsMat;
         nKol = this.jmlKolMat;
 
+        // Membuat matriks baru untuk temp invers
         Matriks mi = new Matriks(nBar, nKol);
         Matriks.salinMatriks(this, mi);
 
+        // Mengecek apakah matriks merupakan matriks persegi
         if (mi.adalahPersegi()){
+            // Men-swap elmt matriks(i,j) dengan elmt (j,i) dengan i sebagai baris dan j sebagai kolom
             det = determinanRedBrs(mi);
             for(i = 0; i<(nBar-1) ; i++){
                 for(j = 0; j<(i+1) ; j++){
@@ -938,21 +941,53 @@ class Matriks {
     }
 
     /**
-     * TODO: D.O. FILL/FIX THIS COMMENT!
      * Menyelesaikan SPL dengan metode Cramer untuk matriks yang memanggil
      * @return nilai SPL dari matriks yang memanggil
      */
-    public double cramer(){
-        Scanner sc = new Scanner(System.in);
+    public void cramer(){
         int i, j, nBar, nKol;
-        double det,temp;
+        double det1,det2,temp;
         nBar = this.jmlBrsMat;
-        nKol = this.jmlKolMat;
+        nKol = (this.jmlKolMat-1);
+        
+        // Membuat matrix baru
+        Matriks m = new Matriks(nBar, (nKol+1));
+        Matriks.salinMatriks(this, m);
+        Matriks m1 = new Matriks(nBar, nKol);
+        Matriks m2 = new Matriks(nBar, 1);
+        Matriks m3 = new Matriks(nBar, nKol);
+    
+        // Mengecek apakah matriks merupakan matriks persegi
+        if(m1.adalahPersegi()){
+            det1 = determinanRedBrs(m1);
+    
+            // Memasukan nilai dari elmt m1 dan m2
+            for (i = 0; i<nKol; i++){
+                for(j = 0; j<nKol ; j++){
+                    m1.setElmt(i, j, m.getElmt(i, j));
+                }
+                m2.setElmt(i, 0, m.getElmt(i, nKol));
+            }
 
-        Matriks mi = new Matriks(nBar, nKol);
-        Matriks.salinMatriks(this, mi);
-
-        // TODO: TEMP RETURN, CHANGE!
-        return 0.0;
+            System.out.print("(");
+            
+            // Menghitung solusi dari SPL 1 demi 1
+            for (i = 0; i<nKol; i++){
+                if(i != 0){
+                    System.out.print(",");
+                }
+                Matriks.salinMatriks(m3, m1);
+                for(j = 0; j<nBar ; j++){
+                    m3.setElmt(j, i, m2.getElmt(i, 0));
+                }
+                det2 = determinanRedBrs(m3);
+                temp = det2/det1;
+                System.out.print("x"+(i+1)+" = "+(temp));
+            }
+            System.out.println("");
+        }
+        else{
+            System.out.println("Tidak ada solusi");
+        } 
     }
 }
