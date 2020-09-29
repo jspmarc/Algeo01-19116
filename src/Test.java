@@ -10,25 +10,36 @@ public class Test {
      * Metode untuk pengujian metode lain matriks ("driver")
      */
     public static void main(String[] args) {
+
         Scanner s = new Scanner(System.in);
         int nBar, nKol;
 
+        /*
+        // Buat baca matriks 3x3 dari file
+        nBar = 3; nKol = 3;
+        Matriks mOriginal = new Matriks(nBar, nKol);
+        Matriks m1 = Matriks.bacaDariFile();
+        */
+
+        // Baca dari masukan user (keyboard)
         System.out.print("Masukkan banyak baris: ");
         nBar = s.nextInt();
         System.out.print("Masukkan banyak kolom: ");
         nKol = s.nextInt();
-
         Matriks m1 = new Matriks(nBar, nKol);
         Matriks mOriginal = new Matriks(nBar, nKol);
-
-        //m1.tulisMatriks();
         m1.bacaMatriks();
+
         Matriks.salinMatriks(m1, mOriginal);
         m1.tulisMatriks();
 
         System.out.printf("Ekspansi kofaktor: %.2f\n", Matriks.determinanEksKof(m1));
         System.out.printf("Reduksi baris: %.2f\n", Matriks.determinanRedBrs(m1));
         Matriks.salinMatriks(mOriginal, m1);
+
+        // tulis ke file
+        Matriks.tulisKeFile(m1);
+        Matriks.tulisKeFile("Hello, world!");
         //System.out.println();
 
         //m1.kaliBaris(0, 200);

@@ -9,9 +9,15 @@
  *      - [x] Reduksi baris
  */
 
+// Struktur data
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.HashMap;
 import java.util.Scanner;
+
+// Input/Output-related
+import java.io.*;
+
+// Mathematics
 import java.lang.Math;
 
 /**
@@ -39,6 +45,9 @@ class Matriks {
      * *** INPUTS/OUTPUTS ***
      *   - bacaMatriks
      *   - tulisMatriks
+     *   - bacaDariFile
+     *   - tulisKeFile (Matriks)
+     *   - tulisKeFile (String)
      * *** HELPER FUNCTIONS ***
      *   - adalahPersegi
      *   - jumElmt
@@ -162,6 +171,7 @@ class Matriks {
      * */
     public void bacaMatriks() {
         // Membuat scanner baru (untuk membacaa masukkan dari user)
+        // Tutup scanner di program utama
         Scanner scan = new Scanner(System.in);
 
         // Mengganti nilai di matriks sesuai dengan masukkan user
@@ -173,9 +183,6 @@ class Matriks {
             }
             this.setBaris(i, kol);
         }
-
-        // Menutup scanner
-        scan.close();
     }
 
     /**
@@ -187,6 +194,167 @@ class Matriks {
                 System.out.printf("%.2f\t", this.getElmt(i, j));
             }
             System.out.println();
+        }
+    }
+
+    /**
+     * Membaca matriks dari suatu file plaintext-file lalu mengembalikannya
+     * Setiap elemen di baris dipisahkan spasi dan
+     * Setiap baris dipisahakan \n (newline character)
+     * @return Matriks yang dibaca dari plaintext-file
+     */
+    public static Matriks bacaDariFile() {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileReader fr;
+        BufferedReader br;
+        String path;
+        Matriks mat,
+                tempMat = new Matriks(1, 1);
+        int brs, kol;
+        ArrayList<Double> secondSplit;
+        ArrayList<ArrayList<Double>> firstSplit = new ArrayList<>();
+
+        // Ngebaca dari file
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        // Menghindari error file ga ada
+        try {
+            fr = new FileReader(path);
+            // Menghindari error file ga bisa dibaca
+            try {
+                br = new BufferedReader(fr);
+
+                // Masukin isi file ke suatu string baris per baris
+                StringBuilder fromFile = new StringBuilder();
+                String ls = "\n", // pemisah antarbaris
+                       currLine = br.readLine(); // line sekarang
+                while (currLine != null) {
+                    fromFile.append(currLine + ls);
+                    currLine = br.readLine(); // Next line
+                }
+
+                // Menghapus line separator terakhir
+                fromFile.deleteCharAt(fromFile.length()-1);
+
+                // konversi ke String dari StringBuilder
+                String strFromFile = fromFile.toString();
+
+                brs = 0;
+                kol = 0;
+                boolean firstPast = true;
+
+                // Pecah string per baris
+                for (String str : strFromFile.split("\n")) {
+                    ++brs;
+                    secondSplit = new ArrayList<>();
+
+                    // Pecah elemen per spasi
+                    for (String num : str.split(" ")) {
+                        secondSplit.add(Double.parseDouble(num));
+                        if (firstPast) {
+                            ++kol;
+                        }
+                    }
+
+                    firstSplit.add(secondSplit);
+                    firstPast = false;
+                }
+
+                // Bikin matriks baru
+                mat = new Matriks(brs, kol);
+                mat.mat = firstSplit;
+
+                mat.tulisMatriks();
+
+                // Probably close these on the main program instead
+                // Probably wanna use a finally block
+                fr.close();
+                br.close();
+
+                return mat;
+            } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat membaca file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
+            }
+        } catch(FileNotFoundException e) {
+            System.out.println("File tidak ditemukan\n" + e);
+            System.exit(1);
+        }
+        // Mengisi matriks tempMat denagn NaN
+        tempMat.setElmt(0, 0, Double.NaN);
+        return tempMat;
+    }
+
+    /**
+     * Menuliskan matriks ke file
+     * @param mat matriks yang ingin ditulis ke file
+     */
+    public static void tulisKeFile(Matriks mat) {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileWriter fw;
+        String path,
+               ls = "\n", // line separator
+               es = " "; // element separator
+
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        try {
+            fw = new FileWriter(path);
+            String strMat = "", currBaris;
+
+            for (int i = 0; i < mat.jmlBrsMat; ++i) {
+                currBaris = "";
+                for (int j = 0; j < mat.jmlBrsMat; ++j) {
+                    String currEl = String.format("%.2f", mat.getElmt(i, j));
+                    currBaris += currEl + es;
+                }
+                strMat += currBaris + ls;
+            }
+
+            fw.write(strMat);
+
+            // Probably close these on the main program instead
+            // Probably wanna use a finally block
+            fw.close();
+        } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat menulis ke file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
+        }
+    }
+
+    /**
+     * Menulis string ke file (secara mentah-mentah, tanpa perubahan dari string)
+     * @param str string yang ingin dituliskan ke file
+     */
+    public static void tulisKeFile(String str) {
+        // Tutup scanner di program utama
+        Scanner scan = new Scanner(System.in);
+        FileWriter fw;
+        String path;
+
+        System.out.print("Masukkan path ke file (contoh: /path/to/file), boleh relative path: ");
+        path = scan.next();
+
+        try {
+            fw = new FileWriter(path);
+            fw.write(str);
+
+            // Probably close these on the main program instead
+            // Probably wanna use a finally block
+            fw.close();
+        } catch (IOException e) {
+                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Tidak dapat menulis ke file yang diberikan");
+                System.out.println(e);
+                System.exit(1);
         }
     }
 
