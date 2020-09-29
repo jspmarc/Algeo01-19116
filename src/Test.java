@@ -56,9 +56,12 @@ public class Test {
         //m1.tulisMatriks();
         //Matriks.interpolasi(m1, 1);
 
-        m1.makeEselon();
-        System.out.println("This is the end");
+        //m1.makeEselon();
+        m1.makeEselonTereduksi();
         m1.tulisMatriks();
+        m1.tulisSolusi(m1.gaussJordan(m1));
+        System.out.println("This is the end");
+        //m1.tulisSolusi(m1.gauss(m1));
 
         //m1.makeAugmented(mOriginal);
         //System.out.println("Before: ");
