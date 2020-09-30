@@ -125,10 +125,21 @@ class Matriks {
      * Alias setter buat element ke-i,j
      * @param i indeks baris
      * @param j indeks kolom
-     * @param val nilai baru yang ingin disubstitusi ke matriks
+     * @param val nilai baru yang ingin disubstitusi/dimasukkan ke matriks
      */
     public void setElmt(int i, int j, double val) {
-        this.mat.get(i).set(j, val);
+        try {
+            this.mat.get(i).set(j, val);
+        } catch (IndexOutOfBoundsException e) {
+            // Kalo ukuran ArrayList yang sebenarnya lebih kecil dari yang
+            // tertulis
+            if (this.jmlKolMat > j) {
+                this.mat.get(i).add(val);
+            } else {
+                // Menambahkan elemen ke tempat yang tidak seharusnya
+                throw e;
+            }
+        }
     }
 
     /**
@@ -146,7 +157,18 @@ class Matriks {
      * @param barisBaru barisBaru yang menggantikan baris ke-i
      */
     public void setBaris(int i, ArrayList<Double> barisBaru) {
-        this.mat.set(i, barisBaru);
+        try {
+            this.mat.set(i, barisBaru);
+        } catch (IndexOutOfBoundsException e) {
+            // Kalo ukuran ArrayList yang sebenarnya lebih kecil dari yang
+            // tertulis
+            if (this.jmlBrsMat > i) {
+                this.mat.add(barisBaru);
+            } else {
+                // Menambahkan elemen ke tempat yang tidak seharusnya
+                throw e;
+            }
+        }
     }
 
     /**
@@ -273,7 +295,7 @@ class Matriks {
 
                 return mat;
             } catch (IOException e) {
-                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Kesalahan fatal proses masukan/keluaran");
                 System.out.println("Tidak dapat membaca file yang diberikan");
                 System.out.println(e);
                 System.exit(1);
@@ -321,7 +343,7 @@ class Matriks {
             // Probably wanna use a finally block
             fw.close();
         } catch (IOException e) {
-                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Kesalahan fatal proses masukan/keluaran");
                 System.out.println("Tidak dapat menulis ke file yang diberikan");
                 System.out.println(e);
                 System.exit(1);
@@ -349,7 +371,7 @@ class Matriks {
             // Probably wanna use a finally block
             fw.close();
         } catch (IOException e) {
-                System.out.println("Kesalahan fatal proses maasukan/keluaran");
+                System.out.println("Kesalahan fatal proses masukan/keluaran");
                 System.out.println("Tidak dapat menulis ke file yang diberikan");
                 System.out.println(e);
                 System.exit(1);
@@ -501,14 +523,14 @@ class Matriks {
      * @param mTujuan
      */
     public static void salinMatriks(Matriks mAsal, Matriks mTujuan) {
+        mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
+        mTujuan.jmlKolMat = mAsal.jmlKolMat;
+
         for (int i = 0; i < mAsal.jmlBrsMat; ++i) {
             for (int j = 0; j < mAsal.jmlKolMat; ++j) {
                 mTujuan.setElmt(i, j, mAsal.getElmt(i, j));
             }
         }
-
-        mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
-        mTujuan.jmlKolMat = mAsal.jmlKolMat;
     }
 
     /**
@@ -1122,7 +1144,7 @@ class Matriks {
 
         // Membuat matriks baru untuk temp invers
         Matriks mi = new Matriks(nBar, nKol);
-        Matriks.salinMatriks(this, mi);
+        salinMatriks(this, mi);
 
         // Mengecek apakah matriks merupakan matriks persegi
         if (mi.adalahPersegi()){
@@ -1138,8 +1160,10 @@ class Matriks {
             for(i = 0; i<nKol; i++){
                 mi.bagiBaris(i,det);
             }
+
+            salinMatriks(mi, this);
         } else {
-            System.out.println("Tidak bisa dibuat invers karena buka matriks persegi");
+            System.out.println("Tidak bisa dibuat invers karena bukan matriks persegi");
         }
     }
 

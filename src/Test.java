@@ -84,6 +84,11 @@ public class Test {
 
         m1 = Matriks.bacaDariFile();
         Matriks.interpolasi(m1, 9.2);
+
+        Matriks.salinMatriks(mOriginal, m1);
+        m1.balikan();
+        m1.tulisMatriks();
+
         s.close();
         System.out.println("This is the end");
     }
