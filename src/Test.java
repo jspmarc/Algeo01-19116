@@ -89,6 +89,9 @@ public class Test {
         m1.balikan();
         m1.tulisMatriks();
 
+        Matriks.salinMatriks(mOriginal, m1);
+        m1.cramer();
+
         s.close();
         System.out.println("This is the end");
     }

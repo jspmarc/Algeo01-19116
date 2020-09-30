@@ -1169,6 +1169,7 @@ class Matriks {
 
     /**
      * Menyelesaikan SPL dengan metode Cramer untuk matriks yang memanggil
+     * Mariks yang memanggil adalah matriks augmented
      * @return nilai SPL dari matriks yang memanggil
      */
     public void cramer(){
@@ -1188,6 +1189,17 @@ class Matriks {
         if(m1.adalahPersegi()){
             det1 = determinanRedBrs(m1);
 
+            // In case deteminannya 0
+            if (det1 == 0) {
+                System.out.println("Determinan matriks adalah 0.");
+                System.out.print("Artinya matriks masukan memliki banyak solusi");
+                System.out.println(" atau tidak memiliki solusi.");
+                System.out.print("Silakan menggunakan metode Gauss-Jordan");
+                System.out.println(" untuk menarik kesimpulan.");
+
+                return;
+            }
+
             // Memasukan nilai dari elmt m1 dan m2
             for (i = 0; i<nKol; i++){
                 for(j = 0; j<nKol ; j++){
@@ -1201,7 +1213,7 @@ class Matriks {
             // Menghitung solusi dari SPL 1 demi 1
             for (i = 0; i<nKol; i++){
                 if(i != 0){
-                    System.out.print(",");
+                    System.out.print(", ");
                 }
                 Matriks.salinMatriks(m3, m1);
                 for(j = 0; j<nBar ; j++){
@@ -1211,10 +1223,9 @@ class Matriks {
                 temp = det2/det1;
                 System.out.print("x"+(i+1)+" = "+(temp));
             }
-            System.out.println("");
-        }
-        else{
-            System.out.println("Tidak ada solusi");
+            System.out.println(")");
+        } else{
+            System.out.println("Tidak ada solusi karena bukan matriks persegi");
         }
     }
 }
