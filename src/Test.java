@@ -67,8 +67,6 @@ public class Test {
         //m1.tulisMatriks();
 
         //m1.makeEselon();
-        m1.makeEselonTereduksi();
-        m1.tulisMatriks();
         Matriks.tulisSolusi(Matriks.gaussJordan(m1));
         //m1.tulisSolusi(m1.gauss(m1));
 

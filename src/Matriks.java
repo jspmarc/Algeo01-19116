@@ -1,15 +1,4 @@
-/*
- * TODO
- * Implementaasi:
- *  - [ ] Gauss
- *  - [ ] Gauss-Jordan
- *  - [ ] Kramer
- *  - [x] Determinan
- *      - [x] Ekspansi kofaktor
- *      - [x] Reduksi baris
- */
-
-// Struktur data
+/// Struktur data
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.HashMap;
 import java.util.Scanner;
@@ -537,7 +526,6 @@ class Matriks {
      * Mengubah matriks pemanggil menjadi matriks segitiga atas
      * */
     private int makeSgtgAtas() {
-        // TODO: Further testing, edge cases
         int swapCount = 0;
 
         // i nandain baris yang sedang diproses
@@ -590,28 +578,26 @@ class Matriks {
      * M1.jadikanAugmented(M2), maka: [M1|M2]
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
-    public void makeAugmented(Matriks aug) {
-        // TODO: Selesaiin fungsi ini  & Jadiin private lagi
+    private void makeAugmented(Matriks aug) {
         if (aug.jmlBrsMat != this.jmlBrsMat) {
             System.out.println("Jumlah baris kedua matriks berbeda");
             System.out.println("Matriks gagal diubah jadi matriks augmented");
             return;
         }
 
+        this.jmlKolMat +=  aug.jmlKolMat;
         // Meng-augment baris per baris
         for (int i = 0; i < this.jmlBrsMat; ++i) {
             for (int j = 0;  j < aug.jmlKolMat; ++j) {
-                this.getBaris(i).add(aug.getElmt(i, j));
+                this.setElmt(i, this.jmlKolMat+j, aug.getElmt(i, j));
             }
         }
-        this.jmlKolMat +=  aug.jmlKolMat;
     }
 
     /**
      * Metode untuk membuat matriks augmented menjadi matriks eselon baris
      */
-    public void makeEselon() {
-        // TODO: FIX ME & Jadiin private lagi
+    private void makeEselon() {
         int leadIdx = 0,
             k;
         double leadElmt;
@@ -674,9 +660,7 @@ class Matriks {
      * Metode untuk mengubah matriks eselon baris menjadi
      * matriks eselon baris tereduksi
      */
-    public void makeEselonTereduksi() {
-        // TODO: Ganti jadi private
-
+    private void makeEselonTereduksi() {
         int leadIdx = 0,
             k;
 
@@ -774,7 +758,6 @@ class Matriks {
      */
 
     private HashMap<String, Double> solusiDouble() {
-        // TODO: Test
         HashMap<String, Double> sol = new HashMap<String, Double>();
 
         for (int i = 0; i < this.jmlBrsMat; i++) {
@@ -930,7 +913,7 @@ class Matriks {
         } else if (indikator == 1) {
             for (int i = 0; i < mat.jmlBrsMat; i++) {
                 double val = mat.getElmt(i, mat.jmlKolMat-1);
-                String valString = Double.toString(val);
+                String valString = String.format("%.2f", val);
                 sol.put("x" + (i+1), valString);
             }
             return sol;
@@ -942,7 +925,7 @@ class Matriks {
 
     /**
      * Metode untuk mencetak jawaban ke layar
-     * @param solHashMap
+     * @param solHashMap kumpulan x1, x2, ..., xn yang akan diprint ke layar
      */
     public static void tulisSolusi(HashMap<String, String> solHashMap) {
         if (solHashMap.isEmpty()) {
@@ -1003,10 +986,11 @@ class Matriks {
      * @return determinan matriks mat
      */
     public static double determinanRedBrs(Matriks mat) {
-        // TODO: untuk angka sangat besar/sangat kecil, implementasi ini kurang
-        // akurat
         double res = 1.0;
         int sc;
+        Matriks tempMat = new Matriks(mat.jmlBrsMat, mat.jmlKolMat);
+
+        salinMatriks(mat, tempMat);
 
         if (!mat.adalahPersegi()) {
             System.out.println("Determinan tidak bisa dihitung karena bukan matriks bujur sangkar.");
@@ -1014,9 +998,9 @@ class Matriks {
             return Double.NaN;
         }
 
-        sc = mat.makeSgtgAtas();
-        for (int i = 0; i < mat.jmlBrsMat; ++i) {
-            res *= mat.getElmt(i, i);
+        sc = tempMat.makeSgtgAtas();
+        for (int i = 0; i < tempMat.jmlBrsMat; ++i) {
+            res *= tempMat.getElmt(i, i);
         }
 
         res *= Math.pow(-1, sc);
@@ -1177,6 +1161,7 @@ class Matriks {
         double det1,det2,temp;
         nBar = this.jmlBrsMat;
         nKol = (this.jmlKolMat-1);
+        HashMap<String, String> solHash = new HashMap<>();
 
         // Membuat matrix baru
         Matriks m = new Matriks(nBar, (nKol+1));
@@ -1187,6 +1172,14 @@ class Matriks {
 
         // Mengecek apakah matriks merupakan matriks persegi
         if(m1.adalahPersegi()){
+            // Memasukan nilai dari elmt m1 dan m2
+            for (i = 0; i<nKol; i++){
+                for(j = 0; j<nKol ; j++){
+                    m1.setElmt(i, j, m.getElmt(i, j));
+                }
+                m2.setElmt(i, 0, m.getElmt(i, nKol));
+            }
+
             det1 = determinanRedBrs(m1);
 
             // In case deteminannya 0
@@ -1200,30 +1193,21 @@ class Matriks {
                 return;
             }
 
-            // Memasukan nilai dari elmt m1 dan m2
-            for (i = 0; i<nKol; i++){
-                for(j = 0; j<nKol ; j++){
-                    m1.setElmt(i, j, m.getElmt(i, j));
-                }
-                m2.setElmt(i, 0, m.getElmt(i, nKol));
-            }
-
-            System.out.print("(");
-
             // Menghitung solusi dari SPL 1 demi 1
             for (i = 0; i<nKol; i++){
-                if(i != 0){
-                    System.out.print(", ");
-                }
-                Matriks.salinMatriks(m3, m1);
+                Matriks.salinMatriks(m1, m3);
+
+                // Taro elemen m2 di m3
                 for(j = 0; j<nBar ; j++){
-                    m3.setElmt(j, i, m2.getElmt(i, 0));
+                    m3.setElmt(j, i, m2.getElmt(j, 0));
                 }
+
                 det2 = determinanRedBrs(m3);
                 temp = det2/det1;
-                System.out.print("x"+(i+1)+" = "+(temp));
+
+                solHash.put("x"+(i+1), (String.format("%.2f", temp)));
             }
-            System.out.println(")");
+            tulisSolusi(solHash);
         } else{
             System.out.println("Tidak ada solusi karena bukan matriks persegi");
         }
