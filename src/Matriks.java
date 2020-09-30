@@ -57,6 +57,7 @@ class Matriks {
      *   - gauss
      *   - gaussJordan
      *   - tulisSolusi
+     *   - stringSolusi
      *   - determinanEksKof
      *   - determinanRedBrs
      *   - interpolasi
@@ -289,7 +290,7 @@ class Matriks {
                 System.out.println(e);
                 System.exit(1);
             }
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.out.println("File tidak ditemukan\n" + e);
             System.exit(1);
         }
@@ -578,14 +579,14 @@ class Matriks {
      * M1.jadikanAugmented(M2), maka: [M1|M2]
      * @param aug matriks yang ingin di-augment-kan ke matriks pemanggil
      */
-    private void makeAugmented(Matriks aug) {
+    public void makeAugmented(Matriks aug) {
         if (aug.jmlBrsMat != this.jmlBrsMat) {
             System.out.println("Jumlah baris kedua matriks berbeda");
             System.out.println("Matriks gagal diubah jadi matriks augmented");
             return;
         }
 
-        this.jmlKolMat +=  aug.jmlKolMat;
+        this.jmlKolMat += aug.jmlKolMat;
         // Meng-augment baris per baris
         for (int i = 0; i < this.jmlBrsMat; ++i) {
             for (int j = 0;  j < aug.jmlKolMat; ++j) {
@@ -940,6 +941,26 @@ class Matriks {
             }
             System.out.println();
         }
+    }
+
+    /**
+     * Metode untuk mencetak jawaban ke layar
+     * @param solHashMap kumpulan x1, x2, ..., xn yang akan diprint ke layar
+     */
+    public static String stringSolusi(HashMap<String, String> solHashMap) {
+        String str = new String();
+        if (solHashMap.isEmpty()) {
+            str = "Solusi tidak ada";
+        }
+        else {
+            for (int i = solHashMap.size()-1; i >= 0; i--) {
+                str = "x" + (i+1) + " = " + solHashMap.get("x"+(i+1));
+                if (i != 0) {
+                    str = str.concat(", ");
+                }
+            }
+        }
+        return str;
     }
 
     /**
