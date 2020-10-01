@@ -64,6 +64,7 @@ class Matriks {
      *   - interpolasi
      *   - balikan
      *   - cramer
+     *   - regresi
      */
 
     /* === ATTRIBUTES === */
@@ -1336,9 +1337,15 @@ class Matriks {
         }
         return solHash;
     }
-    public static Matriks Regresi(Matriks mat){
+
+    /**
+     * Metode untuk mencari regresi
+     * @param mat
+     * @return Matriks
+     */
+    public static Matriks regresi(Matriks mat){
         int i, j, k, nBar, nKol;
-        double temp;
+        //double temp;
         double sum = 0;
         nBar = mat.jmlBrsMat;
         nKol = mat.jmlKolMat;
@@ -1350,24 +1357,24 @@ class Matriks {
         m1.setElmt(0, 0, nBar);
     
         // Mengisi m1 untuk baris pertama
-        for (i = 0; i<nKol; i++){
-            for (j = 0; j<nBar; j++){
-                sum = sum + mat.getElmt(j,i);
+        for (i = 0; i < nKol; i++){
+            for (j = 0; j < nBar; j++){
+                sum = sum + mat.getElmt(j, i);
             }
             m1.setElmt(0, (i+1), sum);
             sum = 0;
         }
     
         // Mengisi m1 untuk kolom pertama
-        for (i = 1; i<(nKol); i++){
+        for (i = 1; i< nKol; i++){
             m1.setElmt(i, 0, m1.getElmt(0,i));
         }
     
         // Mengisi m1 untuk sisanya
-        for (i = 1; i<nKol; i++){           // Baris Output
-            for (j = 0; j<nKol; j++){       // Kolom Input & Output
-                for (k = 0; k<nBar; k++){   // Baris Input
-                    sum = sum + (mat.getElmt(k,(i-1))*mat.getElmt(k,j));
+        for (i = 1; i < nKol; i++){           // Baris Output
+            for (j = 0; j < nKol; j++){       // Kolom Input & Output
+                for (k = 0; k < nBar; k++){   // Baris Input
+                    sum = sum + (mat.getElmt(k,(i-1)) * mat.getElmt(k,j));
                 }
                 m1.setElmt(i, (j+1), sum);
                 sum = 0;    

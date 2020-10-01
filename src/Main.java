@@ -1,10 +1,8 @@
 /**
  * TODO:
- * [ ] runRegresi
  * [ ] spl metode matriks balikan
- * [?] prosedur baca input spl
  * [ ] input interpolasi dalam format (x0, y0), ..., (xn, yn)
- * [?] Buat prosedur untuk baca input spl
+ * [?] buat prosedur untuk baca input spl
  */
 
 /*
@@ -155,7 +153,7 @@ class Main {
      */
     private static void simpanKeFile(Matriks mat) {
         Scanner s = new Scanner(System.in);
-        System.out.println("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
+        System.out.printf("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
         if (s.next().toLowerCase().equals("y")) {
             Matriks.tulisKeFile(mat);
         }
@@ -493,7 +491,7 @@ class Main {
                     // TODO: BENERIN
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
-                        int nBrsA, nKolA;
+                        int nBrsA;
                         System.out.printf("\nMasukkan n: ");
                         nBrsA = s.nextInt();
 
@@ -548,11 +546,7 @@ class Main {
             }
             // Pilihan 2 - Baca dari file eksternal
             case 2: {
-                System.out.printf("\nMasukkan jumlah titik: ");
-                int nBrs = s.nextInt();
-                System.out.println();
-                
-                Matriks m = new Matriks(nBrs, 2);
+                Matriks m = new Matriks(1, 2);
                 m.bacaDariFile();
 
                 System.out.printf("\nMasukkan titik x: ");
@@ -569,15 +563,37 @@ class Main {
      * Metode untuk menjalankan subprogram regresi linier berganda
      */
     private static void runRegresi() {
+        Scanner s = new Scanner(System.in);
         System.out.println();
         int pilihan1 = bacaMetodeInput();
         switch (pilihan1) {
-            case 1: // Pilihan 1 - Input dari keyboard
+            // Pilihan 1 - Input dari keyboard
+            case 1: {
+                int nBrsA;
+                System.out.printf("\nMasukkan n: ");
+                nBrsA = s.nextInt();
 
-                break;
-            case 2: // Pilihan 2 - Baca dari file eksternal
+                Matriks m = new Matriks(nBrsA, nBrsA);
+                System.out.printf("\nMasukkan x[n][i] secara berurut\n");
+                m.bacaMatriks();
 
+                m.regresi(m);
+                m.tulisMatriks();
+                System.out.println();
+                simpanKeFile(m);
                 break;
+            }
+            // Pilihan 2 - Baca dari file eksternal
+            case 2: {
+                Matriks m = new Matriks(1, 1);
+                m.bacaDariFile();
+
+                m.regresi(m);
+                m.tulisMatriks();
+                System.out.println();
+                simpanKeFile(m);
+                break;
+            }
         }
     }
 
