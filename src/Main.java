@@ -1,11 +1,10 @@
 /**
  * TODO:
  * runInterpolasi, runRegresi belum
+ * spl balikan dan cramer belum
  * Buat prosedur untuk baca input spl
- * Matriks.java rounding solusi parametrik
  * Pilihan untuk menyimpan, tidak langsung simpan
  */
-
 
 /*
  * Program utama/gabungan untuk Tubes 01 IF2123 2020/2021

@@ -838,7 +838,6 @@ class Matriks {
 
     private HashMap<String, String> matriksToSPL() {
         // TODO: More test
-        //       Rounding hasil
         //       Fix comment
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas pertama
@@ -906,14 +905,18 @@ class Matriks {
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + "-" +
-                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                                        String.format("%.4f", this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) +
-                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                solParametrik.replace("x" + (j+1), 
+                                                        solParametrik.get("x" + (j+1)) +
+                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             }
                         } else { // elemen (i, k) merupakan konstanta
                             if (this.getElmt(i, k) > 0 || this.getElmt(i, k) < 0) { // nilai konstanta positif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + this.getElmt(i, k));
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + 
+                                String.format("%.4f", this.getElmt(i, k)));
                             }
                         }
                     } else {
@@ -921,22 +924,26 @@ class Matriks {
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
-                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                                        String.format("%.4f", this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
-                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             }
                         } else { // elemen (i, k) merupakan konstanta
                             if (this.getElmt(i, k) > 0) { // nilai konstanta positif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + this.getElmt(i, k));
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + 
+                                String.format("%.4f", this.getElmt(i, k)));
                             } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + this.getElmt(i, k));
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + 
+                                String.format("%.4f", this.getElmt(i, k)));
                             }
                         }
                     }
                 }
             } else { // j adalah koefisien xn
-                solParametrik.replace("x" + (j+1), "" + this.getElmt(i, this.jmlKolMat-1));
+                solParametrik.replace("x" + (j+1), "" + String.format("%.4f", this.getElmt(i, this.jmlKolMat-1)));
             }
         }
         return solParametrik;
