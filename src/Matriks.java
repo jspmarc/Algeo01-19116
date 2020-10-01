@@ -42,6 +42,7 @@ class Matriks {
      *   - jumElmt
      *   - makeMinor
      *   - tambahBaris
+     *   - kaliMatriks
      *   - kaliBaris
      *   - bagiBaris
      *   - tukarBaris
@@ -57,6 +58,7 @@ class Matriks {
      * *** TUGAS ***
      *   - gauss
      *   - gaussJordan
+     *   - splBalikan
      *   - tulisSolusi
      *   - stringSolusi
      *   - determinanEksKof
@@ -119,18 +121,23 @@ class Matriks {
      * @param val nilai baru yang ingin disubstitusi/dimasukkan ke matriks
      */
     public void setElmt(int i, int j, double val) {
+        this.mat.get(i).set(j, val);
+        /*
         try {
             this.mat.get(i).set(j, val);
         } catch (IndexOutOfBoundsException e) {
             // Kalo ukuran ArrayList yang sebenarnya lebih kecil dari yang
             // tertulis
-            if (this.jmlKolMat <= j) {
+            // Cursed but, eeeehhh...
+            try {
                 this.mat.get(i).add(val);
-            } else {
-                // Menambahkan elemen ke tempat yang tidak seharusnya
-                throw e;
+            } catch (IndexOutOfBoundsException e2) {
+                ArrayList<Double> tempAl = new ArrayList<>(1);
+                tempAl.add(val);
+                this.mat.add(tempAl);
             }
         }
+        */
     }
 
     /**
@@ -465,6 +472,32 @@ class Matriks {
     }
 
     /**
+     * Mengkalikan matriks yang memanggil dengan suatu matriks lain
+     * this * m2
+     * @param m2 matriks yang dikalikan dengan matriks pemanggil (this*m2)
+     */
+    private void kaliMatriks (Matriks m2) {
+        if (this.jmlKolMat != m2.jmlBrsMat) {
+            System.out.println("Ukuran kedua matriks tidak cocok.");
+            System.out.println("Perkalian matriks gagal dilakukan");
+            return;
+        }
+
+        Matriks matRes = new Matriks(this.jmlBrsMat, m2.jmlKolMat);
+
+        for (int i = 0;  i < this.jmlBrsMat; ++i) {
+            for (int j = 0; j < m2.jmlKolMat; ++j) {
+                for (int k = 0; k < m2.jmlBrsMat; ++k) {
+                    matRes.setElmt(i, j,
+                                    (this.getElmt(i, k) * m2.getElmt(k, j)));
+                }
+            }
+        }
+
+        salinMatriks(matRes, this);
+    }
+
+    /**
      * Mengkalikan elemen di baris ke-"idxBaris" dengan konsanta k
      * @param idxBaris indeks baris yang ingin dikalikan
      * @param k konstanta yang ingin mengkali baris
@@ -514,14 +547,16 @@ class Matriks {
      * @param mTujuan
      */
     public static void salinMatriks(Matriks mAsal, Matriks mTujuan) {
-        mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
-        mTujuan.jmlKolMat = mAsal.jmlKolMat;
+        mTujuan = new Matriks(mAsal.jmlBrsMat, mAsal.jmlKolMat);
 
         for (int i = 0; i < mAsal.jmlBrsMat; ++i) {
             for (int j = 0; j < mAsal.jmlKolMat; ++j) {
                 mTujuan.setElmt(i, j, mAsal.getElmt(i, j));
             }
         }
+
+        mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
+        mTujuan.jmlKolMat = mAsal.jmlKolMat;
     }
 
     private static Matriks makeIdentitas(int n) {
@@ -589,6 +624,11 @@ class Matriks {
         return swapCount;
     }
 
+    /**
+     * Membatalkan augment matriks yang memanggil
+     * @param mB menyimpan bagian augment dari matriks
+     * @return bagian augment matriks
+     */
     private Matriks makeNotAugmented(Matriks mB) {
         // this sudah augmented dengan mB
         // [this] -> [this], [mB]
@@ -628,7 +668,15 @@ class Matriks {
             return;
         }
 
+        // Padding matriks
+        for (int i = 0; i < this.jmlBrsMat; ++i) {
+            for (int j = this.jmlKolMat; j < aug.jmlKolMat; ++i) {
+                this.getBaris(i).add(0.0);
+            }
+        }
+
         this.jmlKolMat += aug.jmlKolMat;
+
         // Meng-augment baris per baris
         for (int i = 0; i < this.jmlBrsMat; ++i) {
             for (int j = 0;  j < aug.jmlKolMat; ++j) {
@@ -1013,6 +1061,32 @@ class Matriks {
         }
     }
 
+    // matA*matX = matB
+    // <=> matX = inv(matA)*matB
+    public static HashMap<String, String> splBalikan(Matriks matGab) {
+        HashMap<String, String> sol = new HashMap<>();
+        Matriks matA = makeIdentitas(matGab.jmlBrsMat),
+                matB = new Matriks(matGab.jmlBrsMat, 1);
+
+        matB = matGab.makeNotAugmented(matB);
+        matGab.tulisMatriks();
+        matB.tulisMatriks();
+        salinMatriks(matGab, matA);
+
+        double det = determinanEksKof(matGab);
+        if (det == 0) {
+            System.out.print("Determinan matriks 0, tidak dapat menggunakan");
+            System.out.println("metode balikan matriks untuk mencari SPL.");
+            System.out.print("Silakan gunakan metode Gauss-Jordan.");
+        } else {
+            matA = balikanOBE(matA);
+            matA.kaliMatriks(matB);
+            matA.tulisMatriks();
+        }
+
+        return sol;
+    }
+
     /**
      * Metode untuk mencetak jawaban ke layar
      * @param solHashMap kumpulan x1, x2, ..., xn yang akan diprint ke layar
@@ -1226,9 +1300,8 @@ class Matriks {
      * dengan metode adjoin
      */
     public static Matriks balikanAdjoint(Matriks mat){
-        int i, j, nBar, nKol;
-        double det,temp;
-        nBar = mat.jmlBrsMat;
+        int i, nKol;
+        double det;
         nKol = mat.jmlKolMat;
 
         /*
@@ -1278,11 +1351,13 @@ class Matriks {
             m1.makeEselonTereduksi();
 
             // Pecah matriksnya
-            for (int i = 0; i < mat.jmlBrsMat; ++i) {
-                for (int j = mat.jmlKolMat; j < m1.jmlKolMat; ++j) {
-                    mat.setElmt(i, j-mat.jmlKolMat, m1.getElmt(i, j));
-                }
-            }
+            //for (int i = 0; i < mat.jmlBrsMat; ++i) {
+                //for (int j = mat.jmlKolMat; j < m1.jmlKolMat; ++j) {
+                    //mat.setElmt(i, j-mat.jmlKolMat, m1.getElmt(i, j));
+                //}
+            //}
+
+            m1.makeNotAugmented(mat);
 
         } else {
             System.out.println("Matriks yang diberikan bukan matriks persegi");

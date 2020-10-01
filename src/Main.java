@@ -114,7 +114,7 @@ class Main {
         //System.out.println("\nSUB MENU 2:\n");
         System.out.println("\nMETODE UNTUK MENGHITUNG BALIKAN MATRIKS:\n");
         System.out.println("1. Metode adjoin matriks\n"
-                            + "2. Metode OBE\n "
+                            + "2. Metode OBE\n"
                             + "3. Kembali\n");
         System.out.println("\nMasukkan menu pilihan Anda: ");
     }
@@ -555,6 +555,7 @@ class Main {
      * Metode untuk menjalankan program
      */
     private static void run() {
+        wOOOw();
         menu();
         Scanner s = new Scanner(System.in);
         int pilihan0 = s.nextInt();
@@ -605,7 +606,6 @@ class Main {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         intro();
-        wOOOw();
         run();
         s.close();
     }
