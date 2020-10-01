@@ -596,6 +596,9 @@ class Matriks {
         }
     }
 
+    /**
+     * Mengubah matriks yang memanggil jadi matriks kofaktor
+     */
     private void makeKofaktor() {
         Matriks kofak = new Matriks(this.jmlBrsMat, this.jmlKolMat);
         salinMatriks(this, kofak);
@@ -615,6 +618,9 @@ class Matriks {
         salinMatriks(kofak, this);
     }
 
+    /**
+     * Men-transpose matriks yang memanggil
+     */
     private void transpose() {
         Matriks tempMat = new Matriks(this.jmlBrsMat, this.jmlKolMat);
         salinMatriks(this, tempMat);
@@ -626,7 +632,10 @@ class Matriks {
         }
     }
 
-    public void makeAdjoint() {
+    /**
+     * Mengubah mattriks yang memanggil jadi adjointnya
+     */
+    private void makeAdjoint() {
         this.makeKofaktor();
         this.transpose();
     }
