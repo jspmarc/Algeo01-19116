@@ -21,6 +21,7 @@ class Main {
      * - outro
      * - clearScr
      * - wOOOw
+     * - w000w
      * - menu
      * - subMenu1
      * - subMenu2
@@ -36,6 +37,8 @@ class Main {
      * - runRegresi
      * - run
      */
+
+    // Tugas
 
     /**
      * Metode untuk mencetak pembukaan
@@ -59,11 +62,17 @@ class Main {
             + "\nEnd of Program.");
     }
 
+    /**
+     * Nge-clear layar (may not work on all terminal emulator)
+     */
     private static void clearScr() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
+    /**
+     * nge-print ASCII art untuk logo
+     */
     private static void wOOOw() {
         System.out.println(" /$$      /$$             /$$               /$$          ");
         System.out.println("| $$$    /$$$            | $$              |__/          ");
@@ -75,6 +84,9 @@ class Main {
         System.out.println("|__/     |__/ \\_______/   \\___/  |__/      |__/|__/  \\__/");
     }
 
+    /**
+     * nge-print ASCII art untuk pesan penutupan
+     */
     private static void w000w() {
         System.out.println
             (
