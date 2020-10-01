@@ -1459,7 +1459,7 @@ class Matriks {
         nKol = mat.jmlKolMat;
         HashMap<String, String> solHm = new HashMap<>();
         ArrayList<Double> solv = new ArrayList<>();
-        String yx, ys;
+        String yx;
 
         // Membuat Matriks baru (m1)
         Matriks m1 = new Matriks(nKol, (nKol+1));

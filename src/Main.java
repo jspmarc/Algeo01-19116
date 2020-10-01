@@ -627,10 +627,15 @@ class Main {
     /**
      * Metode untuk menjalankan program
      */
-    private static void run() {
+    private static void run(boolean wrongInput) {
+        boolean badInput = false;
+
         clearScr();
         wOOOw();
         menu();
+        if (wrongInput) {
+            System.out.println("Pilihan tidak valid!");
+        }
         Scanner s = new Scanner(System.in);
         int pilihan0 = s.nextInt();
         switch (pilihan0) {
@@ -662,12 +667,13 @@ class Main {
                 //break;
             default: // Pilihan tidak valid
                 System.out.println("Pilihan tidak valid!");
+                badInput = true;
         }
-        run();
+        run(badInput);
     }
 
     public static void main(String[] args) {
         intro();
-        run();
+        run(false);
     }
 }
