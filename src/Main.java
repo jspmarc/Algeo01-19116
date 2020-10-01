@@ -26,6 +26,7 @@ class Main {
      * - menu
      * - subMenu1
      * - subMenu2
+     * - subMenu3
      * - bacaMetodeInput
      * - runSPL
      * - runDet
@@ -41,8 +42,7 @@ class Main {
     private static void intro() {
         System.out.println(
             "Selamat Datang di Program Tugas Besar Pertama\n"
-            + "Mata Kuliah IF2123 Aljabar Linier dan Geometri\n"
-            + "\n");
+            + "Mata Kuliah IF2123 Aljabar Linier dan Geometri\n\n");
     }
 
     /**
@@ -564,6 +564,7 @@ class Main {
      */
     private static void runRegresi() {
         int pilihan1 = bacaMetodeInput();
+        System.out.println();
         switch (pilihan1) {
             case 1: // Pilihan 1 - Input dari keyboard
 
