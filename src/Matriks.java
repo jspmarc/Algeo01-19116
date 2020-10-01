@@ -66,6 +66,7 @@ class Matriks {
      *   - interpolasi
      *   - balikan
      *   - cramer
+     *   - regresi
      */
 
     /* === ATTRIBUTES === */
@@ -911,7 +912,6 @@ class Matriks {
 
     private HashMap<String, String> matriksToSPL() {
         // TODO: More test
-        //       Rounding hasil
         //       Fix comment
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas pertama
@@ -979,14 +979,18 @@ class Matriks {
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + "-" +
-                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                                        String.format("%.4f", this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) +
-                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                solParametrik.replace("x" + (j+1), 
+                                                        solParametrik.get("x" + (j+1)) +
+                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             }
                         } else { // elemen (i, k) merupakan konstanta
                             if (this.getElmt(i, k) > 0 || this.getElmt(i, k) < 0) { // nilai konstanta positif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + this.getElmt(i, k));
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + 
+                                String.format("%.4f", this.getElmt(i, k)));
                             }
                         }
                     } else {
@@ -994,22 +998,26 @@ class Matriks {
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
-                                                        this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                                        String.format("%.4f", this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
-                                                        (-1)*this.getElmt(i, k) + solParametrik.get("x" + (k+1)));
+                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) + 
+                                                        solParametrik.get("x" + (k+1)));
                             }
                         } else { // elemen (i, k) merupakan konstanta
                             if (this.getElmt(i, k) > 0) { // nilai konstanta positif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + this.getElmt(i, k));
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + 
+                                String.format("%.4f", this.getElmt(i, k)));
                             } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + this.getElmt(i, k));
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + 
+                                String.format("%.4f", this.getElmt(i, k)));
                             }
                         }
                     }
                 }
             } else { // j adalah koefisien xn
-                solParametrik.replace("x" + (j+1), "" + this.getElmt(i, this.jmlKolMat-1));
+                solParametrik.replace("x" + (j+1), "" + String.format("%.4f", this.getElmt(i, this.jmlKolMat-1)));
             }
         }
         return solParametrik;
@@ -1390,8 +1398,8 @@ class Matriks {
         // Mengecek apakah matriks merupakan matriks persegi
         if(m1.adalahPersegi()){
             // Memasukan nilai dari elmt m1 dan m2
-            for (i = 0; i<nKol; i++){
-                for(j = 0; j<nKol ; j++){
+            for (i = 0; i < nKol; i++){
+                for(j = 0; j < nKol ; j++){
                     m1.setElmt(i, j, m.getElmt(i, j));
                 }
                 m2.setElmt(i, 0, m.getElmt(i, nKol));
@@ -1411,7 +1419,7 @@ class Matriks {
             }
 
             // Menghitung solusi dari SPL 1 demi 1
-            for (i = 0; i<nKol; i++){
+            for (i = 0; i < nKol; i++){
                 Matriks.salinMatriks(m1, m3);
 
                 // Taro elemen m2 di m3
@@ -1428,5 +1436,50 @@ class Matriks {
             System.out.println("Tidak ada solusi karena bukan matriks persegi");
         }
         return solHash;
+    }
+
+    /**
+     * Metode untuk mencari regresi
+     * @param mat
+     * @return Matriks
+     */
+    public static Matriks regresi(Matriks mat){
+        int i, j, k, nBar, nKol;
+        //double temp;
+        double sum = 0;
+        nBar = mat.jmlBrsMat;
+        nKol = mat.jmlKolMat;
+        
+        // Membuat Matriks baru (m1)
+        Matriks m1 = new Matriks(nKol, (nKol+1));
+    
+        // Mengisi m1 untuk (0,0)
+        m1.setElmt(0, 0, nBar);
+    
+        // Mengisi m1 untuk baris pertama
+        for (i = 0; i < nKol; i++){
+            for (j = 0; j < nBar; j++){
+                sum = sum + mat.getElmt(j, i);
+            }
+            m1.setElmt(0, (i+1), sum);
+            sum = 0;
+        }
+    
+        // Mengisi m1 untuk kolom pertama
+        for (i = 1; i< nKol; i++){
+            m1.setElmt(i, 0, m1.getElmt(0,i));
+        }
+    
+        // Mengisi m1 untuk sisanya
+        for (i = 1; i < nKol; i++){           // Baris Output
+            for (j = 0; j < nKol; j++){       // Kolom Input & Output
+                for (k = 0; k < nBar; k++){   // Baris Input
+                    sum = sum + (mat.getElmt(k,(i-1)) * mat.getElmt(k,j));
+                }
+                m1.setElmt(i, (j+1), sum);
+                sum = 0;    
+            }
+        }
+        return m1;
     }
 }

@@ -103,6 +103,9 @@ public class Test {
         Matriks.salinMatriks(mOriginal, m1);
         Matriks.tulisSolusi(Matriks.cramer(m1));
 
+        System.out.println("Regresi Linier Berganda: ");
+        Matriks.regresi(m1).tulisMatriks();
+
         s.close();
         System.out.println("This is the end");
     }

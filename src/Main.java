@@ -1,11 +1,9 @@
 /**
  * TODO:
- * runInterpolasi, runRegresi belum
- * Buat prosedur untuk baca input spl
- * Matriks.java rounding solusi parametrik
- * Pilihan untuk menyimpan, tidak langsung simpan
+ * [ ] spl metode matriks balikan
+ * [ ] input interpolasi dalam format (x0, y0), ..., (xn, yn)
+ * [?] buat prosedur untuk baca input spl
  */
-
 
 /*
  * Program utama/gabungan untuk Tubes 01 IF2123 2020/2021
@@ -22,9 +20,11 @@ class Main {
      * DAFTAR PROSEDUR
      * - intro
      * - outro
+     * - wOOOw
      * - menu
      * - subMenu1
      * - subMenu2
+     * - subMenu3
      * - bacaMetodeInput
      * - runSPL
      * - runDet
@@ -40,8 +40,7 @@ class Main {
     private static void intro() {
         System.out.println(
             "Selamat Datang di Program Tugas Besar Pertama\n"
-            + "Mata Kuliah IF2123 Aljabar Linier dan Geometri\n"
-            + "\n");
+            + "Mata Kuliah IF2123 Aljabar Linier dan Geometri\n\n");
     }
 
     /**
@@ -71,52 +70,49 @@ class Main {
      * Metode untuk mencetak menu
      */
     private static void menu() {
-        System.out.println("\nMENU:\n");
+        System.out.println("\nMENU:");
         System.out.println("1. Sistem Persamaan Linier\n"
                            + "2. Determinan\n"
                            + "3. Matriks Balikan\n"
                            + "4. Interpolasi Polinom\n"
                            + "5. Regresi Linier Berganda\n"
                            + "6. Keluar\n");
-        System.out.println("\nMasukkan menu pilihan Anda: ");
+        System.out.printf("Masukkan menu pilihan Anda: ");
     }
 
     /**
      * Metode untuk mencetak sub menu 1
      */
     private static void subMenu1() {
-        //System.out.println("\nSUB MENU 1:\n");
-        System.out.println("\nMETODE UNTUK MENGHITUNG SPL:\n");
+        System.out.println("\nMETODE UNTUK MENGHITUNG SPL:");
         System.out.println("1. Metode Eliminasi Gauss\n"
                             + "2. Metode Eliminasi Gauss-Jordan\n"
                             + "3. Matriks Balikan\n"
                             + "4. Kaidah Cramer\n"
                             + "5. Kembali\n");
-        System.out.println("\nMasukkan menu pilihan Anda: ");
+        System.out.printf("Masukkan menu pilihan Anda: ");
     }
 
     /**
      * Metode untuk mencetak sub menu 2
      */
     private static void subMenu2() {
-        //System.out.println("\nSUB MENU 2:\n");
-        System.out.println("\nMETODE UNTUK MENGHITUNG DETERMINAN:\n");
+        System.out.println("\nMETODE UNTUK MENGHITUNG DETERMINAN:");
         System.out.println("1. Metode Reduksi Baris\n"
                             + "2. Metode Ekspansi Kofaktor\n"
                             + "3. Kembali\n");
-        System.out.println("\nMasukkan menu pilihan Anda: ");
+        System.out.printf("Masukkan menu pilihan Anda: ");
     }
 
     /**
      * Metode untuk mencetak sub menu 3
      */
     private static void subMenu3() {
-        //System.out.println("\nSUB MENU 2:\n");
-        System.out.println("\nMETODE UNTUK MENGHITUNG BALIKAN MATRIKS:\n");
+        System.out.println("\nMETODE UNTUK MENGHITUNG BALIKAN MATRIKS:");
         System.out.println("1. Metode adjoin matriks\n"
                             + "2. Metode OBE\n"
                             + "3. Kembali\n");
-        System.out.println("\nMasukkan menu pilihan Anda: ");
+        System.out.printf("Masukkan menu pilihan Anda: ");
     }
 
     /**
@@ -124,20 +120,18 @@ class Main {
      * @return integer pilihan valid
      */
     private static int bacaMetodeInput() {
-        System.out.println("\nMENU METODE INPUT:\n");
+        System.out.println("MENU METODE INPUT:");
         System.out.println("1. Input dari keyboard\n"
                             + "2. Baca dari file eksternal\n");
-        System.out.print("\nMasukkan menu pilihan Anda: ");
+        System.out.printf("Masukkan menu pilihan Anda: ");
 
         Scanner s = new Scanner(System.in);
-        System.out.println();
         int pilihan = s.nextInt();
 
         while (pilihan != 1 && pilihan != 2) {
-            System.out.println("Pilihan tidak valid! Masukan kembali pilihan Anda: ");
+            System.out.printf("Pilihan tidak valid! Masukkan kembali pilihan Anda: ");
             pilihan = s.nextInt();
         }
-        //s.close();
         return pilihan;
     }
 
@@ -147,7 +141,7 @@ class Main {
      */
     private static void simpanKeFile(HashMap<String, String> sol) {
         Scanner s = new Scanner(System.in);
-        System.out.println("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
+        System.out.printf("\nApakah Anda ingin menyimpan solusi ke file? (y/n): ");
         if (s.next().toLowerCase().equals("y")) {
             Matriks.tulisKeFile(Matriks.stringSolusi(sol));
         }
@@ -159,7 +153,7 @@ class Main {
      */
     private static void simpanKeFile(Matriks mat) {
         Scanner s = new Scanner(System.in);
-        System.out.println("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
+        System.out.printf("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
         if (s.next().toLowerCase().equals("y")) {
             Matriks.tulisKeFile(mat);
         }
@@ -193,22 +187,23 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.println("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan jumlah baris: ");
                         nBrsA = s.nextInt();
-                        System.out.println("\nMasukkan jumlah kolom: ");
+                        System.out.printf("Masukkan jumlah kolom: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
                         Matriks mB = new Matriks(nBrsA, 1);
 
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         mA.bacaMatriks();
-                        System.out.println("\nMasukan b[i] secara berurut");
+                        System.out.printf("\nMasukkan b[i] secara berurut\n");
                         mB.bacaMatriks();
                         mA.makeAugmented(mB);
 
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gauss(mA);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -219,6 +214,7 @@ class Main {
                         m = Matriks.bacaDariFile();
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gauss(m);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -233,22 +229,23 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.println("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan jumlah baris: ");
                         nBrsA = s.nextInt();
-                        System.out.println("\nMasukkan jumlah kolom: ");
+                        System.out.printf("Masukkan jumlah kolom: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
                         Matriks mB = new Matriks(nBrsA, 1);
 
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         mA.bacaMatriks();
-                        System.out.println("\nMasukan b[i] secara berurut");
+                        System.out.printf("\nMasukkan b[i] secara berurut\n");
                         mB.bacaMatriks();
                         mA.makeAugmented(mB);
 
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gaussJordan(mA);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -259,6 +256,7 @@ class Main {
                         m = Matriks.bacaDariFile();
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gaussJordan(m);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -273,22 +271,21 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.println("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan jumlah baris: ");
                         nBrsA = s.nextInt();
-                        System.out.println("\nMasukkan jumlah kolom: ");
+                        System.out.printf("Masukkan jumlah kolom: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
                         Matriks mB = new Matriks(nBrsA, 1);
 
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         mA.bacaMatriks();
-                        System.out.println("\nMasukan b[i] secara berurut");
+                        System.out.printf("\nMasukkan b[i] secara berurut\n");
                         mB.bacaMatriks();
                         mA.makeAugmented(mB);
 
                         // insert spl metode matriks balikan
-
                         break;
                     }
                     // Pilihan 2 - Baca dari file eksternal
@@ -309,21 +306,25 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.println("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan jumlah baris: ");
                         nBrsA = s.nextInt();
-                        System.out.println("\nMasukkan jumlah kolom: ");
+                        System.out.printf("\nMasukkan jumlah kolom: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
                         Matriks mB = new Matriks(nBrsA, 1);
 
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         mA.bacaMatriks();
-                        System.out.println("\nMasukan b[i] secara berurut");
+                        System.out.printf("\nMasukkan b[i] secara berurut\n");
                         mB.bacaMatriks();
                         mA.makeAugmented(mB);
 
-                        // insert spl metode matriks balikan
+                        HashMap<String, String> sol = new HashMap<>();
+                        sol = Matriks.cramer(mA);
+                        System.out.println("\nSolusi SPL:");
+                        Matriks.tulisSolusi(sol);
+                        simpanKeFile(sol);
                         break;
                     }
                     // Pilihan 2 - Baca dari file eksternal
@@ -331,7 +332,11 @@ class Main {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
 
-                        // insert spl metode matriks balikan
+                        HashMap<String, String> sol = new HashMap<>();
+                        sol = Matriks.cramer(m);
+                        System.out.println("\nSolusi SPL:");
+                        Matriks.tulisSolusi(sol);
+                        simpanKeFile(sol);
                         break;
                     }
                 }
@@ -340,14 +345,13 @@ class Main {
             // Pilihan 5 - Kembali
             case 5: {
                 break;
-            }
+            } 
             // Pilihan tidak valid
             default: {
                 System.out.println("Pilihan tidak Valid! Masukkan kembali pilihan Anda: ");
                 runSPL();
             }
         }
-        //s.close();
     }
 
     /**
@@ -365,18 +369,17 @@ class Main {
                 switch (pilihan1) {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
-                        int nBrsA, nKolA;
-                        System.out.println("\nMasukkan n: ");
-                        // NOTE: I changd n to nBrsA here and 3 lines after here
+                        int nBrsA;
+                        System.out.printf("\nMasukkan n: ");
                         nBrsA = s.nextInt();
 
                         Matriks m = new Matriks(nBrsA, nBrsA);
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         m.bacaMatriks();
 
                         double sol = Matriks.determinanRedBrs(m);
-                        System.out.printf("Reduksi baris: %.2f\n", sol);
                         String strSol = String.format("%.2f", sol);
+                        System.out.println("Reduksi baris: " + strSol);
                         simpanKeFile(strSol);
                         break;
                     }
@@ -386,8 +389,8 @@ class Main {
                         m = Matriks.bacaDariFile();
 
                         double sol = Matriks.determinanRedBrs(m);
-                        System.out.printf("Reduksi baris: %.2f\n", sol);
                         String strSol = String.format("%.2f", sol);
+                        System.out.println("Reduksi baris: " + strSol);
                         simpanKeFile(strSol);
                         break;
                     }
@@ -400,18 +403,17 @@ class Main {
                 switch (pilihan1) {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
-                        int nBrsA, nKolA;
-                        System.out.println("\nMasukkan n: ");
-                        // NOTE: I changd n to nBrsA here and 3 lines after here
+                        int nBrsA;
+                        System.out.printf("\nMasukkan n: ");
                         nBrsA = s.nextInt();
 
                         Matriks m = new Matriks(nBrsA, nBrsA);
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         m.bacaMatriks();
 
                         double sol = Matriks.determinanEksKof(m);
-                        System.out.printf("Ekspansi kofaktor: %.2f\n", sol);
                         String strSol = String.format("%.2f", sol);
+                        System.out.println("Ekspansi kofaktor: " + strSol);
                         simpanKeFile(strSol);
                         break;
                     }
@@ -421,8 +423,8 @@ class Main {
                         m = Matriks.bacaDariFile();
 
                         double sol = Matriks.determinanEksKof(m);
-                        System.out.printf("Ekspansi kofaktor: %.2f\n", sol);
                         String strSol = String.format("%.2f", sol);
+                        System.out.println("Ekspansi kofaktor: " + strSol);
                         simpanKeFile(strSol);
                         break;
                     }
@@ -447,22 +449,22 @@ class Main {
      */
     private static void runBalikan() {
         Scanner s = new Scanner(System.in);
-        subMenu3();
         int pilihan0 = s.nextInt();
         System.out.println();
 
         switch (pilihan0) {
-            case 1: // balikan dengan adjoin
+            // balikan dengan adjoin
+            case 1: {
                 int pilihan1 = bacaMetodeInput();
                 switch (pilihan1) {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
-                        int nBrsA, nKolA;
-                        System.out.println("\nMasukkan n: ");
+                        int nBrsA;
+                        System.out.printf("\nMasukkan n: ");
                         nBrsA = s.nextInt();
 
                         Matriks m = new Matriks(nBrsA, nBrsA);
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         m.bacaMatriks();
 
                         Matriks.balikanAdjoint(m);
@@ -481,18 +483,20 @@ class Main {
                     }
                 }
                 break;
-            case 2: // Dengan OBE
-                pilihan1 = bacaMetodeInput();
+            }
+            // Dengan OBE
+            case 2: {
+                int pilihan1 = bacaMetodeInput();
                 switch (pilihan1) {
                     // TODO: BENERIN
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
-                        int nBrsA, nKolA;
-                        System.out.println("\nMasukkan n: ");
+                        int nBrsA;
+                        System.out.printf("\nMasukkan n: ");
                         nBrsA = s.nextInt();
 
                         Matriks m = new Matriks(nBrsA, nBrsA);
-                        System.out.println("\nMasukan koefisien a[i][j] secara berurut");
+                        System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         m.bacaMatriks();
 
                         Matriks.balikanAdjoint(m);
@@ -510,6 +514,8 @@ class Main {
                         break;
                     }
                 }
+                break;
+            }
         }
     }
 
@@ -517,16 +523,37 @@ class Main {
      * Metode untuk menjalankan subprogram interpolasi polinom
      */
     private static void runInterpolasi() {
+        Scanner s = new Scanner(System.in);
+        System.out.println();
         int pilihan1 = bacaMetodeInput();
         switch (pilihan1) {
             // Pilihan 1 - Input dari keyboard
             case 1: {
+                System.out.printf("\nMasukkan jumlah titik: ");
+                int nBrs = s.nextInt();
+                System.out.println();
 
+                Matriks m = new Matriks(nBrs, 2);
+                System.out.printf("\nMasukkan data titik");
+                m.bacaMatriks();
+
+                System.out.printf("\nMasukkan titik x: ");
+                int x = s.nextInt();
+                System.out.println();
+
+                Matriks.interpolasi(m, x);
                 break;
             }
             // Pilihan 2 - Baca dari file eksternal
             case 2: {
+                Matriks m = new Matriks(1, 2);
+                m.bacaDariFile();
 
+                System.out.printf("\nMasukkan titik x: ");
+                int x = s.nextInt();
+                System.out.println();
+
+                Matriks.interpolasi(m, x);
                 break;
             }
         }
@@ -536,16 +563,35 @@ class Main {
      * Metode untuk menjalankan subprogram regresi linier berganda
      */
     private static void runRegresi() {
+        Scanner s = new Scanner(System.in);
+        System.out.println();
         int pilihan1 = bacaMetodeInput();
         switch (pilihan1) {
             // Pilihan 1 - Input dari keyboard
             case 1: {
+                int nBrsA;
+                System.out.printf("\nMasukkan n: ");
+                nBrsA = s.nextInt();
 
+                Matriks m = new Matriks(nBrsA, nBrsA);
+                System.out.printf("\nMasukkan x[n][i] secara berurut\n");
+                m.bacaMatriks();
+
+                m.regresi(m);
+                m.tulisMatriks();
+                System.out.println();
+                simpanKeFile(m);
                 break;
             }
             // Pilihan 2 - Baca dari file eksternal
             case 2: {
+                Matriks m = new Matriks(1, 1);
+                m.bacaDariFile();
 
+                m.regresi(m);
+                m.tulisMatriks();
+                System.out.println();
+                simpanKeFile(m);
                 break;
             }
         }
@@ -560,45 +606,31 @@ class Main {
         Scanner s = new Scanner(System.in);
         int pilihan0 = s.nextInt();
         switch (pilihan0) {
-            // Pilihan 1 - Sistem Persamaan Linear
-            case 1: {
+            case 1: // Pilihan 1 - Sistem Persamaan Linear
                 subMenu1();
                 runSPL();
                 break;
-            }
-            // Pilihan 2 - Determinan
-            case 2: {
+            case 2: // Pilihan 2 - Determinan
                 subMenu2();
                 runDet();
                 break;
-            }
-            // Pilihan 3 - Matriks Balikan
-            case 3: {
+            case 3: // Pilihan 3 - Matriks Balikan
                 subMenu3();
                 runBalikan();
                 break;
-            }
-            // Pilihan 4 - Interpolasi Polinom
-            case 4: {
+            case 4: // Pilihan 4 - Interpolasi Polinom
                 runInterpolasi();
                 break;
-            }
-            // Pilihan 5 - Regresi Linier Berganda
-            case 5: {
+            case 5: // Pilihan 5 - Regresi Linier Berganda
                 runRegresi();
                 break;
-            }
-            // Pilihan 6 - Keluar
-            case 6: {
+            case 6: // Pilihan 6 - Keluar
                 //s.close();
                 outro();
                 System.exit(0);
                 //break;
-            }
-            // Pilihan tidak valid
-            default: {
+            default: // Pilihan tidak valid
                 System.out.println("Pilihan tidak valid!");
-            }
         }
         run();
     }
