@@ -524,6 +524,22 @@ class Matriks {
         }
     }
 
+    private static Matriks makeIdentitas(int n) {
+        Matriks mat = new Matriks(n, n);
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (i == j) {
+                    mat.setElmt(i, j, 1);
+                } else {
+                    mat.setElmt(i, j, 0);
+                }
+            }
+        }
+
+        return mat;
+    }
+
     /**
      * Mengubah matriks pemanggil menjadi matriks segitiga atas
      * */
@@ -938,6 +954,8 @@ class Matriks {
      */
     public static HashMap<String, String> gauss(Matriks mat) {
         mat.makeEselon();
+        // Akan menjadi SPL baru
+        // Solve SPL baru dengan gaussJordan
         return gaussJordan(mat);
     }
 
@@ -977,8 +995,7 @@ class Matriks {
     public static void tulisSolusi(HashMap<String, String> solHashMap) {
         if (solHashMap.isEmpty()) {
             System.out.println("Solusi tidak ada");
-        }
-        else {
+        } else {
             for (int i = solHashMap.size()-1; i >= 0; i--) {
                 System.out.print("x" + (i+1) + " = " + solHashMap.get("x"+(i+1)));
                 if (i != 0) {
@@ -1219,6 +1236,33 @@ class Matriks {
             //salinMatriks(mi, mat);
         } else {
             System.out.println("Tidak bisa dibuat invers karena bukan matriks persegi");
+            System.out.println("atau determinannya 0");
+        }
+        return mat;
+    }
+
+    public static Matriks balikanOBE(Matriks mat) {
+        double det = determinanRedBrs(mat);
+        if (mat.adalahPersegi() && det != 0) {
+            Matriks ident = makeIdentitas(mat.jmlBrsMat),
+                    m1 = new Matriks(mat.jmlBrsMat, mat.jmlKolMat);
+
+            salinMatriks(mat, m1);
+            m1.makeAugmented(ident);
+            m1.makeEselon();
+            m1.makeEselonTereduksi();
+
+            // Pecah matriksnya
+            for (int i = 0; i < mat.jmlBrsMat; ++i) {
+                for (int j = mat.jmlKolMat; j < m1.jmlKolMat; ++j) {
+                    mat.setElmt(i, j-mat.jmlKolMat, m1.getElmt(i, j));
+                }
+            }
+
+        } else {
+            System.out.println("Matriks yang diberikan bukan matriks persegi");
+            System.out.println("atau determinannya 0.");
+            System.out.println("Balikan matriks tidak dapat dibuat.");
         }
         return mat;
     }

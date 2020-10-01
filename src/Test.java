@@ -38,8 +38,8 @@ public class Test {
         Matriks.salinMatriks(mOriginal, m1);
 
         // tulis ke file
-        Matriks.tulisKeFile(m1);
-        Matriks.tulisKeFile("Hello, world!");
+        //Matriks.tulisKeFile(m1);
+        //Matriks.tulisKeFile("Hello, world!");
         //System.out.println();
 
         //m1.kaliBaris(0, 200);
@@ -80,10 +80,10 @@ public class Test {
         //System.out.println(m1.jumElmt() + " " + m1.getJmlBrs() + " " + m1.getJmlKol());
         //m1.tulisMatriks();
 
-        m1 = Matriks.bacaDariFile();
-        Matriks.interpolasi(m1, 9.2);
+        //m1 = Matriks.bacaDariFile();
+        //Matriks.interpolasi(m1, 9.2);
 
-        System.out.println("88239r58239r5qw4ftg8i90gv8hg789yw4789ty234 89tyu294yt9");
+        //System.out.println("88239r58239r5qw4ftg8i90gv8hg789yw4789ty234 89tyu294yt9");
 
         Matriks.salinMatriks(mOriginal, m1);
         Matriks.tulisSolusi(Matriks.cramer(m1));
@@ -94,7 +94,11 @@ public class Test {
         System.out.println("inverse:");
         Matriks.balikanAdjoint(m1);
         m1.tulisMatriks();
-        //m1.tulisMatriks();
+
+        Matriks.salinMatriks(mOriginal, m1);
+        System.out.println("inverse:");
+        Matriks.balikanOBE(m1).tulisMatriks();
+        m1.tulisMatriks();
 
         Matriks.salinMatriks(mOriginal, m1);
         Matriks.tulisSolusi(Matriks.cramer(m1));
