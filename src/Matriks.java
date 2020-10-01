@@ -156,6 +156,8 @@ class Matriks {
      * @param barisBaru barisBaru yang menggantikan baris ke-i
      */
     public void setBaris(int i, ArrayList<Double> barisBaru) {
+        this.mat.set(i, barisBaru);
+        /*
         try {
             this.mat.set(i, barisBaru);
         } catch (IndexOutOfBoundsException e) {
@@ -168,6 +170,7 @@ class Matriks {
                 throw e;
             }
         }
+        */
     }
 
     /**
@@ -548,16 +551,28 @@ class Matriks {
      * @param mTujuan
      */
     public static void salinMatriks(Matriks mAsal, Matriks mTujuan) {
-        mTujuan = new Matriks(mAsal.jmlBrsMat, mAsal.jmlKolMat);
+        // padding
+        ArrayList<Double> tempAl = new ArrayList<>();
+        for (int i = 0; i < mAsal.jmlBrsMat; ++i) {
+            // i >= mTujuan.jmlBrsMat artinya mulai baris baru
+            if (i >= mTujuan.jmlBrsMat) {
+                mTujuan.mat.add(tempAl);
+            }
+            for (int j = i >= mTujuan.jmlBrsMat ? 0 : mTujuan.jmlKolMat;
+                    j < mAsal.jmlKolMat; ++j) {
+                mTujuan.getBaris(i).add(0.0);
+            }
+        }
+
+        // salin matriks
+        mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
+        mTujuan.jmlKolMat = mAsal.jmlKolMat;
 
         for (int i = 0; i < mAsal.jmlBrsMat; ++i) {
             for (int j = 0; j < mAsal.jmlKolMat; ++j) {
                 mTujuan.setElmt(i, j, mAsal.getElmt(i, j));
             }
         }
-
-        mTujuan.jmlBrsMat = mAsal.jmlBrsMat;
-        mTujuan.jmlKolMat = mAsal.jmlKolMat;
     }
 
     private static Matriks makeIdentitas(int n) {
@@ -671,12 +686,10 @@ class Matriks {
 
         // Padding matriks
         for (int i = 0; i < this.jmlBrsMat; ++i) {
-            for (int j = this.jmlKolMat; j < aug.jmlKolMat; ++i) {
+            for (int j = this.jmlKolMat; j < aug.jmlKolMat+this.jmlKolMat; ++j) {
                 this.getBaris(i).add(0.0);
             }
         }
-
-        this.jmlKolMat += aug.jmlKolMat;
 
         // Meng-augment baris per baris
         for (int i = 0; i < this.jmlBrsMat; ++i) {
@@ -684,6 +697,7 @@ class Matriks {
                 this.setElmt(i, this.jmlKolMat+j, aug.getElmt(i, j));
             }
         }
+        this.jmlKolMat += aug.jmlKolMat;
     }
 
     /**

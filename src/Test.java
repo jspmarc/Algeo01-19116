@@ -31,7 +31,8 @@ public class Test {
         m1.bacaMatriks();
 
         Matriks.salinMatriks(m1, mOriginal);
-        m1.tulisMatriks();
+        System.out.println("bruh");
+        mOriginal.tulisMatriks();
 
         System.out.printf("Ekspansi kofaktor: %.2f\n", Matriks.determinanEksKof(m1));
         System.out.printf("Reduksi baris: %.2f\n", Matriks.determinanRedBrs(m1));
