@@ -1,4 +1,4 @@
-/// Struktur data
+// Struktur data
 import java.util.ArrayList; // Array dinamis untuk matriks
 import java.util.HashMap;
 import java.util.Scanner;
