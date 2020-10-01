@@ -43,7 +43,6 @@ class Matriks {
      *   - makeMinor
      *   - tambahBaris
      *   - kaliMatriks
-     *   - kaliBaris
      *   - bagiBaris
      *   - tukarBaris
      *   - salinMatriks
@@ -55,7 +54,6 @@ class Matriks {
      *   - makeEselonTereduksi
      *   - makeAdjoin
      *   - indikator
-     *   - solusiDouble
      *   - matriksToSPL
      * *** TUGAS ***
      *   - gauss
@@ -77,6 +75,7 @@ class Matriks {
                 jmlKolMat; // Banyak kolom
 
     // ArrayList dari ArrayList
+    // Unttuk menampung elemen matriks
     ArrayList<ArrayList<Double>> mat = new ArrayList<>();
 
     /* === CONSTRUCTOR === */
@@ -459,25 +458,6 @@ class Matriks {
     }
 
     /**
-     * Metode untuk melakukan operasi:
-     * mat[idxBrsAsal] = mat[idxBrsAsal] + mat[idxBrsPenjumlah]
-     * dengan mat adalah matriks pemanggil
-     * dengan k == 1
-     * @param idxBrsAsal indeks baris yang ingin dijumlahkan
-     * @param idxBrsPenjumlah indeks baris yang menjadi penjumlah
-     */
-    private void tambahBaris(int idxBrsAsal, int idxBrsPenjumlah) {
-        double tempElmt;
-
-        // i untuk kolom
-        for (int i = 0; i < this.jmlKolMat; ++i) {
-            tempElmt = this.getElmt(idxBrsAsal, i);
-            tempElmt += this.getElmt(idxBrsPenjumlah, i);
-            this.setElmt(idxBrsAsal, i, tempElmt);
-        }
-    }
-
-    /**
      * Mengkalikan matriks yang memanggil dengan suatu matriks lain
      * this * m2
      * Syarat: Ukuran kolom this sama dengan ukuran baris m2
@@ -503,22 +483,6 @@ class Matriks {
         }
 
         salinMatriks(matRes, this);
-    }
-
-    /**
-     * Mengkalikan elemen di baris ke-"idxBaris" dengan konsanta k
-     * @param idxBaris indeks baris yang ingin dikalikan
-     * @param k konstanta yang ingin mengkali baris
-     * @param m matriks yang salah satu barisnya ingin dikalikan dengan k
-     */
-    private void kaliBaris(int idxBaris, double k) {
-        double tempElmt;
-
-        // i untuk kolom
-        for (int i = 0; i < this.jmlKolMat; ++i) {
-            tempElmt = k*this.getElmt(idxBaris, i);
-            this.setElmt(idxBaris, i, tempElmt);
-        }
     }
 
     /**
@@ -927,29 +891,12 @@ class Matriks {
     }
 
     /**
-     * Metode untuk mencari (assign) solusi dari matriks eselon baris tereduksi
-     * Prekondisi: indikator = 1 dan matriks sudah berupa matriks eselon tereduksi
-     * @return HashMap<String, Double>
-     */
-    private HashMap<String, Double> solusiDouble() {
-        HashMap<String, Double> sol = new HashMap<String, Double>();
-
-        for (int i = 0; i < this.jmlBrsMat; i++) {
-            double val = this.getElmt(i, this.jmlKolMat-1);
-            sol.put("x" + (i+1), val);
-        }
-        return sol;
-    }
-
-    /**
      * Metode untuk membuat SPL dari matriks eselon tereduksi
      * menghasilkan solusi SPL yang solusinya parametrik.
      * Prekondisi: matriks sudah berupa matriks eselon tereduksi dengan indikator = 2
      * @return Arraylist berisi pair variabel x1 - xn dan solusinya
      */
     private HashMap<String, String> matriksToSPL() {
-        // TODO: More test
-        //       Fix comment
         HashMap<String, String> solParametrik = new HashMap<>();
         char varBebas = 's'; // variabel bebas pertama
         int i, j;

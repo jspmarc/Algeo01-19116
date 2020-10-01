@@ -1,19 +1,18 @@
 /**
  * TODO:
- * [ ] spl metode matriks balikan
  * [ ] input interpolasi dalam format (x0, y0), ..., (xn, yn)
- * [?] buat prosedur untuk baca input spl
  */
 
-/*
- * Program utama/gabungan untuk Tubes 01 IF2123 2020/2021
+import java.util.*;
+
+/**
+ * Kelas utama untuk Tubes 01 IF2123 2020/2021
  *
- * Jeane Mikha Erwansyah - 13519116
- * Josep Marcello - 13519164
- * David Owen Adiwiguna - 13519169
+ * @author Jeane Mikha Erwansyah - 13519116
+ * @author Josep Marcello - 13519164
+ * @author David Owen Adiwiguna - 13519169
  *
  */
-import java.util.*;
 
 class Main {
     /**
@@ -27,6 +26,9 @@ class Main {
      * - subMenu2
      * - subMenu3
      * - bacaMetodeInput
+     * - simpanKeFile (HashMap)
+     * - simpanKeFile (String)
+     * - simpanKeFile (Matriks)
      * - runSPL
      * - runDet
      * - runBalikan
@@ -514,7 +516,6 @@ class Main {
             case 2: {
                 int pilihan1 = bacaMetodeInput();
                 switch (pilihan1) {
-                    // TODO: BENERIN
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA;
