@@ -31,8 +31,7 @@ public class Test {
         m1.bacaMatriks();
 
         Matriks.salinMatriks(m1, mOriginal);
-        System.out.println("bruh");
-        mOriginal.tulisMatriks();
+        m1.tulisMatriks();
 
         System.out.printf("Ekspansi kofaktor: %.2f\n", Matriks.determinanEksKof(m1));
         System.out.printf("Reduksi baris: %.2f\n", Matriks.determinanRedBrs(m1));
@@ -66,9 +65,10 @@ public class Test {
 
         //mOriginal.tulisMatriks();
         //m1.tulisMatriks();
-
-        //m1.makeEselon();
+        System.out.println("============");
+        m1.tulisMatriks();
         Matriks.tulisSolusi(Matriks.gaussJordan(m1));
+        System.out.println("============");
         //m1.tulisSolusi(m1.gauss(m1));
 
         //m1.makeAugmented(mOriginal);
@@ -87,12 +87,6 @@ public class Test {
         //System.out.println("88239r58239r5qw4ftg8i90gv8hg789yw4789ty234 89tyu294yt9");
 
         Matriks.salinMatriks(mOriginal, m1);
-        System.out.println("SPL Balikan: ");
-        Matriks.tulisSolusi(Matriks.splBalikan(m1));
-
-
-        System.out.println("Cramer: ");
-        Matriks.salinMatriks(mOriginal, m1);
         Matriks.tulisSolusi(Matriks.cramer(m1));
         //m1.balikan();
         m1.tulisMatriks();
@@ -105,9 +99,8 @@ public class Test {
         Matriks.salinMatriks(mOriginal, m1);
         System.out.println("inverse:");
         Matriks.balikanOBE(m1).tulisMatriks();
-        //m1.tulisMatriks();
+        m1.tulisMatriks();
 
-        System.out.println("Cramer: ");
         Matriks.salinMatriks(mOriginal, m1);
         Matriks.tulisSolusi(Matriks.cramer(m1));
 

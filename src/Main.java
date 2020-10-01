@@ -18,7 +18,7 @@ import java.util.*;
 
 class Main {
     /**
-     * DAFTAR PROSEDUR
+     * DAFTAR FUNGSI DAN PROSEDUR
      * - intro
      * - outro
      * - clearScr
@@ -209,9 +209,9 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.printf("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan m: ");
                         nBrsA = s.nextInt();
-                        System.out.printf("Masukkan jumlah kolom: ");
+                        System.out.printf("Masukkan n: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
@@ -251,9 +251,9 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.printf("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan m: ");
                         nBrsA = s.nextInt();
-                        System.out.printf("Masukkan jumlah kolom: ");
+                        System.out.printf("Masukkan n: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
@@ -261,7 +261,7 @@ class Main {
 
                         System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         mA.bacaMatriks();
-                        System.out.printf("\nMasukkan b[i] secara berurut\n");
+                        System.out.printf("\nMasukkan b[i] secara berurut: ");
                         mB.bacaMatriks();
                         mA.makeAugmented(mB);
 
@@ -293,9 +293,9 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.printf("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan m: ");
                         nBrsA = s.nextInt();
-                        System.out.printf("Masukkan jumlah kolom: ");
+                        System.out.printf("Masukkan n: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
@@ -336,9 +336,9 @@ class Main {
                     // Pilihan 1 - Input dari keyboard
                     case 1: {
                         int nBrsA, nKolA;
-                        System.out.printf("\nMasukkan jumlah baris: ");
+                        System.out.printf("\nMasukkan m: ");
                         nBrsA = s.nextInt();
-                        System.out.printf("\nMasukkan jumlah kolom: ");
+                        System.out.printf("Masukkan n: ");
                         nKolA = s.nextInt();
 
                         Matriks mA = new Matriks(nBrsA, nKolA);
@@ -559,7 +559,7 @@ class Main {
         switch (pilihan1) {
             // Pilihan 1 - Input dari keyboard
             case 1: {
-                System.out.printf("\nMasukkan jumlah titik: ");
+                System.out.printf("\nMasukkan n: ");
                 int nBrs = s.nextInt();
                 System.out.println();
 
@@ -606,6 +606,8 @@ class Main {
                 Matriks m = new Matriks(nBrsA, nBrsA);
                 System.out.printf("\nMasukkan x[n][i] secara berurut\n");
                 m.bacaMatriks();
+                
+                // kurang yi xk?
 
                 m.regresi(m);
                 m.tulisMatriks();
