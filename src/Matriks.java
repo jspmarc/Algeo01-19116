@@ -478,6 +478,7 @@ class Matriks {
     /**
      * Mengkalikan matriks yang memanggil dengan suatu matriks lain
      * this * m2
+     * Syarat: Ukuran kolom this sama dengan ukuran baris m2
      * @param m2 matriks yang dikalikan dengan matriks pemanggil (this*m2)
      */
     private void kaliMatriks (Matriks m2) {

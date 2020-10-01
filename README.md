@@ -33,8 +33,15 @@ kofaktor
 
 ## Petunjuk Instalasi
 
-jalankan perintah `make jar`
+Jalankan perintah `make jar`.
+Tidak punya `make`?
+Jalankan:
+1. `javac -g -d bin src/Matriks.java src/Main.java`
+1. `jar -cvfe bin/tubes.jar Main -C bin/Matriks.class -C bin/Main.class`
 
 ## Petunjuk Penggunaan
 
 jalankan perintah `make`
+Tidak punya `make`?
+1. Pastikan Anda sudah melalui proses instalasi
+1. `java -jar bin/tubes.jar`

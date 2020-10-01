@@ -13,6 +13,7 @@
  * David Owen Adiwiguna - 13519169
  *
  */
+import java.io.IOException;
 import java.util.*;
 
 class Main {
@@ -20,6 +21,7 @@ class Main {
      * DAFTAR PROSEDUR
      * - intro
      * - outro
+     * - clearScr
      * - wOOOw
      * - menu
      * - subMenu1
@@ -38,6 +40,7 @@ class Main {
      * Metode untuk mencetak pembukaan
      */
     private static void intro() {
+        clearScr();
         System.out.println(
             "Selamat Datang di Program Tugas Besar Pertama\n"
             + "Mata Kuliah IF2123 Aljabar Linier dan Geometri\n\n");
@@ -55,6 +58,11 @@ class Main {
             + "\nEnd of Program.");
     }
 
+    private static void clearScr() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     private static void wOOOw() {
         System.out.println(" /$$      /$$             /$$               /$$          ");
         System.out.println("| $$$    /$$$            | $$              |__/          ");
@@ -64,6 +72,17 @@ class Main {
         System.out.println("| $$\\  $ | $$ /$$__  $$  | $$ /$$| $$      | $$  >$$  $$");
         System.out.println("| $$ \\/  | $$|  $$$$$$$  |  $$$$/| $$      | $$ /$$/\\  $$");
         System.out.println("|__/     |__/ \\_______/   \\___/  |__/      |__/|__/  \\__/");
+    }
+
+    private static void w000w() {
+        System.out.println
+            (
+                " ______     __  __     ______   \n"
+                + "/\\  == \\   /\\ \\_\\ \\   /\\  ___\\  \n"
+                + "\\ \\  __<   \\ \\____ \\  \\ \\  __\\  \n"
+                + " \\ \\_____\\  \\/\\_____\\  \\ \\_____\\\n"
+                + "  \\/_____/   \\/_____/   \\/_____/"
+            );
     }
 
     /**
@@ -84,6 +103,7 @@ class Main {
      * Metode untuk mencetak sub menu 1
      */
     private static void subMenu1() {
+        clearScr();
         System.out.println("\nMETODE UNTUK MENGHITUNG SPL:");
         System.out.println("1. Metode Eliminasi Gauss\n"
                             + "2. Metode Eliminasi Gauss-Jordan\n"
@@ -97,6 +117,7 @@ class Main {
      * Metode untuk mencetak sub menu 2
      */
     private static void subMenu2() {
+        clearScr();
         System.out.println("\nMETODE UNTUK MENGHITUNG DETERMINAN:");
         System.out.println("1. Metode Reduksi Baris\n"
                             + "2. Metode Ekspansi Kofaktor\n"
@@ -108,6 +129,7 @@ class Main {
      * Metode untuk mencetak sub menu 3
      */
     private static void subMenu3() {
+        clearScr();
         System.out.println("\nMETODE UNTUK MENGHITUNG BALIKAN MATRIKS:");
         System.out.println("1. Metode adjoin matriks\n"
                             + "2. Metode OBE\n"
@@ -546,7 +568,7 @@ class Main {
                 m.bacaMatriks();
 
                 System.out.printf("\nMasukkan titik x: ");
-                int x = s.nextInt();
+                double x = s.nextDouble();
                 System.out.println();
 
                 Matriks.interpolasi(m, x);
@@ -558,7 +580,7 @@ class Main {
                 m.bacaDariFile();
 
                 System.out.printf("\nMasukkan titik x: ");
-                int x = s.nextInt();
+                double x = s.nextDouble();
                 System.out.println();
 
                 Matriks.interpolasi(m, x);
@@ -609,6 +631,7 @@ class Main {
      * Metode untuk menjalankan program
      */
     private static void run() {
+        clearScr();
         wOOOw();
         menu();
         Scanner s = new Scanner(System.in);
@@ -634,7 +657,10 @@ class Main {
                 break;
             case 6: // Pilihan 6 - Keluar
                 //s.close();
+                clearScr();
+                w000w();
                 outro();
+                s.close();
                 System.exit(0);
                 //break;
             default: // Pilihan tidak valid
@@ -647,6 +673,5 @@ class Main {
         Scanner s = new Scanner(System.in);
         intro();
         run();
-        s.close();
     }
 }
