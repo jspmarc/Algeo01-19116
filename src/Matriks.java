@@ -49,6 +49,7 @@ class Matriks {
      *   - salinMatriks
      *   - makeSgtgAtas
      *   - makeAugmented
+     *   - makePersegi
      *   - makeEselon
      *   - makeEselonTereduksi
      *   - makeAdjoin
@@ -751,6 +752,22 @@ class Matriks {
     }
 
     /**
+     * Metode untuk membuat matriks augmented menjadi n x n+1
+     */
+    private void makePersegi() {
+        ArrayList<Double> newBrs = new ArrayList<>();
+
+        for (int i = 0; i < this.jmlKolMat; ++i) {
+            newBrs.add(0.0);
+        }
+
+        for (int i = this.jmlBrsMat; i < jmlKolMat; ++i) {
+            this.mat.add(newBrs);
+        }
+        this.jmlBrsMat = this.jmlKolMat;
+    }
+
+    /**
      * Metode untuk membuat matriks augmented menjadi matriks eselon baris
      */
     private void makeEselon() {
@@ -1054,6 +1071,10 @@ class Matriks {
      */
     public static HashMap<String, String> gauss(Matriks mat) {
         mat.makeEselon();
+        if (mat.jmlBrsMat < mat.jmlKolMat -1) {
+            mat.makePersegi();
+        }
+
         // Akan menjadi SPL baru
         // Solve SPL baru dengan gaussJordan
         return gaussJordan(mat);
@@ -1072,6 +1093,9 @@ class Matriks {
         HashMap<String, String> sol = new HashMap<>();
 
         mat.makeEselonTereduksi();
+        if (mat.jmlBrsMat < mat.jmlKolMat -1) {
+            mat.makePersegi();
+        }
         indikator = mat.indikator();
         if (indikator == 0) {
             return sol;
