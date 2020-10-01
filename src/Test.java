@@ -83,18 +83,21 @@ public class Test {
         m1 = Matriks.bacaDariFile();
         Matriks.interpolasi(m1, 9.2);
 
+        System.out.println("88239r58239r5qw4ftg8i90gv8hg789yw4789ty234 89tyu294yt9");
+
         Matriks.salinMatriks(mOriginal, m1);
+        Matriks.tulisSolusi(Matriks.cramer(m1));
         //m1.balikan();
         m1.tulisMatriks();
         m1.tulisMatriks();
         System.out.println("Determinan: " + Matriks.determinanRedBrs(m1));
         System.out.println("inverse:");
-        m1.balikanAdjoint();
+        Matriks.balikanAdjoint(m1);
         m1.tulisMatriks();
         //m1.tulisMatriks();
 
         Matriks.salinMatriks(mOriginal, m1);
-        m1.cramer();
+        Matriks.tulisSolusi(Matriks.cramer(m1));
 
         s.close();
         System.out.println("This is the end");

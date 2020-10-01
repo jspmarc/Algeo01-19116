@@ -1183,20 +1183,22 @@ class Matriks {
      * Membuat inverse/balikan dari matriks yang memanggil
      * dengan metode adjoin
      */
-    public void balikanAdjoint(){
+    public static Matriks balikanAdjoint(Matriks mat){
         int i, j, nBar, nKol;
         double det,temp;
-        nBar = this.jmlBrsMat;
-        nKol = this.jmlKolMat;
+        nBar = mat.jmlBrsMat;
+        nKol = mat.jmlKolMat;
 
         /*
         // Membuat matriks baru untuk temp invers
         Matriks mi = new Matriks(nBar, nKol);
-        salinMatriks(this, mi);
+        salinMatriks(mat, mi);
         */
 
+        det = determinanEksKof(mat);
+
         // Mengecek apakah matriks merupakan matriks persegi
-        if (this.adalahPersegi()){
+        if (mat.adalahPersegi() && det != 0){
             /*
             // Men-swap elmt matriks(i,j) dengan elmt (j,i) dengan i sebagai baris dan j sebagai kolom
             det = determinanRedBrs(mi);
@@ -1209,34 +1211,34 @@ class Matriks {
             }
             */
 
-            det = determinanEksKof(this);
-            this.makeAdjoint();
+            mat.makeAdjoint();
 
             for(i = 0; i<nKol; i++){
-                this.bagiBaris(i, det);
+                mat.bagiBaris(i, det);
             }
-
-            //salinMatriks(mi, this);
+            //salinMatriks(mi, mat);
         } else {
             System.out.println("Tidak bisa dibuat invers karena bukan matriks persegi");
         }
+        return mat;
     }
 
     /**
      * Menyelesaikan SPL dengan metode Cramer untuk matriks yang memanggil
      * Mariks yang memanggil adalah matriks augmented
+     * @param mat Matriks yang ingin dihiung SPL-nya
      * @return nilai SPL dari matriks yang memanggil
      */
-    public void cramer(){
+    public static HashMap<String, String> cramer(Matriks mat){
         int i, j, nBar, nKol;
         double det1,det2,temp;
-        nBar = this.jmlBrsMat;
-        nKol = (this.jmlKolMat-1);
+        nBar = mat.jmlBrsMat;
+        nKol = (mat.jmlKolMat-1);
         HashMap<String, String> solHash = new HashMap<>();
 
         // Membuat matrix baru
         Matriks m = new Matriks(nBar, (nKol+1));
-        Matriks.salinMatriks(this, m);
+        Matriks.salinMatriks(mat, m);
         Matriks m1 = new Matriks(nBar, nKol);
         Matriks m2 = new Matriks(nBar, 1);
         Matriks m3 = new Matriks(nBar, nKol);
@@ -1261,7 +1263,7 @@ class Matriks {
                 System.out.print("Silakan menggunakan metode Gauss-Jordan");
                 System.out.println(" untuk menarik kesimpulan.");
 
-                return;
+                return solHash;
             }
 
             // Menghitung solusi dari SPL 1 demi 1
@@ -1278,9 +1280,9 @@ class Matriks {
 
                 solHash.put("x"+(i+1), (String.format("%.2f", temp)));
             }
-            tulisSolusi(solHash);
         } else{
             System.out.println("Tidak ada solusi karena bukan matriks persegi");
         }
+        return solHash;
     }
 }
