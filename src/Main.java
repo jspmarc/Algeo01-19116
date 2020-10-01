@@ -285,7 +285,11 @@ class Main {
                         mB.bacaMatriks();
                         mA.makeAugmented(mB);
 
-                        // insert spl metode matriks balikan
+                        HashMap<String, String> sol = new HashMap<>();
+                        sol = Matriks.splBalikan(mA);
+                        System.out.println("\nSolusi SPL:");
+                        Matriks.tulisSolusi(sol);
+                        simpanKeFile(sol);
                         break;
                     }
                     // Pilihan 2 - Baca dari file eksternal
@@ -293,7 +297,11 @@ class Main {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
 
-                        // insert spl metode matriks balikan
+                        HashMap<String, String> sol = new HashMap<>();
+                        sol = Matriks.splBalikan(m);
+                        System.out.println("\nSolusi SPL:");
+                        Matriks.tulisSolusi(sol);
+                        simpanKeFile(sol);
                         break;
                     }
                 }
