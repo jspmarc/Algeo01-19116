@@ -205,6 +205,7 @@ class Main {
 
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gauss(mA);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -215,6 +216,7 @@ class Main {
                         m = Matriks.bacaDariFile();
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gauss(m);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -245,6 +247,7 @@ class Main {
 
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gaussJordan(mA);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -255,6 +258,7 @@ class Main {
                         m = Matriks.bacaDariFile();
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gaussJordan(m);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -320,6 +324,7 @@ class Main {
 
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.cramer(mA);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -331,6 +336,7 @@ class Main {
 
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.cramer(m);
+                        System.out.println("\nSolusi SPL:");
                         Matriks.tulisSolusi(sol);
                         simpanKeFile(sol);
                         break;
@@ -563,8 +569,8 @@ class Main {
      * Metode untuk menjalankan subprogram regresi linier berganda
      */
     private static void runRegresi() {
-        int pilihan1 = bacaMetodeInput();
         System.out.println();
+        int pilihan1 = bacaMetodeInput();
         switch (pilihan1) {
             case 1: // Pilihan 1 - Input dari keyboard
 
