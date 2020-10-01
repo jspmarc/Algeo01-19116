@@ -72,11 +72,11 @@ class Main {
     private static void menu() {
         System.out.println("\nMENU:");
         System.out.println("1. Sistem Persamaan Linier\n"
-                           + "2. Determinan\n"
-                           + "3. Matriks Balikan\n"
-                           + "4. Interpolasi Polinom\n"
-                           + "5. Regresi Linier Berganda\n"
-                           + "6. Keluar\n");
+                            + "2. Determinan\n"
+                            + "3. Matriks Balikan\n"
+                            + "4. Interpolasi Polinom\n"
+                            + "5. Regresi Linier Berganda\n"
+                            + "6. Keluar\n");
         System.out.printf("Masukkan menu pilihan Anda: ");
     }
 
@@ -345,7 +345,7 @@ class Main {
             // Pilihan 5 - Kembali
             case 5: {
                 break;
-            } 
+            }
             // Pilihan tidak valid
             default: {
                 System.out.println("Pilihan tidak Valid! Masukkan kembali pilihan Anda: ");

@@ -491,10 +491,11 @@ class Matriks {
 
         for (int i = 0;  i < this.jmlBrsMat; ++i) {
             for (int j = 0; j < m2.jmlKolMat; ++j) {
+                double curEl = matRes.getElmt(i, j);
                 for (int k = 0; k < m2.jmlBrsMat; ++k) {
-                    matRes.setElmt(i, j,
-                                    (this.getElmt(i, k) * m2.getElmt(k, j)));
+                    curEl += this.getElmt(i, k) * m2.getElmt(k, j);
                 }
+                matRes.setElmt(i, j, curEl);
             }
         }
 
@@ -575,6 +576,11 @@ class Matriks {
         }
     }
 
+    /**
+     * membuat matriks identitas berukuran n x n
+     * @param n ukuran baris dan kolom matriks
+     * @return matriks identitas berukuran n x n
+     */
     private static Matriks makeIdentitas(int n) {
         Matriks mat = new Matriks(n, n);
 
@@ -923,7 +929,6 @@ class Matriks {
      * Prekondisi: matriks sudah berupa matriks eselon tereduksi dengan indikator = 2
      * @return Arraylist berisi pair variabel x1 - xn dan solusinya
      */
-
     private HashMap<String, String> matriksToSPL() {
         // TODO: More test
         //       Fix comment
@@ -993,17 +998,17 @@ class Matriks {
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + "-" +
-                                                        String.format("%.4f", this.getElmt(i, k)) + 
+                                                        String.format("%.4f", this.getElmt(i, k)) +
                                                         solParametrik.get("x" + (k+1)));
                             } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
-                                solParametrik.replace("x" + (j+1), 
+                                solParametrik.replace("x" + (j+1),
                                                         solParametrik.get("x" + (j+1)) +
-                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) + 
+                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) +
                                                         solParametrik.get("x" + (k+1)));
                             }
                         } else { // elemen (i, k) merupakan konstanta
                             if (this.getElmt(i, k) > 0 || this.getElmt(i, k) < 0) { // nilai konstanta positif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + 
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) +
                                 String.format("%.4f", this.getElmt(i, k)));
                             }
                         }
@@ -1012,19 +1017,19 @@ class Matriks {
                         if (k != this.jmlKolMat - 1) {
                             if (this.getElmt(i, k) > 0) { // nilai koefisien positif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " -" +
-                                                        String.format("%.4f", this.getElmt(i, k)) + 
+                                                        String.format("%.4f", this.getElmt(i, k)) +
                                                         solParametrik.get("x" + (k+1)));
                             } else if (this.getElmt(i, k) < 0) { // nilai koefisien negatif
                                 solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
-                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) + 
+                                                        String.format("%.4f", (-1)*this.getElmt(i, k)) +
                                                         solParametrik.get("x" + (k+1)));
                             }
                         } else { // elemen (i, k) merupakan konstanta
                             if (this.getElmt(i, k) > 0) { // nilai konstanta positif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " + 
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " + " +
                                 String.format("%.4f", this.getElmt(i, k)));
                             } else if (this.getElmt(i, k) < 0) { // nilai konstanta negatif
-                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " + 
+                                solParametrik.replace("x" + (j+1), solParametrik.get("x" + (j+1)) + " " +
                                 String.format("%.4f", this.getElmt(i, k)));
                             }
                         }
@@ -1083,16 +1088,19 @@ class Matriks {
         }
     }
 
-    // matA*matX = matB
-    // <=> matX = inv(matA)*matB
+    /**
+     * Menghitung SPL dengan metode matriks balikan
+     * @param matGab matriks augmented yang ingin dihitung SPL-nya
+     * @return solusi SPL matriks augmented
+     */
     public static HashMap<String, String> splBalikan(Matriks matGab) {
+        // matA*matX = matB
+        // <=> matX = inv(matA)*matB
         HashMap<String, String> sol = new HashMap<>();
         Matriks matA = makeIdentitas(matGab.jmlBrsMat),
                 matB = new Matriks(matGab.jmlBrsMat, 1);
 
         matB = matGab.makeNotAugmented(matB);
-        matGab.tulisMatriks();
-        matB.tulisMatriks();
         salinMatriks(matGab, matA);
 
         double det = determinanEksKof(matGab);
@@ -1103,7 +1111,10 @@ class Matriks {
         } else {
             matA = balikanOBE(matA);
             matA.kaliMatriks(matB);
-            matA.tulisMatriks();
+
+            for (int i = 0; i < matA.jmlBrsMat; ++i) {
+                sol.put("x"+(i+1), String.format("%.2f", matA.getElmt(i, 0)));
+            }
         }
 
         return sol;
@@ -1361,6 +1372,11 @@ class Matriks {
         return mat;
     }
 
+    /**
+     * Membuat balikan matriks mat dengan metode OBE
+     * @param mat matriks yang ingin dibuat balikannya
+     * @return balikan matriks mat
+     */
     public static Matriks balikanOBE(Matriks mat) {
         double det = determinanRedBrs(mat);
         if (mat.adalahPersegi() && det != 0) {
@@ -1463,13 +1479,13 @@ class Matriks {
         double sum = 0;
         nBar = mat.jmlBrsMat;
         nKol = mat.jmlKolMat;
-        
+
         // Membuat Matriks baru (m1)
         Matriks m1 = new Matriks(nKol, (nKol+1));
-    
+
         // Mengisi m1 untuk (0,0)
         m1.setElmt(0, 0, nBar);
-    
+
         // Mengisi m1 untuk baris pertama
         for (i = 0; i < nKol; i++){
             for (j = 0; j < nBar; j++){
@@ -1478,12 +1494,12 @@ class Matriks {
             m1.setElmt(0, (i+1), sum);
             sum = 0;
         }
-    
+
         // Mengisi m1 untuk kolom pertama
         for (i = 1; i< nKol; i++){
             m1.setElmt(i, 0, m1.getElmt(0,i));
         }
-    
+
         // Mengisi m1 untuk sisanya
         for (i = 1; i < nKol; i++){           // Baris Output
             for (j = 0; j < nKol; j++){       // Kolom Input & Output
@@ -1491,7 +1507,7 @@ class Matriks {
                     sum = sum + (mat.getElmt(k,(i-1)) * mat.getElmt(k,j));
                 }
                 m1.setElmt(i, (j+1), sum);
-                sum = 0;    
+                sum = 0;
             }
         }
         return m1;
