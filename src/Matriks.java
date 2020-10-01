@@ -1297,8 +1297,8 @@ class Matriks {
         // Mengecek apakah matriks merupakan matriks persegi
         if(m1.adalahPersegi()){
             // Memasukan nilai dari elmt m1 dan m2
-            for (i = 0; i<nKol; i++){
-                for(j = 0; j<nKol ; j++){
+            for (i = 0; i < nKol; i++){
+                for(j = 0; j < nKol ; j++){
                     m1.setElmt(i, j, m.getElmt(i, j));
                 }
                 m2.setElmt(i, 0, m.getElmt(i, nKol));
@@ -1318,7 +1318,7 @@ class Matriks {
             }
 
             // Menghitung solusi dari SPL 1 demi 1
-            for (i = 0; i<nKol; i++){
+            for (i = 0; i < nKol; i++){
                 Matriks.salinMatriks(m1, m3);
 
                 // Taro elemen m2 di m3
