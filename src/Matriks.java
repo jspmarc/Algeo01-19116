@@ -47,6 +47,7 @@ class Matriks {
      *   - bagiBaris
      *   - tukarBaris
      *   - salinMatriks
+     *   - makeIdentitas
      *   - makeSgtgAtas
      *   - makeAugmented
      *   - makePersegi
@@ -334,7 +335,7 @@ class Matriks {
             for (int i = 0; i < mat.jmlBrsMat; ++i) {
                 currBaris = "";
                 for (int j = 0; j < mat.jmlKolMat; ++j) {
-                    String currEl = String.format("%.2f", mat.getElmt(i, j));
+                    String currEl = String.format("%.4f", mat.getElmt(i, j));
                     currBaris += currEl + es;
                 }
                 strMat += currBaris + ls;
@@ -930,7 +931,6 @@ class Matriks {
      * Prekondisi: indikator = 1 dan matriks sudah berupa matriks eselon tereduksi
      * @return HashMap<String, Double>
      */
-
     private HashMap<String, Double> solusiDouble() {
         HashMap<String, Double> sol = new HashMap<String, Double>();
 
@@ -1103,7 +1103,7 @@ class Matriks {
         } else if (indikator == 1) {
             for (int i = 0; i < mat.jmlBrsMat; i++) {
                 double val = mat.getElmt(i, mat.jmlKolMat-1);
-                String valString = String.format("%.2f", val);
+                String valString = String.format("%.4f", val);
                 sol.put("x" + (i+1), valString);
             }
             return sol;
@@ -1128,17 +1128,19 @@ class Matriks {
         matB = matGab.makeNotAugmented(matB);
         salinMatriks(matGab, matA);
 
-        double det = determinanEksKof(matGab);
-        if (det == 0) {
-            System.out.print("Determinan matriks 0, tidak dapat menggunakan");
-            System.out.println("metode balikan matriks untuk mencari SPL.");
-            System.out.print("Silakan gunakan metode Gauss-Jordan.");
+        if (!matA.adalahPersegi()) {
+            System.out.println("Bentuk matriks inkonsisten.");
+            System.out.println("Gagal menghiung solusi SPL.");
+            System.out.println("Silakan gunakan metode Gauss-Jordan.");
         } else {
-            matA = balikanOBE(matA);
-            matA.kaliMatriks(matB);
+            double det = determinanEksKof(matGab);
+            if (det != 0) {
+                matA = balikanOBE(matA);
+                matA.kaliMatriks(matB);
 
-            for (int i = 0; i < matA.jmlBrsMat; ++i) {
-                sol.put("x"+(i+1), String.format("%.2f", matA.getElmt(i, 0)));
+                for (int i = 0; i < matA.jmlBrsMat; ++i) {
+                    sol.put("x"+(i+1), String.format("%.4f", matA.getElmt(i, 0)));
+                }
             }
         }
 
@@ -1148,13 +1150,14 @@ class Matriks {
     /**
      * Metode untuk mencetak jawaban ke layar
      * @param solHashMap kumpulan x1, x2, ..., xn yang akan diprint ke layar
+     * @param symb simbol/variabeel yang digunakan untuk menuliskan solusi
      */
-    public static void tulisSolusi(HashMap<String, String> solHashMap) {
+    public static void tulisSolusi(HashMap<String, String> solHashMap, String symb) {
         if (solHashMap.isEmpty()) {
             System.out.println("Solusi tidak ada");
         } else {
             for (int i = solHashMap.size()-1; i >= 0; i--) {
-                System.out.print("x" + (i+1) + " = " + solHashMap.get("x"+(i+1)));
+                System.out.print(symb + (i+1) + " = " + solHashMap.get("x"+(i+1)));
                 if (i != 0) {
                     System.out.print(", ");
                 }
@@ -1314,10 +1317,10 @@ class Matriks {
             px = "P(x) = ";
             ps = "P(" + x + ") = ";
             for (int i = 0; i < matInter.jmlBrsMat; ++i) {
-                px += String.format("%.4f", solv.get(i) >= 0
+                px += String.format("%.4f", solv.get(i) >= 0 || i == 0
                                             ? solv.get(i)
                                             : -1*solv.get(i));
-                ps += String.format("%.4f", solv.get(i) >= 0
+                ps += String.format("%.4f", solv.get(i) >= 0 || i == 0
                                             ? solv.get(i)
                                             : -1*solv.get(i));
                 if (i != 0) {
@@ -1488,7 +1491,9 @@ class Matriks {
                 solHash.put("x"+(i+1), (String.format("%.2f", temp)));
             }
         } else{
-            System.out.println("Tidak ada solusi karena bukan matriks persegi");
+            System.out.println("Bentuk matriks inkonsisten.");
+            System.out.println("Gagal menghiung solusi SPL.");
+            System.out.println("Silakan gunakan metode Gauss-Jordan.");
         }
         return solHash;
     }
@@ -1499,11 +1504,15 @@ class Matriks {
      * @return Matriks
      */
     public static Matriks regresi(Matriks mat){
+        Scanner s = new Scanner(System.in);
         int i, j, k, nBar, nKol;
         //double temp;
         double sum = 0;
         nBar = mat.jmlBrsMat;
         nKol = mat.jmlKolMat;
+        HashMap<String, String> solHm = new HashMap<>();
+        ArrayList<Double> solv = new ArrayList<>();
+        String yx, ys;
 
         // Membuat Matriks baru (m1)
         Matriks m1 = new Matriks(nKol, (nKol+1));
@@ -1535,6 +1544,53 @@ class Matriks {
                 sum = 0;
             }
         }
+
+        // Lakukan Gauss-Jordan
+        solHm = gaussJordan(m1);
+        tulisSolusi(solHm, "b");
+
+        for (i = 0; i < m1.jmlBrsMat; ++i) {
+            solv.add(i, m1.getElmt(i, m1.jmlKolMat-1));
+        }
+
+        // Membuat persamaan y
+        yx = "y = ";
+        for (i = 0; i < m1.jmlBrsMat; ++i) {
+            yx += String.format("%.4f", solv.get(i) >= 0 || i == 0
+                                        ? solv.get(i)
+                                        : -1*solv.get(i));
+            if (i != 0) {
+                yx += "x" + i;
+            }
+            if (i < m1.jmlBrsMat-1) {
+                yx += (solv.get(i+1) >= 0) ? " + " : " - ";
+            }
+        }
+        System.out.println(yx);
+
+        // Memprediksi
+        String xPred = "";
+        sum = solv.get(0);
+        System.out.print("Ingin memprediksi? (y/n): ");
+        if (s.next().toLowerCase().equals("y")) {
+            for (i = 1; i < m1.jmlBrsMat; ++i) {
+                System.out.print("Masukkan x" + i + ": ");
+                double input = s.nextDouble();
+                sum += input*solv.get(i);
+                xPred += "x" + i + ": " + input + "\n";
+            }
+        }
+
+        String pred = "Hasil prediksi: y = " + sum;
+        System.out.print(pred);
+
+        yx += "\n\nPrediksi:\n" + xPred + pred;
+
+        System.out.printf("\nApakah Anda ingin menyimpan solusi ke file? (y/n): ");
+        if (s.next().toLowerCase().equals("y")) {
+            tulisKeFile(yx);
+        }
+
         return m1;
     }
 }

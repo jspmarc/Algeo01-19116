@@ -67,7 +67,7 @@ public class Test {
         //m1.tulisMatriks();
         System.out.println("============");
         m1.tulisMatriks();
-        Matriks.tulisSolusi(Matriks.gaussJordan(m1));
+        Matriks.tulisSolusi(Matriks.gaussJordan(m1), "x");
         System.out.println("============");
         //m1.tulisSolusi(m1.gauss(m1));
 
@@ -81,13 +81,14 @@ public class Test {
         //System.out.println(m1.jumElmt() + " " + m1.getJmlBrs() + " " + m1.getJmlKol());
         //m1.tulisMatriks();
 
-        //m1 = Matriks.bacaDariFile();
-        //Matriks.interpolasi(m1, 9.2);
+        System.out.println("interpolasi:");
+        m1 = Matriks.bacaDariFile();
+        Matriks.interpolasi(m1, 9.2);
 
         //System.out.println("88239r58239r5qw4ftg8i90gv8hg789yw4789ty234 89tyu294yt9");
 
         Matriks.salinMatriks(mOriginal, m1);
-        Matriks.tulisSolusi(Matriks.cramer(m1));
+        Matriks.tulisSolusi(Matriks.cramer(m1), "x");
         //m1.balikan();
         m1.tulisMatriks();
         m1.tulisMatriks();
@@ -102,7 +103,7 @@ public class Test {
         m1.tulisMatriks();
 
         Matriks.salinMatriks(mOriginal, m1);
-        Matriks.tulisSolusi(Matriks.cramer(m1));
+        Matriks.tulisSolusi(Matriks.cramer(m1), "x");
 
         System.out.println("Regresi Linier Berganda: ");
         Matriks.regresi(m1).tulisMatriks();

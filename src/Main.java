@@ -13,7 +13,6 @@
  * David Owen Adiwiguna - 13519169
  *
  */
-import java.io.IOException;
 import java.util.*;
 
 class Main {
@@ -103,7 +102,6 @@ class Main {
      * Metode untuk mencetak sub menu 1
      */
     private static void subMenu1() {
-        clearScr();
         System.out.println("\nMETODE UNTUK MENGHITUNG SPL:");
         System.out.println("1. Metode Eliminasi Gauss\n"
                             + "2. Metode Eliminasi Gauss-Jordan\n"
@@ -117,7 +115,6 @@ class Main {
      * Metode untuk mencetak sub menu 2
      */
     private static void subMenu2() {
-        clearScr();
         System.out.println("\nMETODE UNTUK MENGHITUNG DETERMINAN:");
         System.out.println("1. Metode Reduksi Baris\n"
                             + "2. Metode Ekspansi Kofaktor\n"
@@ -129,7 +126,6 @@ class Main {
      * Metode untuk mencetak sub menu 3
      */
     private static void subMenu3() {
-        clearScr();
         System.out.println("\nMETODE UNTUK MENGHITUNG BALIKAN MATRIKS:");
         System.out.println("1. Metode adjoin matriks\n"
                             + "2. Metode OBE\n"
@@ -175,7 +171,7 @@ class Main {
      */
     private static void simpanKeFile(Matriks mat) {
         Scanner s = new Scanner(System.in);
-        System.out.printf("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
+        System.out.printf("\nApakah Anda ingin menyimpan solusi ke file? (y/n): ");
         if (s.next().toLowerCase().equals("y")) {
             Matriks.tulisKeFile(mat);
         }
@@ -187,7 +183,7 @@ class Main {
      */
     private static void simpanKeFile(String sol) {
         Scanner s = new Scanner(System.in);
-        System.out.println("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
+        System.out.printf("\nApakah Anda ingin menyimpan solusi ke file? (y/n): ");
         if (s.next().toLowerCase().equals("y")) {
             Matriks.tulisKeFile(sol);
         }
@@ -226,7 +222,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gauss(mA);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -237,7 +233,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gauss(m);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -268,7 +264,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gaussJordan(mA);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -279,7 +275,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.gaussJordan(m);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -310,7 +306,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.splBalikan(mA);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -322,7 +318,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.splBalikan(m);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -353,7 +349,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.cramer(mA);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -365,7 +361,7 @@ class Main {
                         HashMap<String, String> sol = new HashMap<>();
                         sol = Matriks.cramer(m);
                         System.out.println("\nSolusi SPL:");
-                        Matriks.tulisSolusi(sol);
+                        Matriks.tulisSolusi(sol, "x");
                         simpanKeFile(sol);
                         break;
                     }
@@ -564,7 +560,7 @@ class Main {
                 System.out.println();
 
                 Matriks m = new Matriks(nBrs, 2);
-                System.out.printf("\nMasukkan data titik");
+                System.out.println("\nMasukkan data titik: ");
                 m.bacaMatriks();
 
                 System.out.printf("\nMasukkan titik x: ");
@@ -577,7 +573,7 @@ class Main {
             // Pilihan 2 - Baca dari file eksternal
             case 2: {
                 Matriks m = new Matriks(1, 2);
-                m.bacaDariFile();
+                m = Matriks.bacaDariFile();
 
                 System.out.printf("\nMasukkan titik x: ");
                 double x = s.nextDouble();
@@ -606,24 +602,22 @@ class Main {
                 Matriks m = new Matriks(nBrsA, nBrsA);
                 System.out.printf("\nMasukkan x[n][i] secara berurut\n");
                 m.bacaMatriks();
-                
+
                 // kurang yi xk?
 
-                m.regresi(m);
-                m.tulisMatriks();
+                m = Matriks.regresi(m);
                 System.out.println();
-                simpanKeFile(m);
+                //simpanKeFile(m);
                 break;
             }
             // Pilihan 2 - Baca dari file eksternal
             case 2: {
                 Matriks m = new Matriks(1, 1);
-                m.bacaDariFile();
+                m = Matriks.bacaDariFile();
 
-                m.regresi(m);
-                m.tulisMatriks();
+                m = Matriks.regresi(m);
                 System.out.println();
-                simpanKeFile(m);
+                //simpanKeFile(m);
                 break;
             }
         }
@@ -672,7 +666,6 @@ class Main {
     }
 
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
         intro();
         run();
     }
