@@ -40,7 +40,7 @@ class Matriks {
      * *** HELPER FUNCTIONS ***
      *   - adalahPersegi
      *   - jumElmt
-     *   - buatKofaktor
+     *   - makeMinor
      *   - tambahBaris
      *   - kaliBaris
      *   - bagiBaris
@@ -50,6 +50,7 @@ class Matriks {
      *   - makeAugmented
      *   - makeEselon
      *   - makeEselonTereduksi
+     *   - makeAdjoin
      *   - indikator
      *   - solusiDouble
      *   - matriksToSPL
@@ -387,13 +388,13 @@ class Matriks {
     }
 
     /**
-     * Fungsi membuat kofaktor dari matriks mat
-     * @param mat matriks yang ingin dibuat kofaktornya
+     * Fungsi membuat minor dari matriks mat
+     * @param mat matriks yang ingin dibuat minornya
      * @param idxAcuanBrs indeks baris yang menjadi acuan
      * @param idxAcuanKol indeks kolom yang menjadi acuan
-     * @return kofaktor matriks dengan acuan sesuai parameter
+     * @return minor matriks dengan acuan sesuai parameter
      */
-    private static Matriks buatKofaktor(Matriks mat, int idxAcuanBrs,
+    private static Matriks makeMinor(Matriks mat, int idxAcuanBrs,
                                         int idxAcuanKol){
         Matriks matRes;
         int m, n;
@@ -593,6 +594,41 @@ class Matriks {
                 this.setElmt(i, this.jmlKolMat+j, aug.getElmt(i, j));
             }
         }
+    }
+
+    private void makeKofaktor() {
+        Matriks kofak = new Matriks(this.jmlBrsMat, this.jmlKolMat);
+        salinMatriks(this, kofak);
+
+        // Bikin kofaktornya dulu
+        for (int i = 0; i < kofak.jmlBrsMat; ++i) {
+            for (int j = 0; j < kofak.jmlKolMat; ++j) {
+                Matriks tempKofak = new Matriks(kofak.jmlBrsMat-1, kofak.jmlKolMat-1);
+                tempKofak = makeMinor(this, i, j);
+                double val = determinanEksKof(tempKofak);
+                val *= Math.pow(-1, i+j);
+                kofak.setElmt(i, j, val);
+            }
+        }
+
+        // Pindahin kofaktor ke matriks awal
+        salinMatriks(kofak, this);
+    }
+
+    private void transpose() {
+        Matriks tempMat = new Matriks(this.jmlBrsMat, this.jmlKolMat);
+        salinMatriks(this, tempMat);
+
+        for (int i = 0; i < this.jmlBrsMat; ++i) {
+            for (int j = 0; j < this.jmlKolMat; ++j) {
+                this.setElmt(i, j, tempMat.getElmt(j, i));
+            }
+        }
+    }
+
+    public void makeAdjoint() {
+        this.makeKofaktor();
+        this.transpose();
     }
 
     /**
@@ -965,7 +1001,7 @@ class Matriks {
 
     /**
      * Metode menghitung determinan matriks dengan ekspansi kofaktor
-     * @param mat matriks yang ingin dihitung kofaktornya
+     * @param mat matriks yang ingin dihitung determinannya
      * @return nilai determinan dari matriks, NaN jika bukan matriks persegi
      */
     public static double determinanEksKof(Matriks mat) {
@@ -990,7 +1026,7 @@ class Matriks {
         // Baris yang digunakan adalah baris pertama
         // i buat nandain kolom untuk acuan
         for (int i = 0; i < mat.jmlKolMat; ++i) {
-            MTemp = buatKofaktor(mat, 0, i);
+            MTemp = makeMinor(mat, 0, i);
 
             res += ((i % 2 == 0 ? 1 : ~0) *
                     mat.getElmt(0, i) *
@@ -1136,20 +1172,23 @@ class Matriks {
 
     /**
      * Membuat inverse/balikan dari matriks yang memanggil
+     * dengan metode adjoin
      */
-    public void balikan(){
-        Scanner sc = new Scanner(System.in);
+    public void balikanAdjoint(){
         int i, j, nBar, nKol;
         double det,temp;
         nBar = this.jmlBrsMat;
         nKol = this.jmlKolMat;
 
+        /*
         // Membuat matriks baru untuk temp invers
         Matriks mi = new Matriks(nBar, nKol);
         salinMatriks(this, mi);
+        */
 
         // Mengecek apakah matriks merupakan matriks persegi
-        if (mi.adalahPersegi()){
+        if (this.adalahPersegi()){
+            /*
             // Men-swap elmt matriks(i,j) dengan elmt (j,i) dengan i sebagai baris dan j sebagai kolom
             det = determinanRedBrs(mi);
             for(i = 0; i<(nBar-1) ; i++){
@@ -1159,11 +1198,16 @@ class Matriks {
                     mi.setElmt(j, i, temp);
                 }
             }
+            */
+
+            det = determinanEksKof(this);
+            this.makeAdjoint();
+
             for(i = 0; i<nKol; i++){
-                mi.bagiBaris(i,det);
+                this.bagiBaris(i, det);
             }
 
-            salinMatriks(mi, this);
+            //salinMatriks(mi, this);
         } else {
             System.out.println("Tidak bisa dibuat invers karena bukan matriks persegi");
         }

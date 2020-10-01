@@ -465,7 +465,7 @@ class Main {
                         System.out.println("\nMasukan koefisien a[i][j] secara berurut");
                         m.bacaMatriks();
 
-                        m.balikan();
+                        m.balikanAdjoint();
                         simpanKeFile(m);
                         break;
                     }
@@ -474,7 +474,7 @@ class Main {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
 
-                        m.balikan();
+                        m.balikanAdjoint();
 
                         simpanKeFile(m);
                         break;
@@ -495,7 +495,7 @@ class Main {
                         System.out.println("\nMasukan koefisien a[i][j] secara berurut");
                         m.bacaMatriks();
 
-                        m.balikan();
+                        m.balikanAdjoint();
                         simpanKeFile(m);
                         break;
                     }
@@ -504,7 +504,7 @@ class Main {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
 
-                        m.balikan();
+                        m.balikanAdjoint();
 
                         simpanKeFile(m);
                         break;

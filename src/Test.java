@@ -84,8 +84,17 @@ public class Test {
         Matriks.interpolasi(m1, 9.2);
 
         Matriks.salinMatriks(mOriginal, m1);
-        m1.balikan();
+        //m1.balikan();
         m1.tulisMatriks();
+        System.out.println("adjoin:");
+        m1.makeAdjoint();
+        m1.tulisMatriks();
+        Matriks.salinMatriks(mOriginal, m1);
+        System.out.println("Determinan: " + Matriks.determinanRedBrs(m1));
+        System.out.println("inverse:");
+        m1.balikanAdjoint();
+        m1.tulisMatriks();
+        //m1.tulisMatriks();
 
         Matriks.salinMatriks(mOriginal, m1);
         m1.cramer();
