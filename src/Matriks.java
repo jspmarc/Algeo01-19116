@@ -123,7 +123,7 @@ class Matriks {
         } catch (IndexOutOfBoundsException e) {
             // Kalo ukuran ArrayList yang sebenarnya lebih kecil dari yang
             // tertulis
-            if (this.jmlKolMat > j) {
+            if (this.jmlKolMat <= j) {
                 this.mat.get(i).add(val);
             } else {
                 // Menambahkan elemen ke tempat yang tidak seharusnya
@@ -952,8 +952,7 @@ class Matriks {
         String str = new String();
         if (solHashMap.isEmpty()) {
             str = "Solusi tidak ada";
-        }
-        else {
+        } else {
             for (int i = solHashMap.size()-1; i >= 0; i--) {
                 str = "x" + (i+1) + " = " + solHashMap.get("x"+(i+1));
                 if (i != 0) {
@@ -1119,7 +1118,7 @@ class Matriks {
             System.out.println(px);
             System.out.println(ps);
 
-            System.out.print("Ingin menulis output ke file? (y/n): ");
+            System.out.print("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
             String yn = scan.next();
 
             if (yn.toLowerCase().equals("y")) {
@@ -1130,9 +1129,6 @@ class Matriks {
             System.out.println("Gagal menginterpolasi polinom dari matriks yang diberikan");
             solv.add(Double.NaN);
             return solv;
-        }
-
-        for (int i = 0; i < titik.jmlBrsMat; ++i) {
         }
 
         return solv;
