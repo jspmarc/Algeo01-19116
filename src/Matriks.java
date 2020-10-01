@@ -589,6 +589,31 @@ class Matriks {
         return swapCount;
     }
 
+    private Matriks makeNotAugmented(Matriks mB) {
+        // this sudah augmented dengan mB
+        // [this] -> [this], [mB]
+
+        // tempOri akan menampung matriks `this` (matriks sebelum diaugment)
+        // untuk sementara waktu
+        // kolOri adalah ukuran kolom matriks original
+        int kolOri = this.jmlKolMat - mB.jmlKolMat;
+        Matriks tempOri = new Matriks(this.jmlBrsMat,  kolOri);
+
+        for (int i = 0; i < this.jmlBrsMat; ++i) {
+            int k = 0;
+            for (int j = 0; j < this.jmlKolMat; ++j) {
+                if (j < tempOri.jmlKolMat) {
+                    tempOri.setElmt(i, j, this.getElmt(i, j));
+                } else { // Sudah masuk ke bagian augmented
+                    mB.setElmt(i, k++, this.getElmt(i, j));
+                }
+            }
+        }
+
+        salinMatriks(tempOri, this);
+        return mB;
+    }
+
     /**
      * Meng-augment matriks pemanggil dengan matriks aug
      * misalkan ada dua matriks: M1 dan M2, di mana M2 adalah matriks yang
