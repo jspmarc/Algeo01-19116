@@ -618,7 +618,7 @@ class Matriks {
      * @param mB menyimpan bagian augment dari matriks
      * @return bagian augment matriks
      */
-    private Matriks makeNotAugmented(Matriks mB) {
+    public Matriks makeNotAugmented(Matriks mB) {
         // this sudah augmented dengan mB
         // [this] -> [this], [mB]
 
@@ -1022,6 +1022,7 @@ class Matriks {
         if (mat.jmlBrsMat < mat.jmlKolMat -1) {
             mat.makePersegi();
         }
+        mat.tulisMatriks();
 
         // Akan menjadi SPL baru
         // Solve SPL baru dengan gaussJordan
@@ -1303,7 +1304,7 @@ class Matriks {
                         interpolatedX += solv.get(j) * Math.pow(x, j);
                     }
 
-                    currPs += String.format(" = %.4f", interpolatedX);
+                    currPs += String.format("%.4f", interpolatedX);
                     System.out.println(currPs);
 
                     ps += currPs + "\n";

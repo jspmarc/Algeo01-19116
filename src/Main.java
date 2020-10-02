@@ -427,6 +427,7 @@ class Main {
                     case 2: {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
+                        m.makeNotAugmented(new Matriks(m.getJmlBrs(), 1));
 
                         double sol = Matriks.determinanRedBrs(m);
                         String strSol = String.format("%.2f", sol);
@@ -461,6 +462,7 @@ class Main {
                     case 2: {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
+                        m.makeNotAugmented(new Matriks(m.getJmlBrs(), 1));
 
                         double sol = Matriks.determinanEksKof(m);
                         String strSol = String.format("%.2f", sol);
