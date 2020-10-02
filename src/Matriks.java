@@ -896,18 +896,18 @@ class Matriks {
                 }
                 
                 int k = 0;
-                while ((k < this.jmlKolMat-1) && koefNol) {
-                    if (getElmt(this.jmlBrsMat-i, k) != 0.0d) {
+                while ((k < i-1) && koefNol) {
+                    if (getElmt(i-1, k) != 0.0d) {
                         koefNol = false;
                     }
                     k++;
                 }
                 i++;
             }
-            if (koefNol && !konstNol) {
-                indikator = 0;
-            } else {
+            if (!(koefNol && !konstNol)) {
                 indikator = 2;
+            } else {
+                indikator = 0;
             }
         } else if (koefisienNol && !konstantaNol) {
             indikator = 0;
