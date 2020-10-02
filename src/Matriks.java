@@ -884,7 +884,7 @@ class Matriks {
             }
             j++;
         }
-        /*
+
         int indikator;
         if (koefisienNol && konstantaNol) {
             int i = 2;
@@ -914,9 +914,6 @@ class Matriks {
         } else {
             indikator = 1;
         }
-        */
-        int indikator = (koefisienNol && konstantaNol) ? 2 :
-                        (koefisienNol && !konstantaNol) ? 0 : 1;
         return indikator;
     }
 
