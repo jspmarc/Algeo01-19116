@@ -1022,7 +1022,6 @@ class Matriks {
         if (mat.jmlBrsMat < mat.jmlKolMat -1) {
             mat.makePersegi();
         }
-        mat.tulisMatriks();
 
         // Akan menjadi SPL baru
         // Solve SPL baru dengan gaussJordan
