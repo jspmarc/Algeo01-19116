@@ -271,7 +271,7 @@ class Main {
 
                         System.out.printf("\nMasukkan koefisien a[i][j] secara berurut\n");
                         mA.bacaMatriks();
-                        System.out.printf("\nMasukkan b[i] secara berurut: ");
+                        System.out.printf("\nMasukkan b[i] secara berurut\n");
                         mB.bacaMatriks();
                         mA.makeAugmented(mB);
 
