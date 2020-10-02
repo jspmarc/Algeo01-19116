@@ -36,6 +36,7 @@ kofaktor
 Jalankan perintah `make jar`.
 Tidak punya `make`?
 Jalankan:
+1. `git clone https://github.com/jspmarc/Algeo01-19116`
 1. `javac -g -d bin src/Matriks.java src/Main.java`
 1. `jar -cvfe bin/tubes.jar Main -C bin/Matriks.class -C bin/Main.class`
 
