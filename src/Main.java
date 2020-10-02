@@ -418,7 +418,8 @@ class Main {
                         m.bacaMatriks();
 
                         double sol = Matriks.determinanRedBrs(m);
-                        String strSol = String.format("%.2f", sol);
+                        //String strSol = String.format("%.2f", sol);
+                        String strSol = String.valueOf(sol);
                         System.out.println("Reduksi baris: " + strSol);
                         simpanKeFile(strSol);
                         break;
@@ -427,10 +428,11 @@ class Main {
                     case 2: {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
-                        m.makeNotAugmented(new Matriks(m.getJmlBrs(), 1));
+                        //m.makeNotAugmented(new Matriks(m.getJmlBrs(), 1));
 
                         double sol = Matriks.determinanRedBrs(m);
-                        String strSol = String.format("%.2f", sol);
+                        //String strSol = String.format("%.2f", sol);
+                        String strSol = String.valueOf(sol);
                         System.out.println("Reduksi baris: " + strSol);
                         simpanKeFile(strSol);
                         break;
@@ -453,7 +455,8 @@ class Main {
                         m.bacaMatriks();
 
                         double sol = Matriks.determinanEksKof(m);
-                        String strSol = String.format("%.2f", sol);
+                        //String strSol = String.format("%.2f", sol);
+                        String strSol = String.valueOf(sol);
                         System.out.println("Ekspansi kofaktor: " + strSol);
                         simpanKeFile(strSol);
                         break;
@@ -462,10 +465,11 @@ class Main {
                     case 2: {
                         Matriks m = new Matriks(1, 1);
                         m = Matriks.bacaDariFile();
-                        m.makeNotAugmented(new Matriks(m.getJmlBrs(), 1));
+                        //m.makeNotAugmented(new Matriks(m.getJmlBrs(), 1));
 
                         double sol = Matriks.determinanEksKof(m);
-                        String strSol = String.format("%.2f", sol);
+                        //String strSol = String.format("%.2f", sol);
+                        String strSol = String.valueOf(sol);
                         System.out.println("Ekspansi kofaktor: " + strSol);
                         simpanKeFile(strSol);
                         break;
