@@ -799,7 +799,7 @@ class Matriks {
      * Metode untuk mengubah matriks eselon baris menjadi
      * matriks eselon baris tereduksi
      */
-    public void makeEselonTereduksi() { // here
+    private void makeEselonTereduksi() {
         int leadIdx = 0,
             k;
 
@@ -885,35 +885,8 @@ class Matriks {
             j++;
         }
 
-        int indikator;
-        if (koefisienNol && konstantaNol) {
-            int i = 2;
-            boolean konstNol = true;
-            boolean koefNol = true;
-            while (i < this.jmlBrsMat && !((koefNol) && !konstNol)) {
-                if (getElmt(this.jmlBrsMat-i, this.jmlKolMat-1) != 0.0d) {
-                    konstNol = false;
-                }
-                
-                int k = 0;
-                while ((k < i-1) && koefNol) {
-                    if (getElmt(i-1, k) != 0.0d) {
-                        koefNol = false;
-                    }
-                    k++;
-                }
-                i++;
-            }
-            if (!(koefNol && !konstNol)) {
-                indikator = 2;
-            } else {
-                indikator = 0;
-            }
-        } else if (koefisienNol && !konstantaNol) {
-            indikator = 0;
-        } else {
-            indikator = 1;
-        }
+        int indikator = (koefisienNol && konstantaNol) ? 2 :
+                        (koefisienNol && !konstantaNol) ? 0 : 1;
         return indikator;
     }
 
@@ -1046,6 +1019,11 @@ class Matriks {
      */
     public static HashMap<String, String> gauss(Matriks mat) {
         mat.makeEselon();
+        if (mat.jmlBrsMat < mat.jmlKolMat -1) {
+            mat.makePersegi();
+        }
+        mat.tulisMatriks();
+
         // Akan menjadi SPL baru
         // Solve SPL baru dengan gaussJordan
         return gaussJordan(mat);
@@ -1064,10 +1042,10 @@ class Matriks {
         HashMap<String, String> sol = new HashMap<>();
 
         mat.makeEselonTereduksi();
-        indikator = mat.indikator();
-        if (mat.jmlBrsMat < mat.jmlKolMat -1 && indikator != 0) {
+        if (mat.jmlBrsMat < mat.jmlKolMat -1) {
             mat.makePersegi();
         }
+        indikator = mat.indikator();
         if (indikator == 0) {
             return sol;
         } else if (indikator == 1) {
