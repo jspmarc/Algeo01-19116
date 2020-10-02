@@ -576,11 +576,12 @@ class Main {
                 System.out.println("\nMasukkan data titik: ");
                 m.bacaMatriks();
 
-                System.out.printf("\nMasukkan titik x: ");
-                double x = s.nextDouble();
-                System.out.println();
+                //System.out.printf("\nMasukkan titik x: ");
+                //double x = s.nextDouble();
+                //System.out.println();
 
-                Matriks.interpolasi(m, x);
+                //Matriks.interpolasi(m, x);
+                Matriks.interpolasi(m);
                 break;
             }
             // Pilihan 2 - Baca dari file eksternal
@@ -588,11 +589,12 @@ class Main {
                 Matriks m = new Matriks(1, 2);
                 m = Matriks.bacaDariFile();
 
-                System.out.printf("\nMasukkan titik x: ");
-                double x = s.nextDouble();
-                System.out.println();
+                //System.out.printf("\nMasukkan titik x: ");
+                //double x = s.nextDouble();
+                //System.out.println();
 
-                Matriks.interpolasi(m, x);
+                //Matriks.interpolasi(m, x);
+                Matriks.interpolasi(m);
                 break;
             }
         }

@@ -83,7 +83,8 @@ public class Test {
 
         System.out.println("interpolasi:");
         m1 = Matriks.bacaDariFile();
-        Matriks.interpolasi(m1, 9.2);
+        //Matriks.interpolasi(m1, 9.2);
+        Matriks.interpolasi(m1);
 
         //System.out.println("88239r58239r5qw4ftg8i90gv8hg789yw4789ty234 89tyu294yt9");
 

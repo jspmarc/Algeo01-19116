@@ -1212,7 +1212,7 @@ class Matriks {
      * @return jika matriks yang diberikan salah, berupa ArrayList berisi NaN,
      * selain itu akan berisi solusi a_0, a_1, ..., a_n
      */
-    public static ArrayList<Double> interpolasi(Matriks titik, double x) {
+    public static ArrayList<Double> interpolasi(Matriks titik) {
         Scanner scan = new Scanner(System.in);
         ArrayList<Double> solv = new ArrayList<>();
         int indikator;
@@ -1261,33 +1261,56 @@ class Matriks {
                 solv.add(matInter.getElmt(i, matInter.jmlKolMat-1));
             }
 
-            px = "P(x) = ";
-            ps = "P(" + x + ") = ";
+            px = "\nP(x) = ";
+            //ps = "P(" + x + ") = ";
             for (int i = 0; i < matInter.jmlBrsMat; ++i) {
                 px += String.format("%.4f", solv.get(i) >= 0 || i == 0
                                             ? solv.get(i)
                                             : -1*solv.get(i));
-                ps += String.format("%.4f", solv.get(i) >= 0 || i == 0
-                                            ? solv.get(i)
-                                            : -1*solv.get(i));
+                //ps += String.format("%.4f", solv.get(i) >= 0 || i == 0
+                                            //? solv.get(i)
+                                            //: -1*solv.get(i));
                 if (i != 0) {
                     px += "(x" + (i == 1 ? "" : "**" + i) + ")";
-                    ps += "(" + x +  (i == 1 ? "" : "**" + i) + ")";
+                    //ps += "(" + x +  (i == 1 ? "" : "**" + i) + ")";
                 }
                 if (i < matInter.jmlBrsMat-1) {
                     px += (solv.get(i+1) >= 0) ? " + " : " - ";
-                    ps += (solv.get(i+1) >= 0) ? " + " : " - ";
+                    //ps += (solv.get(i+1) >= 0) ? " + " : " - ";
                 }
 
-                interpolatedX += solv.get(i) * Math.pow(x, i);
+                //interpolatedX += solv.get(i) * Math.pow(x, i);
             }
 
-            ps += String.format(" = %.4f", interpolatedX);
+            //ps += String.format(" = %.4f", interpolatedX);
 
             System.out.println(px);
-            System.out.println(ps);
+            //System.out.println(ps);
 
-            System.out.print("Apakah Anda ingin menyimpan solusi ke file? (y/n): ");
+            ps = "";
+            System.out.print("\nApakah Anda ingin membuat perkiraan beberapa titik? (y/n): ");
+            if (scan.next().toLowerCase().equals("y")) {
+                String currPs = "";
+                System.out.print("Banyak x/titik yang ingin diperkirakan: ");
+                int limit = scan.nextInt();
+
+                for (int i = 0; i < limit; ++i) {
+                    System.out.print("x" + (i+1) + ": ");
+                    double x = scan.nextDouble();
+                    currPs = "P(" + x + ") = ";
+
+                    for (int j = 0; j < matInter.jmlBrsMat; ++j) {
+                        interpolatedX += solv.get(j) * Math.pow(x, j);
+                    }
+
+                    currPs += String.format(" = %.4f", interpolatedX);
+                    System.out.println(currPs);
+
+                    ps += currPs + "\n";
+                }
+            }
+
+            System.out.print("\nApakah Anda ingin menyimpan solusi ke file? (y/n): ");
             String yn = scan.next();
 
             if (yn.toLowerCase().equals("y")) {
