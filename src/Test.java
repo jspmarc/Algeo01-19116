@@ -67,6 +67,9 @@ public class Test {
         //m1.tulisMatriks();
         System.out.println("============");
         m1.tulisMatriks();
+        Matriks.gaussJordan(m1);
+        System.out.println();
+        m1.tulisMatriks();
         Matriks.tulisSolusi(Matriks.gaussJordan(m1), "x");
         System.out.println("============");
         //m1.tulisSolusi(m1.gauss(m1));
